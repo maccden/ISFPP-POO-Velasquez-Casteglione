@@ -20,4 +20,15 @@ public class Parada {
     public String toString() {
         return "Parada [codigo=" + codigo + ", direccion=" + direccion + "]";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Parada other = (Parada) obj;
+        if (codigo == null) {
+            if (other.codigo != null)
+                return false;
+        } else if (!codigo.equals(other.codigo))
+            return false;
+        return true;
+    }
 }

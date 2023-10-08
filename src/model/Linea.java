@@ -32,4 +32,15 @@ public class Linea {
     public Parada getParada(int i) {
         return paradas.get(i);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Linea other = (Linea) obj;
+        if (codigo == null) {
+            if (other.codigo != null)
+                return false;
+        } else if (!codigo.equals(other.codigo))
+            return false;
+        return true;
+    }
 }

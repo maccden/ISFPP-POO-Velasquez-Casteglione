@@ -2,21 +2,15 @@ package model;
 
 public class Colectivo {
     private String codigo;
-    private Parada parada;
     private Linea linea;
 
-    public Colectivo(String codigo, Parada parada, Linea linea) {
+    public Colectivo(String codigo, Linea linea) {
         this.codigo = codigo;
-        this.parada = parada;
         this.linea = linea;
     }
 
     public String getCodigo() {
         return codigo;
-    }
-
-    public Parada getParada() {
-        return parada;
     }
 
     public Linea getLinea() {
@@ -25,6 +19,17 @@ public class Colectivo {
 
     @Override
     public String toString() {
-        return "Colectivo [id=" + codigo + ", parada=" + parada + ", linea=" + linea + "]";
+        return "Colectivo [id=" + codigo + ", linea=" + linea + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Colectivo other = (Colectivo) obj;
+        if (codigo == null) {
+            if (other.codigo != null)
+                return false;
+        } else if (!codigo.equals(other.codigo))
+            return false;
+        return true;
     }
 }
