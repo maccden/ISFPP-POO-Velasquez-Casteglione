@@ -4,13 +4,15 @@ import datastructures.ArrayList;
 
 public class Linea {
     private String codigo;
-    private String nombre;
-    private ArrayList<Parada> paradas;
-    
-    public Linea(String codigo, String nombre, ArrayList<Parada> paradas) {
+    private char sentido;
+    private ArrayList<Parada> paradasIda;
+    private ArrayList<Parada> paradasRegreso;
+
+    public Linea(String codigo, char sentido, ArrayList<Parada> paradasIda, ArrayList<Parada> paradasRegreso) {
         this.codigo = codigo;
-        this.nombre = nombre;
-        this.paradas = paradas;
+        this.sentido = sentido;
+        this.paradasIda = paradasIda;
+        this.paradasRegreso = paradasRegreso;
     }
 
     public String getCodigo() {
@@ -21,17 +23,9 @@ public class Linea {
         this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public char getSentido() { return sentido; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Parada getParada(int i) {
-        return paradas.get(i);
-    }
+    public void setSentido(char sentido) { this.sentido = sentido; }
 
     @Override
     public boolean equals(Object obj) {

@@ -22,14 +22,14 @@ public class Aplicacion {
 
         // Cargar datos
 
-        TreeMap<String, Parada> paradas;
-        TreeMap<String, Linea> lineas;
-        TreeMap<String, Colectivo> colectivos;
-        List<Tramo> tramos;
+        TreeMap<String, Parada> paradas = null;
+        TreeMap<String, Linea> lineas = null;
+        TreeMap<String, Colectivo> colectivos = null;
+        List<Tramo> tramos = null;
 
         try {
-            paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
-            lineas = Datos.cargarLineas(CargarParametros.getArchivoLinea(), paradas);
+            //paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
+            //lineas = Datos.cargarLineas(CargarParametros.getArchivoLinea(), paradas);
             colectivos = Datos.cargarColectivos(CargarParametros.getArchivoColectivo(), lineas);
             tramos = Datos.cargarTramos(CargarParametros.getArchivoTramo(), paradas);
         } catch (Exception e) {

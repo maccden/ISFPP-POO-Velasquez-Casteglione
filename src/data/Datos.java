@@ -11,6 +11,7 @@ import model.*;
 
 public class Datos {
 
+    /*
     public static TreeMap<String, Parada> cargarParadas(String fileName) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
         TreeMap<String, Parada> paradas = new TreeMap<>();
@@ -26,6 +27,7 @@ public class Datos {
         bf.close();
         return paradas;
     }
+    */
     
     /*
     public static TreeMap<String, Linea> cargarLineas(String fileName, TreeMap<String, Parada> paradas) throws IOException {
@@ -74,7 +76,8 @@ public class Datos {
             String parada1 = partes[0];
             String parada2 = partes[1];
             String tiempo = partes[2];
-            tramos.add(0, new Tramo(paradas.get(parada1), paradas.get(parada2), Integer.parseInt(tiempo)));
+            String tipo = partes[3];
+            tramos.add(0, new Tramo(paradas.get(parada1), paradas.get(parada2), Integer.parseInt(tiempo), Integer.parseInt(tipo)));
         }
 
         bf.close();

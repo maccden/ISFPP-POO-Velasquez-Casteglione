@@ -15,7 +15,7 @@ public class Calculo {
         // Datos de los Grafos
     }
 
-    public rapido() {
+    public void rapido() {
         // Se calcula el camino mas corto
     }
 }

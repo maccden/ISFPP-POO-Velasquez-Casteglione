@@ -1,40 +1,44 @@
 package model;
 
 public class Tramo {
-    private Parada parada1;
-    private Parada parada2;
+    private Parada inicio;
+    private Parada fin;
     private int tiempo;
+    private int tipo;
 
-    public Tramo(Parada parada1, Parada parada2, int tiempo) {
-        this.parada1 = parada1;
-        this.parada2 = parada2;
+    public Tramo(Parada inicio, Parada fin, int tiempo, int tipo) {
+        this.inicio = inicio;
+        this.fin = fin;
         this.tiempo = tiempo;
+        this.tipo = tipo;
     }
 
-    public Parada getParada1() {
-        return parada1;
+    public Parada getInicio() {
+        return inicio;
     }
 
-    public Parada getParada2() {
-        return parada2;
+    public Parada getFin() {
+        return fin;
     }
 
     public int getTiempo() {
         return tiempo;
     }
 
+    public int getTipo() { return tipo; }
+
     @Override
     public boolean equals(Object obj) {
         Tramo other = (Tramo) obj;
-        if (parada1 == null) {
-            if (other.parada1 != null)
+        if (inicio == null) {
+            if (other.inicio != null)
                 return false;
-        } else if (!parada1.equals(other.parada1))
+        } else if (!inicio.equals(other.inicio))
             return false;
-        if (parada2 == null) {
-            if (other.parada2 != null)
+        if (fin == null) {
+            if (other.fin != null)
                 return false;
-        } else if (!parada2.equals(other.parada2))
+        } else if (!fin.equals(other.fin))
             return false;
         return true;
     }
