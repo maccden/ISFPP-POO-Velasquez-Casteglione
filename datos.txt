@@ -1,0 +1,22 @@
+Estructura de los archivos:
+
+
+parada.txt
+==========
+
+# id de la parada;direccion
+
+
+linea.txt
+=========
+
+# Nombre de la linea;Sentido; id de las paradas    
+# Sentido I: ida - R: Regreso
+
+
+tramo.txt
+=========
+
+# id de la parada inicio; id de la parada fin; tiempo del recorrido; tipo de recorrido
+# tiempo en minutos	
+# tipo: 1 = colectivo, 2 = caminando

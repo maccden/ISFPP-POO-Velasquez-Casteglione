@@ -1,12 +1,12 @@
 package model;
 
-import datastructures.ArrayList;
+import datastructures.List;
 
 public class Parada {
     private String codigo, direccion;
-    private ArrayList<Linea> lineas = new ArrayList<>();
+    private List<Linea> lineas;
 
-    public Parada(String codigo, String direccion, ArrayList<Linea> lineas) {
+    public Parada(String codigo, String direccion, List<Linea> lineas) {
         this.codigo = codigo;
         this.direccion = direccion;
         this.lineas = lineas;
@@ -22,7 +22,7 @@ public class Parada {
 
     @Override
     public String toString() {
-        return "Parada [codigo=" + codigo + ", direccion=" + direccion + "]";
+        return "Parada [codigo=" + codigo + ", direccion=" + direccion + ", lineas=" + lineas + "]";
     }
 
     @Override

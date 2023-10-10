@@ -8,7 +8,6 @@ import java.util.Properties;
 public class CargarParametros {
     private static String archivoLinea;
     private static String archivoParada;
-    private static String archivoColectivo;
     private static String archivoTramo;
 
     public static void parametros() throws IOException {
@@ -19,7 +18,6 @@ public class CargarParametros {
 
         archivoLinea = prop.getProperty("linea");
         archivoParada = prop.getProperty("parada");
-        archivoColectivo = prop.getProperty("colectivo");
         archivoTramo = prop.getProperty("tramo");
     }
 
@@ -29,10 +27,6 @@ public class CargarParametros {
 
     public static String getArchivoParada() {
         return archivoParada;
-    }
-
-    public static String getArchivoColectivo() {
-        return archivoColectivo;
     }
 
     public static String getArchivoTramo() {

@@ -49,22 +49,6 @@ public class Datos {
         return lineas;
     }
     */
-    
-    public static TreeMap<String, Colectivo> cargarColectivos(String fileName, TreeMap<String, Linea> lineas) throws IOException {
-        BufferedReader bf = new BufferedReader(new FileReader(fileName));
-        TreeMap<String, Colectivo> colectivos = new TreeMap<>();
-        String reader;
-        
-        while ((reader = bf.readLine()) != null) {
-            String[] partes = reader.split(";");
-            String idColectivo = partes[0];
-            String idLinea = partes[1];
-            colectivos.put(idColectivo, new Colectivo(idColectivo, lineas.get(idLinea)));
-        }
-
-        bf.close();
-        return colectivos;
-    }
 
     public static List<Tramo> cargarTramos(String fileName, TreeMap<String, Parada> paradas) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
