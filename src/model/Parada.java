@@ -1,15 +1,16 @@
 package model;
 
+import datastructures.ArrayList;
 import datastructures.List;
 
 public class Parada {
     private String codigo, direccion;
     private List<Linea> lineas;
 
-    public Parada(String codigo, String direccion, List<Linea> lineas) {
+    public Parada(String codigo, String direccion) {
         this.codigo = codigo;
         this.direccion = direccion;
-        this.lineas = lineas;
+        this.lineas =  new ArrayList<>();
     }
 
     public String getCodigo() {
