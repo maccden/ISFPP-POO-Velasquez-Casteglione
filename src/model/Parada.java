@@ -10,13 +10,21 @@ public class Parada {
         this.codigo = codigo;
         this.direccion = direccion;
     }
-
-    public String getCodigo() {
-        return codigo;
-    }
+    public String getCodigo() { return codigo; }
 
     public String getDireccion() {
         return direccion;
+    }
+
+    public Linea getLinea() { return null; }
+
+    public void setLinea(Linea linea) {
+        for (Linea l : lineas) {
+            if (l.equals(linea))
+                return;
+        }
+
+        lineas.add(lineas.size(), linea);
     }
 
     @Override

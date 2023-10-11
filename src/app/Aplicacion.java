@@ -21,12 +21,11 @@ public class Aplicacion {
         // Cargar datos
         TreeMap<String, Parada> paradas = null;
         TreeMap<String, Linea> lineas = null;
-        TreeMap<String, Colectivo> colectivos = null;
         List<Tramo> tramos = null;
 
         try {
-            // paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
-            // lineas = Datos.cargarLineas(CargarParametros.getArchivoLinea(), paradas);
+            paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
+            lineas = Datos.cargarLineas(CargarParametros.getArchivoLinea(), paradas);
             tramos = Datos.cargarTramos(CargarParametros.getArchivoTramo(), paradas);
         } catch (Exception e) {
             System.out.println("Error al cargar archivos de datos");

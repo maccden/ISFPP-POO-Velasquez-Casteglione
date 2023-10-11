@@ -27,7 +27,6 @@ public class Datos {
         return paradas;
     }
 
-    /*
     public static TreeMap<String, Linea> cargarLineas(String fileName, TreeMap<String, Parada> paradas) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
         TreeMap<String, Linea> lineas = new TreeMap<>();
@@ -36,17 +35,37 @@ public class Datos {
         while ((reader = bf.readLine()) != null) {
             String[] partes = reader.split(";");
             String idLinea = partes[0];
-            
-            // idLinea = partes[0]
-            // ArrayList = partes[1] .. partes[n]
+            String sentido = partes[1];
 
-            lineas.put(idLinea, new Linea(idLinea, paradas.get(idParada)));
+            Linea linea = new Linea(idLinea, sentido);
+
+            for (String parada: partes) {
+                if (paradas.get(parada) != null) {
+                    linea.agregarIda(paradas.get(parada));
+                    paradas.get(parada).setLinea(linea);
+                }
+            }
+
+            reader = bf.readLine();
+            partes = reader.split(";");
+
+            ArrayList<Parada> vuelta = new ArrayList<>();
+
+            for (String parada: partes) {
+                if (paradas.get(parada) != null) {
+                    linea.agregarVuelta(paradas.get(parada));
+                    paradas.get(parada).setLinea(linea);
+                }
+            }
+
+            System.out.println(new Linea(idLinea, sentido));
+
+            lineas.put(idLinea, new Linea(idLinea, sentido));
         }
 
         bf.close();
         return lineas;
     }
-    */
 
     public static List<Tramo> cargarTramos(String fileName, TreeMap<String, Parada> paradas) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
@@ -65,4 +84,6 @@ public class Datos {
         bf.close();
         return tramos;
     }
+
+
 }

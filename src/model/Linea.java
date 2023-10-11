@@ -1,17 +1,25 @@
 package model;
 
+import datastructures.ArrayList;
 import datastructures.List;
 
 public class Linea {
     private String codigo;
-    private char sentido;
+    private String sentido;
     private List<Parada> paradasVuelta, paradasIda;
 
-    public Linea(String codigo, char sentido, List<Parada> paradasIda, List<Parada> paradasVuelta) {
+    public Linea(String codigo, String sentido) {
         this.codigo = codigo;
         this.sentido = sentido;
-        this.paradasIda = paradasIda;
-        this.paradasVuelta = paradasVuelta;
+        paradasVuelta = paradasIda = new ArrayList<>();
+    }
+
+    public void agregarIda(Parada parada) {
+        paradasIda.add(paradasIda.size() ,parada);
+    }
+
+    public void agregarVuelta(Parada parada){
+        paradasVuelta.add(paradasVuelta.size(), parada);
     }
 
     public String getCodigo() {
@@ -22,11 +30,11 @@ public class Linea {
         this.codigo = codigo;
     }
 
-    public char getSentido() {
+    public String getSentido() {
         return sentido;
     }
 
-    public void setSentido(char sentido) {
+    public void setSentido(String sentido) {
         this.sentido = sentido;
     }
     
