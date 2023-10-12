@@ -49,8 +49,6 @@ public class Datos {
             reader = bf.readLine();
             partes = reader.split(";");
 
-            ArrayList<Parada> vuelta = new ArrayList<>();
-
             for (String parada: partes) {
                 if (paradas.get(parada) != null) {
                     linea.agregarVuelta(paradas.get(parada));
