@@ -3,6 +3,7 @@ package data;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 import datastructures.ArrayList;
 import datastructures.List;
@@ -37,29 +38,45 @@ public class Datos {
             String idLinea = partes[0];
             String sentido = partes[1];
 
-            Linea linea = new Linea(idLinea, sentido);
-
-            for (String parada: partes) {
-                if (paradas.get(parada) != null) {
-                    linea.agregarIda(paradas.get(parada));
-                    paradas.get(parada).setLinea(linea);
+            if (lineas.get(idLinea) != null) {
+                if (sentido.equals("I")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            lineas.get(idLinea).agregarIda(paradas.get(parada));
+                            paradas.get(parada).setLinea(lineas.get(idLinea).getCodigo());
+                        }
+                    }
+                } else if (sentido.equals("R")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            lineas.get(idLinea).agregarVuelta(paradas.get(parada));
+                            paradas.get(parada).setLinea(lineas.get(idLinea).getCodigo());
+                        }
+                    }
                 }
-            }
-
-            reader = bf.readLine();
-            partes = reader.split(";");
-
-            for (String parada: partes) {
-                if (paradas.get(parada) != null) {
-                    linea.agregarVuelta(paradas.get(parada));
-                    paradas.get(parada).setLinea(linea);
+            } else {
+                Linea linea = new Linea(idLinea);
+                if (sentido.equals("I")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            linea.agregarIda(paradas.get(parada));
+                            paradas.get(parada).setLinea(linea.getCodigo());
+                        }
+                    }
+                } else if (sentido.equals("R")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            linea.agregarVuelta(paradas.get(parada));
+                            paradas.get(parada).setLinea(linea.getCodigo());
+                        }
+                    }
                 }
+                lineas.put(idLinea, linea);
             }
-
-            System.out.println(new Linea(idLinea, sentido));
-
-            lineas.put(idLinea, new Linea(idLinea, sentido));
         }
+
+        for (Linea linea: lineas.values())
+            System.out.println(linea);
 
         bf.close();
         return lineas;

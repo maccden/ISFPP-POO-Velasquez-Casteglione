@@ -4,7 +4,7 @@ import datastructures.ArrayList;
 
 public class Parada {
     private String codigo, direccion;
-    private ArrayList<Linea> lineas = new ArrayList<>();
+    private ArrayList<String> lineas = new ArrayList<>();
 
     public Parada(String codigo, String direccion) {
         this.codigo = codigo;
@@ -16,10 +16,10 @@ public class Parada {
         return direccion;
     }
 
-    public Linea getLinea() { return null; }
+    public String getLinea() { return null; }
 
-    public void setLinea(Linea linea) {
-        for (Linea l : lineas) {
+    public void setLinea(String linea) {
+        for (String l : lineas) {
             if (l.equals(linea))
                 return;
         }

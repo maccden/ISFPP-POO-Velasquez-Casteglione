@@ -5,20 +5,18 @@ import datastructures.List;
 
 public class Linea {
     private String codigo;
-    private String sentido;
     private List<Parada> paradasVuelta, paradasIda;
 
-    public Linea(String codigo, String sentido) {
+    public Linea(String codigo) {
         this.codigo = codigo;
-        this.sentido = sentido;
         paradasVuelta = paradasIda = new ArrayList<>();
     }
 
     public void agregarIda(Parada parada) {
-        paradasIda.add(paradasIda.size() ,parada);
+        paradasIda.add(paradasIda.size(), parada);
     }
 
-    public void agregarVuelta(Parada parada){
+    public void agregarVuelta(Parada parada) {
         paradasVuelta.add(paradasVuelta.size(), parada);
     }
 
@@ -30,18 +28,14 @@ public class Linea {
         this.codigo = codigo;
     }
 
-    public String getSentido() {
-        return sentido;
-    }
-
-    public void setSentido(String sentido) {
-        this.sentido = sentido;
-    }
-    
     @Override
     public String toString() {
-        return "Linea [codigo=" + codigo + ", sentido=" + sentido + ", paradasRegreso=" + paradasVuelta
-                + ", paradasIda=" + paradasIda + "]";
+        final StringBuilder sb = new StringBuilder("Linea{");
+        sb.append("codigo='").append(codigo).append('\'');
+        sb.append(", paradasVuelta=").append(paradasVuelta);
+        sb.append(", paradasIda=").append(paradasIda);
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override
