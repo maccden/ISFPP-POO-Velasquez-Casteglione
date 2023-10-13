@@ -10,13 +10,18 @@ public class Parada {
         this.codigo = codigo;
         this.direccion = direccion;
     }
-    public String getCodigo() { return codigo; }
+
+    public String getCodigo() {
+        return codigo;
+    }
 
     public String getDireccion() {
         return direccion;
     }
 
-    public String getLinea() { return null; }
+    public String getLinea() {
+        return null;
+    }
 
     public void setLinea(String linea) {
         for (String l : lineas) {

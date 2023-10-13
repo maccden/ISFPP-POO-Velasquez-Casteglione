@@ -30,12 +30,7 @@ public class Linea {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Linea{");
-        sb.append("codigo='").append(codigo).append('\'');
-        sb.append(", paradasVuelta=").append(paradasVuelta);
-        sb.append(", paradasIda=").append(paradasIda);
-        sb.append('}');
-        return sb.toString();
+        return "Linea [codigo=" + codigo + ", paradasVuelta=" + paradasVuelta + ", paradasIda=" + paradasIda + "]\n";
     }
 
     @Override

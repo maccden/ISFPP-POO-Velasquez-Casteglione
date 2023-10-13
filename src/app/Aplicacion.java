@@ -31,6 +31,5 @@ public class Aplicacion {
             System.out.println("Error al cargar archivos de datos");
             System.exit(-1);
         }
-
     }
 }
