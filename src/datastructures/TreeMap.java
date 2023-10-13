@@ -508,4 +508,8 @@ public class TreeMap<K,V> extends AbstractSortedMap<K,V> {
     }
   }
 
+public boolean containsKey(String idLinea) {
+    return this.checkKey((K) idLinea);
+}
+
 }

@@ -5,8 +5,7 @@ import java.io.IOException;
 import datastructures.List;
 import datastructures.TreeMap;
 import model.*;
-import data.Datos;
-import data.CargarParametros;
+import data.*;
 
 public class Aplicacion {
     public static void main(String[] args) {
@@ -27,7 +26,7 @@ public class Aplicacion {
             paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
             lineas = Datos.cargarLineas(CargarParametros.getArchivoLinea(), paradas);
             tramos = Datos.cargarTramos(CargarParametros.getArchivoTramo(), paradas);
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error al cargar archivos de datos");
             System.exit(-1);
         }

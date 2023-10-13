@@ -39,18 +39,22 @@ public class Datos {
             String sentido = partes[1];
             Linea linea = new Linea(idLinea);
 
-            for (int i = 2; i < partes.length; i++) {
-                Parada parada = paradas.get(partes[i]);
-
-                if (parada != null) {
-                    if (sentido.equals("I"))
-                        linea.agregarIda(parada);
-                    else if (sentido.equals("R"))
-                        linea.agregarVuelta(parada);
-                    parada.setLinea(idLinea);
+            if (sentido.equals("I"))
+                for (int i = 2; i < partes.length; i++) {
+                    linea.agregarIda(paradas.get(partes[i]));
+                    paradas.get(partes[i]).setLinea(idLinea);
                 }
-            }
-            
+
+            reader = bf.readLine();
+            partes = reader.split(";");
+            sentido = partes[1];
+
+            if (sentido.equals("R"))
+                for (int i = 2; i < partes.length; i++) {
+                    linea.agregarVuelta(paradas.get(partes[i]));
+                    paradas.get(partes[i]).setLinea(idLinea);
+                }
+
             lineas.put(idLinea, linea);
         }
 
