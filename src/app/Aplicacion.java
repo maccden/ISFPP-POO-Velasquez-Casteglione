@@ -18,9 +18,9 @@ public class Aplicacion {
         }
 
         // Cargar datos
-        TreeMap<String, Parada> paradas = null;
-        TreeMap<String, Linea> lineas = null;
-        List<Tramo> tramos = null;
+        TreeMap<String, Parada> paradas;
+        TreeMap<String, Linea> lineas;
+        List<Tramo> tramos;
 
         try {
             paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
