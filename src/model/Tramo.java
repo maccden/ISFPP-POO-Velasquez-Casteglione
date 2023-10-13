@@ -22,11 +22,11 @@ public class Tramo {
     public int getTiempo() {
         return tiempo;
     }
-    
+
     public int getTipo() {
         return tipo;
     }
-    
+
     @Override
     public String toString() {
         return "Tramo [inicio=" + inicio + ", fin=" + fin + ", tiempo=" + tiempo + ", tipo=" + tipo + "]";

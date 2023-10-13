@@ -7,18 +7,17 @@ import model.Parada;
 import model.Tramo;
 
 public class Interfaz {
-
-    // Usuario ingresa opci�n
+    // Usuario ingresa opcion
     public static int opcion() {
         return Constante.MAS_RAPIDO;
     }
 
-    // Usuario ingresa estaci�n origen
+    // Usuario ingresa estacion origen
     public static Parada ingresarEstacionOrigen(TreeMap<String, Parada> paradas) {
         return paradas.get("a2");
     }
 
-    // Usuario ingresa estaci�n destino
+    // Usuario ingresa estacion destino
     public static Parada ingresarEstacionDestino(TreeMap<String, Parada> paradas) {
         return paradas.get("c6");
     }
@@ -40,9 +39,5 @@ public class Interfaz {
         System.out.println("Tiempo Subte: " + tiempoSubte);
         System.out.println("Tiempo Caminando: " + tiempoCaminando);
     }
-
-
      */
 }
-
-

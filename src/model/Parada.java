@@ -1,29 +1,34 @@
 package model;
 
 import datastructures.ArrayList;
+import datastructures.List;
 
 public class Parada {
     private String codigo, direccion;
-    private ArrayList<String> lineas = new ArrayList<>();
+    private List<String> lineas;
 
     public Parada(String codigo, String direccion) {
         this.codigo = codigo;
         this.direccion = direccion;
+        lineas = new ArrayList<>();
     }
-    public String getCodigo() { return codigo; }
+
+    public String getCodigo() {
+        return codigo;
+    }
 
     public String getDireccion() {
         return direccion;
     }
 
-    public String getLinea() { return null; }
+    public String getLinea() {
+        return null;
+    }
 
     public void setLinea(String linea) {
-        for (String l : lineas) {
+        for (String l : lineas)
             if (l.equals(linea))
                 return;
-        }
-
         lineas.add(lineas.size(), linea);
     }
 

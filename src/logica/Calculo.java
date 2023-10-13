@@ -52,8 +52,6 @@ public class Calculo {
         }
 
         return tramos;
-
-
     }
 */
 }
@@ -63,15 +61,8 @@ Cosas para anotar:
 
 el peso de cada tramo
 
-
 Armar un grafo por cada linea. Si el resultado es null, la linea no pasa por la parada <!>
 Si hay 2 lineas que pasan por la parada, comparar cual es el mas rapido <!>
 
 2 Aplicaciones, 1 para modificar, sacar e ingresar paradas, y la otra para consultar <!>
-
-
-
-
-
-
  */
