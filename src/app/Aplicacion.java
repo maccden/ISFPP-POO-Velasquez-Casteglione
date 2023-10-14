@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import datastructures.List;
 import datastructures.TreeMap;
+import interfaz.Interfaz;
 import model.*;
 import data.*;
 
@@ -18,9 +19,9 @@ public class Aplicacion {
         }
 
         // Cargar datos
-        TreeMap<String, Parada> paradas;
-        TreeMap<String, Linea> lineas;
-        List<Tramo> tramos;
+        TreeMap<String, Parada> paradas = null;
+        TreeMap<String, Linea> lineas = null;
+        List<Tramo> tramos = null;
 
         try {
             paradas = Datos.cargarParadas(CargarParametros.getArchivoParada());
@@ -30,5 +31,7 @@ public class Aplicacion {
             System.out.println("Error al cargar archivos de datos");
             System.exit(-1);
         }
+
+        Parada inicio = Interfaz.ingresarEstacionOrigen(lineas, paradas);
     }
 }

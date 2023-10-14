@@ -21,8 +21,11 @@ public class Parada {
         return direccion;
     }
 
-    public String getLinea() {
-        return null;
+    public boolean getLinea(String linea) {
+        for (String l: lineas)
+            if (l.equals(linea))
+                return true;
+        return false;
     }
 
     public void setLinea(String linea) {
