@@ -3,7 +3,6 @@ package interfaz;
 import app.Constante;
 
 import datastructures.TreeMap;
-import model.Linea;
 import model.Parada;
 
 import javax.swing.*;
@@ -18,10 +17,10 @@ public class Interfaz extends JFrame {
 
     private static JFrame aplicacion;
     private static JButton siguiente, cancelar;
-    private static ArrayList<String> nombresLineas, nombresParadas1, nombresParadas2;
-    private static JComboBox comboBox1, comboBox2;
-    private static String respuesta1, respuesta2;
-    private static Parada respuestaParada;
+    private static ArrayList<String> dir;
+    private static ArrayList<Parada> p;
+    private static JComboBox comboBox;
+    private static Parada respuesta;
 
     // Usuario ingresa opcion
     public static int opcion() {
@@ -29,12 +28,12 @@ public class Interfaz extends JFrame {
     }
 
     // Usuario ingresa estacion origen
-    public static Parada ingresarEstacionOrigen(TreeMap<String, Linea> lineas, TreeMap<String, Parada> paradas) {
-        aplicacion = new JFrame();
+    public static Parada ingresarEstacionOrigen(TreeMap<String, Parada> paradas) {
+        aplicacion = new JFrame("Seleccione la parada inicial");
 
         JPanel panelNorte = new JPanel();
-        JLabel lblNewLabel = new JLabel("Elija la linea la cual va a utilizar y la parada de inicio");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        JLabel lblNewLabel = new JLabel("Elija la parada inicial de su trayecto");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
         panelNorte.add(lblNewLabel);
         aplicacion.getContentPane().add(panelNorte, BorderLayout.NORTH);
 
@@ -43,7 +42,6 @@ public class Interfaz extends JFrame {
         siguiente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                respuestaParada = paradas.get(respuesta2);
                 aplicacion.dispose();
             }
         });
@@ -57,66 +55,111 @@ public class Interfaz extends JFrame {
         });
         panelSur.add(cancelar);
         aplicacion.getContentPane().add(panelSur, BorderLayout.SOUTH);
-
         siguiente.setFocusable(false);
         siguiente.setEnabled(false);
         cancelar.setFocusable(false);
 
-        nombresLineas = new ArrayList<>();
-        nombresLineas.add("...");
+        JPanel panelCentro = new JPanel();
+        dir = new ArrayList<>();
+        dir.add("...");
+        p = new ArrayList<>();
 
-        for (String linea: lineas.keySet())
-            nombresLineas.add(linea);
+        for (Parada parada: paradas.values()) {
+            p.add(parada);
+            dir.add(parada.getCodigo() + " - " + parada.getDireccion());
+        }
 
-        JPanel panelIzquier = new JPanel();
-        JPanel panelDerecho = new JPanel();
-        panelDerecho.setVisible(false);
-        comboBox1 = new JComboBox();
-        comboBox2 = new JComboBox();
-        comboBox1.setModel(new DefaultComboBoxModel(nombresLineas.toArray()));
-        comboBox1.addItemListener(new ItemListener() {
+        comboBox = new JComboBox<>();
+        comboBox.setModel(new DefaultComboBoxModel(dir.toArray()));
+        comboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                respuesta1 = nombresLineas.get(comboBox1.getSelectedIndex());
-                panelDerecho.setVisible(true);
-
-                nombresParadas1 = new ArrayList<>();
-                nombresParadas1.add("...");
-                nombresParadas2 = new ArrayList<>();
-
-                for (Parada parada: paradas.values())
-                    if (parada.getLinea(respuesta1)) {
-                        nombresParadas1.add(parada.getCodigo() + " - " + parada.getDireccion());
-                        nombresParadas2.add(parada.getCodigo());
-                    }
-
-                comboBox2.setModel(new DefaultComboBoxModel(nombresParadas1.toArray()));
+                if (comboBox.getSelectedIndex() == 0) {
+                    siguiente.setEnabled(false);
+                } else {
+                    siguiente.setEnabled(true);
+                    respuesta = p.get(comboBox.getSelectedIndex() - 1);
+                }
             }
         });
-        panelIzquier.add(comboBox1);
-        aplicacion.getContentPane().add(panelIzquier, BorderLayout.WEST);
-
-        comboBox2.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                respuesta2 = nombresParadas2.get(comboBox2.getSelectedIndex());
-                siguiente.setEnabled(true);
-            }
-        });
-        panelDerecho.add(comboBox2);
-        aplicacion.getContentPane().add(panelDerecho, BorderLayout.EAST);
+        panelCentro.add(comboBox);
+        aplicacion.getContentPane().add(panelCentro, BorderLayout.CENTER);
 
         aplicacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         aplicacion.setSize(400, 250);
         aplicacion.setVisible(true);
 
-        return respuestaParada;
+        respuesta = paradas.get("5");
+
+        return respuesta;
     }
 
     // Usuario ingresa estacion destino
-    public static Parada ingresarEstacionDestino(TreeMap<String, Parada> paradas) {
+    public static Parada ingresarEstacionDestino(TreeMap<String, Parada> paradas, Parada inicio) {
+        aplicacion = new JFrame();
 
-        return paradas.get("c6");
+        JPanel panelNorte = new JPanel();
+        JLabel lblNewLabel = new JLabel("Elija la parada final de su trayecto");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        panelNorte.add(lblNewLabel);
+        aplicacion.getContentPane().add(panelNorte, BorderLayout.NORTH);
+
+        JPanel panelSur = new JPanel();
+        siguiente = new JButton("Siguiente");
+        siguiente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aplicacion.dispose();
+            }
+        });
+        panelSur.add(siguiente);
+        cancelar = new JButton("Cancelar");
+        cancelar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aplicacion.dispose();
+            }
+        });
+        panelSur.add(cancelar);
+        aplicacion.getContentPane().add(panelSur, BorderLayout.SOUTH);
+        siguiente.setFocusable(false);
+        siguiente.setEnabled(false);
+        cancelar.setFocusable(false);
+
+
+        JPanel panelCentro = new JPanel();
+        dir = new ArrayList<>();
+        dir.add("...");
+        p = new ArrayList<>();
+
+        for (Parada parada: paradas.values()) {
+            if (!parada.equals(inicio)) {
+                p.add(parada);
+                dir.add(parada.getCodigo() + " - " + parada.getDireccion());
+            }
+        }
+
+        comboBox = new JComboBox<>();
+        comboBox.setModel(new DefaultComboBoxModel(dir.toArray()));
+        comboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (comboBox.getSelectedIndex() == 0) {
+                    siguiente.setEnabled(false);
+                } else {
+                    siguiente.setEnabled(true);
+                    respuesta = p.get(comboBox.getSelectedIndex() - 1);
+                }
+            }
+        });
+        panelCentro.add(comboBox);
+        aplicacion.getContentPane().add(panelCentro, BorderLayout.CENTER);
+
+        aplicacion.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        aplicacion.setSize(400, 250);
+        aplicacion.setVisible(true);
+
+        return respuesta;
     }
 
     /*

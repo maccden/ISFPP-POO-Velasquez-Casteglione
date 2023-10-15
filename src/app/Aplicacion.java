@@ -32,6 +32,8 @@ public class Aplicacion {
             System.exit(-1);
         }
 
-        Parada inicio = Interfaz.ingresarEstacionOrigen(lineas, paradas);
+        Parada inicio = Interfaz.ingresarEstacionOrigen(paradas);
+
+        Parada fin = Interfaz.ingresarEstacionDestino(paradas, inicio);
     }
 }
