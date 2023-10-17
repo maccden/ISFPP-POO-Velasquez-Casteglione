@@ -166,17 +166,16 @@ public class Interfaz extends JFrame {
 
     public static void resultado(List<Tramo> recorrido) {
         int tiempoTotal = 0;
+        final StringBuilder sb = new StringBuilder("Recorrido: " + "\n");
         for (Tramo t : recorrido) {
-            aplicacion = new JFrame();
-            final StringBuilder sb = new StringBuilder("Recorrido: ");
-            sb.append(t.getInicio().getCodigo() + "-" + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + "-" + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\'');
+            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
             tiempoTotal += t.getTiempo();
         }
+        sb.append("Tiempo total: " + tiempoTotal + " minutos");
         if (tiempoTotal == 0) {
             JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas", "Resultado", JOptionPane.INFORMATION_MESSAGE);
         } else {
-
-            System.out.println("Tiempo Total: " + tiempoTotal);
+            JOptionPane.showMessageDialog(null, sb, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
