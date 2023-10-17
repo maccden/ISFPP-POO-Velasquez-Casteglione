@@ -2,8 +2,10 @@ package interfaz;
 
 import app.Constante;
 
+import datastructures.List;
 import datastructures.TreeMap;
 import model.Parada;
+import model.Tramo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,22 +164,19 @@ public class Interfaz extends JFrame {
         return respuesta;
     }
 
-    /*
     public static void resultado(List<Tramo> recorrido) {
         int tiempoTotal = 0;
-        int tiempoSubte = 0;
-        int tiempoCaminando = 0;
         for (Tramo t : recorrido) {
-            System.out.println(t.getInicio().getLinea().getCodigo() + "-" + t.getInicio().getNombre() + " > " + t.getFin().getLinea().getCodigo() + "-" + t.getFin().getNombre() + " :" + t.getTiempo());
+            aplicacion = new JFrame();
+            final StringBuilder sb = new StringBuilder("Recorrido: ");
+            sb.append(t.getInicio().getCodigo() + "-" + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + "-" + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\'');
             tiempoTotal += t.getTiempo();
-            if (t.getInicio().getLinea().equals(t.getFin().getLinea()))
-                tiempoSubte += t.getTiempo();
-            else
-                tiempoCaminando += t.getTiempo();
         }
-        System.out.println("Tiempo Total: " + tiempoTotal);
-        System.out.println("Tiempo Subte: " + tiempoSubte);
-        System.out.println("Tiempo Caminando: " + tiempoCaminando);
+        if (tiempoTotal == 0) {
+            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+
+            System.out.println("Tiempo Total: " + tiempoTotal);
+        }
     }
-     */
 }

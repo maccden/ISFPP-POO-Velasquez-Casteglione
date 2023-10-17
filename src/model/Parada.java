@@ -5,7 +5,7 @@ import datastructures.List;
 
 public class Parada {
     private String codigo, direccion;
-    private List<String> lineas;
+    private List<Linea> lineas;
 
     public Parada(String codigo, String direccion) {
         this.codigo = codigo;
@@ -21,23 +21,25 @@ public class Parada {
         return direccion;
     }
 
-    public boolean getLinea(String linea) {
-        for (String l: lineas)
-            if (l.equals(linea))
-                return true;
-        return false;
-    }
-
-    public void setLinea(String linea) {
-        for (String l : lineas)
-            if (l.equals(linea))
-                return;
+    public void setLinea(Linea linea) {
+        if (!lineas.isEmpty())
+            for (Linea l : lineas)
+                if (l.equals(linea))
+                    return;
         lineas.add(lineas.size(), linea);
     }
 
     @Override
     public String toString() {
-        return "Parada [codigo=" + codigo + ", direccion=" + direccion + ", lineas=" + lineas + "]";
+        final StringBuilder sb = new StringBuilder("Parada{");
+        sb.append("codigo='").append(codigo).append('\'');
+        sb.append(", direccion='").append(direccion).append('\'');
+        sb.append(", lineas=");
+        for (Linea linea: lineas) {
+            sb.append(linea.getCodigo());
+        }
+        sb.append('}');
+        return sb.toString();
     }
 
     @Override

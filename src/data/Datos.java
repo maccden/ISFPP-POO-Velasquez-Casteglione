@@ -37,25 +37,42 @@ public class Datos {
             String[] partes = reader.split(";");
             String idLinea = partes[0];
             String sentido = partes[1];
-            Linea linea = new Linea(idLinea);
 
-            if (sentido.equals("I"))
-                for (int i = 2; i < partes.length; i++) {
-                    linea.agregarIda(paradas.get(partes[i]));
-                    paradas.get(partes[i]).setLinea(idLinea);
+            if (lineas.get(idLinea) != null) {
+                if (sentido.equals("I")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            lineas.get(idLinea).agregarIda(paradas.get(parada));
+                            paradas.get(parada).setLinea(lineas.get(idLinea));
+                        }
+                    }
+                } else if (sentido.equals("R")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            lineas.get(idLinea).agregarVuelta(paradas.get(parada));
+                            paradas.get(parada).setLinea(lineas.get(idLinea));
+                        }
+                    }
                 }
-
-            reader = bf.readLine();
-            partes = reader.split(";");
-            sentido = partes[1];
-
-            if (sentido.equals("R"))
-                for (int i = 2; i < partes.length; i++) {
-                    linea.agregarVuelta(paradas.get(partes[i]));
-                    paradas.get(partes[i]).setLinea(idLinea);
+            } else {
+                Linea linea = new Linea(idLinea);
+                if (sentido.equals("I")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            linea.agregarIda(paradas.get(parada));
+                            paradas.get(parada).setLinea(linea);
+                        }
+                    }
+                } else if (sentido.equals("R")) {
+                    for (String parada : partes) {
+                        if (paradas.get(parada) != null) {
+                            linea.agregarVuelta(paradas.get(parada));
+                            paradas.get(parada).setLinea(linea);
+                        }
+                    }
                 }
-
-            lineas.put(idLinea, linea);
+                lineas.put(idLinea, linea);
+            }
         }
 
         bf.close();

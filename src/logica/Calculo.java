@@ -19,24 +19,25 @@ public class Calculo {
 
         // Cargar tramos
         for (Tramo tramo : tramos)
-            grafo.insertEdge(vertices.get(tramo.getInicio().getCodigo()), vertices.get(tramo.getFin().getCodigo()), tramo);
+            if (grafo.getEdge(vertices.get(tramo.getInicio().getCodigo()), vertices.get(tramo.getFin().getCodigo())) == null)
+                grafo.insertEdge(vertices.get(tramo.getInicio().getCodigo()), vertices.get(tramo.getFin().getCodigo()), tramo);
     }
 
-/*
+
     public List<Tramo> rapido(Parada inicio, Parada fin) {
 
         // copia grafo
         Graph<Parada, Integer> rapido = new AdjacencyMapGraph<>(false);
         Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
 
-        for (Vertex<Parada> result : grafo.vertices())
-            res.put(result.getElement(), rapido.insertVertex(result.getElement()));
+        for (Vertex<Parada> vertex : grafo.vertices())
+            res.put(vertex.getElement(), rapido.insertVertex(vertex.getElement()));
 
         Vertex<Parada>[] vert;
 
-        for (Edge<Tramo> result : grafo.edges()) {
-            vert = grafo.endVertices(result);
-            rapido.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), result.getElement().getTiempo());
+        for (Edge<Tramo> peso : grafo.edges()) {
+            vert = grafo.endVertices(peso);
+            rapido.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), peso.getElement().getTiempo());
         }
         PositionalList<Vertex<Parada>> lista = GraphAlgorithms.shortestPathList(rapido, res.get(inicio), res.get(fin));
 
@@ -48,12 +49,12 @@ public class Calculo {
             v1 = aux.getElement();
             aux = lista.after(aux);
             v2 = aux.getElement();
-            tramos.add(grafo.getEdge(vertices.get(v1.getElement().getCodigo()), vertices.get(v2.getElement().getCodigo())).getElement());
+            tramos.add(tramos.size(), grafo.getEdge(vertices.get(v1.getElement().getCodigo()), vertices.get(v2.getElement().getCodigo())).getElement());
         }
 
         return tramos;
     }
-    */
+    
 }
 
 /*

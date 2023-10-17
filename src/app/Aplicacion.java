@@ -5,6 +5,7 @@ import java.io.IOException;
 import datastructures.List;
 import datastructures.TreeMap;
 import interfaz.Interfaz;
+import logica.Calculo;
 import model.*;
 import data.*;
 
@@ -32,8 +33,21 @@ public class Aplicacion {
             System.exit(-1);
         }
 
-        Parada inicio = Interfaz.ingresarEstacionOrigen(paradas);
+        // Ingreso datos usuario
+        int opcion = Interfaz.opcion();
+        Parada origen = Interfaz.ingresarEstacionOrigen(paradas);
+        Parada destino = Interfaz.ingresarEstacionDestino(paradas, origen);
 
-        Parada fin = Interfaz.ingresarEstacionDestino(paradas, inicio);
+        origen = paradas.get("25");
+        destino = paradas.get("1");
+
+        // Realizar calculo
+        Calculo c = new Calculo(paradas, tramos);
+
+        List<Tramo> recorrido = c.rapido(origen, destino);
+
+        // Mostrar resultado
+        Interfaz.resultado(recorrido);
+
     }
 }
