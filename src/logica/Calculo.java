@@ -10,7 +10,7 @@ public class Calculo {
 
     public Calculo(TreeMap<String, Parada> paradas, List<Tramo> tramos) {
 
-        grafo = new AdjacencyMapGraph<>(false);
+        grafo = new AdjacencyMapGraph<>(true);
 
         // Cargar paradas
         vertices = new TreeMap<String, Vertex<Parada>>();
@@ -27,7 +27,7 @@ public class Calculo {
     public List<Tramo> rapido(Parada inicio, Parada fin) {
 
         // copia grafo
-        Graph<Parada, Integer> rapido = new AdjacencyMapGraph<>(false);
+        Graph<Parada, Integer> rapido = new AdjacencyMapGraph<>(true);
         Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
 
         for (Vertex<Parada> vertex : grafo.vertices())
@@ -43,13 +43,14 @@ public class Calculo {
 
         List<Tramo> tramos = new ArrayList<Tramo>();
 
-        Vertex<Parada> v1, v2;
-        Position<Vertex<Parada>> aux = lista.first();
-        while (lista.after(aux) != null) {
-            v1 = aux.getElement();
-            aux = lista.after(aux);
-            v2 = aux.getElement();
-            tramos.add(tramos.size(), grafo.getEdge(vertices.get(v1.getElement().getCodigo()), vertices.get(v2.getElement().getCodigo())).getElement());
+        Position<Vertex<Parada>> v1, v2;
+
+        for (Position<Vertex<Parada>> position: lista.positions()) {
+            if (lista.after(position) != null) {
+                v1 = position;
+                v2 = lista.after(v1);
+                tramos.add(tramos.size(), grafo.getEdge(vertices.get(v1.getElement().getElement().getCodigo()), vertices.get(v2.getElement().getElement().getCodigo())).getElement());
+            }
         }
 
         return tramos;

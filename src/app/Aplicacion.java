@@ -35,19 +35,22 @@ public class Aplicacion {
 
         // Ingreso datos usuario
         int opcion = Interfaz.opcion();
+
         Parada origen = Interfaz.ingresarEstacionOrigen(paradas);
+
+        origen = paradas.get("1");
+
         Parada destino = Interfaz.ingresarEstacionDestino(paradas, origen);
 
-        origen = paradas.get("25");
-        destino = paradas.get("1");
+        destino = paradas.get("2");
 
         // Realizar calculo
         Calculo c = new Calculo(paradas, tramos);
 
-        List<Tramo> recorrido = c.rapido(origen, destino);
+        List<Tramo> recorrido1 = c.rapido(origen, destino);
 
         // Mostrar resultado
-        Interfaz.resultado(recorrido);
+        Interfaz.resultado(recorrido1);
 
     }
 }
