@@ -2,7 +2,7 @@ package interfaz;
 
 import app.Constante;
 
-import datastructures.List;
+import java.util.List;
 import datastructures.TreeMap;
 import model.Parada;
 import model.Tramo;
@@ -30,7 +30,7 @@ public class Interfaz extends JFrame {
     }
 
     // Usuario ingresa estacion origen
-    public static Parada ingresarEstacionOrigen(TreeMap<String, Parada> paradas) {
+    public static Parada ingresarEstacionOrigen(TreeMap<Integer, Parada> paradas) {
         aplicacion = new JFrame("Seleccione la parada inicial");
 
         JPanel panelNorte = new JPanel();
@@ -91,13 +91,11 @@ public class Interfaz extends JFrame {
         aplicacion.setSize(400, 250);
         aplicacion.setVisible(true);
 
-        respuesta = paradas.get("5");
-
         return respuesta;
     }
 
     // Usuario ingresa estacion destino
-    public static Parada ingresarEstacionDestino(TreeMap<String, Parada> paradas, Parada inicio) {
+    public static Parada ingresarEstacionDestino(TreeMap<Integer, Parada> paradas, Parada inicio) {
         aplicacion = new JFrame();
 
         JPanel panelNorte = new JPanel();

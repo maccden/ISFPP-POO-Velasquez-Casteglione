@@ -3,23 +3,28 @@ package model;
 import datastructures.ArrayList;
 import datastructures.List;
 
+import java.util.Objects;
+
 public class Parada {
-    private String codigo, direccion;
+    private int codigo;
+    private String direccion;
     private List<Linea> lineas;
 
-    public Parada(String codigo, String direccion) {
+    public Parada(int codigo, String direccion) {
         this.codigo = codigo;
         this.direccion = direccion;
         lineas = new ArrayList<>();
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
     public String getDireccion() {
         return direccion;
     }
+
+    public List<Linea> getLineas() { return lineas; }
 
     public void setLinea(Linea linea) {
         if (!lineas.isEmpty())
@@ -42,13 +47,9 @@ public class Parada {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Parada other = (Parada) obj;
-        if (codigo == null) {
-            if (other.codigo != null)
-                return false;
-        } else if (!codigo.equals(other.codigo))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parada parada)) return false;
+        return codigo == parada.codigo;
     }
 }

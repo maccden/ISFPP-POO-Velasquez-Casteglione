@@ -25,6 +25,10 @@ public class Linea {
         return codigo;
     }
 
+    public List<Parada> getParadasIda() { return paradasIda; }
+
+    public List<Parada> getParadasVuelta() { return paradasVuelta; }
+
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
