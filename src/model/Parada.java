@@ -35,9 +35,8 @@ public class Parada {
         sb.append("codigo='").append(codigo).append('\'');
         sb.append(", direccion='").append(direccion).append('\'');
         sb.append(", lineas=");
-        for (Linea linea: lineas) {
+        for (Linea linea : lineas)
             sb.append(linea.getCodigo());
-        }
         sb.append('}');
         return sb.toString();
     }
