@@ -33,7 +33,7 @@ public class Coordinador {
         return listarLineas().get(linea.getCodigo());
     }
 
-    public TreeMap<String, Parada> listarParadas() throws IOException {
+    public TreeMap<Integer, Parada> listarParadas() throws IOException {
         return Datos.getParadas();
     }
     

@@ -11,7 +11,6 @@ import modelo.Tramo;
 import negocio.Calculo;
 
 public class AplicacionConsultas {
-
 	private Calculo calculo;
 	private Interfaz interfaz;
 	private Coordinador coordinador;
@@ -34,15 +33,15 @@ public class AplicacionConsultas {
 
     private void consultar() throws IOException {
         CargarParametros.parametros();
-        TreeMap<String, Parada> paradas = coordinador.listarParadas();
+        TreeMap<Integer, Parada> paradas = coordinador.listarParadas();
         //TreeMap<String, Linea> linea = coordinador.listarLineas();
         List<Tramo> tramos = coordinador.listarTramos();
         int opcion = Interfaz.opcion();
 		calculo.cargarDatos(paradas, tramos);
         Parada origen = Interfaz.ingresarEstacionOrigen(paradas);
         Parada destino = Interfaz.ingresarEstacionDestino(paradas, origen);
-        origen = paradas.get("1");
-        destino = paradas.get("2");
+        origen = paradas.get(1);
+        destino = paradas.get(2);
 		List<Tramo> recorrido1 = calculo.rapido(origen, destino);
 		Interfaz.resultado(recorrido1);
     }

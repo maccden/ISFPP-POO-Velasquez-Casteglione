@@ -4,16 +4,17 @@ import datastructures.ArrayList;
 import datastructures.List;
 
 public class Parada {
-    private String codigo, direccion;
+    private int codigo; 
+    private String direccion;
     private List<Linea> lineas;
 
-    public Parada(String codigo, String direccion) {
+    public Parada(int codigo, String direccion) {
         this.codigo = codigo;
         this.direccion = direccion;
         lineas = new ArrayList<>();
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
@@ -44,10 +45,7 @@ public class Parada {
     @Override
     public boolean equals(Object obj) {
         Parada other = (Parada) obj;
-        if (codigo == null) {
-            if (other.codigo != null)
-                return false;
-        } else if (!codigo.equals(other.codigo))
+        if (codigo != other.codigo)
             return false;
         return true;
     }
