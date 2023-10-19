@@ -1,4 +1,4 @@
-package data;
+package datos;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,11 +7,10 @@ import java.io.IOException;
 import datastructures.ArrayList;
 import datastructures.List;
 import datastructures.TreeMap;
-import model.*;
+import modelo.*;
 
 public class Datos {
-
-    public static TreeMap<String, Parada> cargarParadas(String fileName) throws IOException {
+    private static TreeMap<String, Parada> cargarParadas(String fileName) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
         TreeMap<String, Parada> paradas = new TreeMap<>();
         String reader;
@@ -22,12 +21,11 @@ public class Datos {
             String direccion = partes[1];
             paradas.put(idParada, new Parada(idParada, direccion));
         }
-
         bf.close();
         return paradas;
     }
 
-    public static TreeMap<String, Linea> cargarLineas(String fileName, TreeMap<String, Parada> paradas)
+    private static TreeMap<String, Linea> cargarLineas(String fileName, TreeMap<String, Parada> paradas)
             throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
         TreeMap<String, Linea> lineas = new TreeMap<>();
@@ -74,12 +72,11 @@ public class Datos {
                 lineas.put(idLinea, linea);
             }
         }
-
         bf.close();
         return lineas;
     }
 
-    public static List<Tramo> cargarTramos(String fileName, TreeMap<String, Parada> paradas) throws IOException {
+    private static List<Tramo> cargarTramos(String fileName, TreeMap<String, Parada> paradas) throws IOException {
         BufferedReader bf = new BufferedReader(new FileReader(fileName));
         List<Tramo> tramos = new ArrayList<>();
         String reader;
@@ -93,8 +90,19 @@ public class Datos {
             tramos.add(0, new Tramo(paradas.get(parada1), paradas.get(parada2), Integer.parseInt(tiempo),
                     Integer.parseInt(tipo)));
         }
-
         bf.close();
         return tramos;
+    }
+
+    public static TreeMap<String, Parada> getParadas() throws IOException {
+        return cargarParadas(CargarParametros.getArchivoParada());
+    }
+
+    public static TreeMap<String, Linea> getLineas() throws IOException {
+        return cargarLineas(CargarParametros.getArchivoLinea(), getParadas());
+    }
+
+    public static List<Tramo> getTramos() throws IOException {
+        return cargarTramos(CargarParametros.getArchivoTramo(), getParadas());
     }
 }

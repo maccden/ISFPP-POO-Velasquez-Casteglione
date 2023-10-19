@@ -1,4 +1,4 @@
-package data;
+package datos;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,9 +13,7 @@ public class CargarParametros {
     public static void parametros() throws IOException {
         Properties prop = new Properties();
         InputStream input = new FileInputStream("config.properties");
-
         prop.load(input);
-
         archivoLinea = prop.getProperty("linea");
         archivoParada = prop.getProperty("parada");
         archivoTramo = prop.getProperty("tramo");

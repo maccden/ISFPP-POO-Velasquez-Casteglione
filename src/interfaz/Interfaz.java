@@ -1,13 +1,15 @@
 package interfaz;
 
-import app.Constante;
-
 import datastructures.List;
 import datastructures.TreeMap;
-import model.Parada;
-import model.Tramo;
+import modelo.Parada;
+import modelo.Tramo;
 
 import javax.swing.*;
+
+import controlador.Constantes;
+import controlador.Coordinador;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class Interfaz extends JFrame {
 
     private static JFrame aplicacion;
+    private Coordinador coordinador;
     private static JButton siguiente, cancelar;
     private static ArrayList<String> dir;
     private static ArrayList<Parada> p;
@@ -26,7 +29,7 @@ public class Interfaz extends JFrame {
 
     // Usuario ingresa opcion
     public static int opcion() {
-        return Constante.MAS_RAPIDO;
+        return Constantes.MAS_RAPIDO;
     }
 
     // Usuario ingresa estacion origen
@@ -66,7 +69,7 @@ public class Interfaz extends JFrame {
         dir.add("...");
         p = new ArrayList<>();
 
-        for (Parada parada: paradas.values()) {
+        for (Parada parada : paradas.values()) {
             p.add(parada);
             dir.add(parada.getCodigo() + " - " + parada.getDireccion());
         }
@@ -128,13 +131,12 @@ public class Interfaz extends JFrame {
         siguiente.setEnabled(false);
         cancelar.setFocusable(false);
 
-
         JPanel panelCentro = new JPanel();
         dir = new ArrayList<>();
         dir.add("...");
         p = new ArrayList<>();
 
-        for (Parada parada: paradas.values()) {
+        for (Parada parada : paradas.values()) {
             if (!parada.equals(inicio)) {
                 p.add(parada);
                 dir.add(parada.getCodigo() + " - " + parada.getDireccion());
@@ -168,14 +170,20 @@ public class Interfaz extends JFrame {
         int tiempoTotal = 0;
         final StringBuilder sb = new StringBuilder("Recorrido: " + "\n");
         for (Tramo t : recorrido) {
-            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
+            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo()
+                    + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
             tiempoTotal += t.getTiempo();
         }
         sb.append("Tiempo total: " + tiempoTotal + " minutos");
         if (tiempoTotal == 0) {
-            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas", "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas",
+                    "Resultado", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, sb, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
     }
 }
