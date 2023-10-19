@@ -1,6 +1,6 @@
 package interfaz;
 
-import datastructures.List;
+import java.util.List;
 import datastructures.TreeMap;
 import modelo.Parada;
 import modelo.Tramo;
@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class Interfaz extends JFrame {
 
-    private static JFrame aplicacion;
     private Coordinador coordinador;
+    private static JFrame aplicacion;
     private static JButton siguiente, cancelar;
     private static ArrayList<String> dir;
     private static ArrayList<Parada> p;
@@ -33,7 +33,7 @@ public class Interfaz extends JFrame {
     }
 
     // Usuario ingresa estacion origen
-    public static Parada ingresarEstacionOrigen(TreeMap<String, Parada> paradas) {
+    public static Parada ingresarEstacionOrigen(TreeMap<Integer, Parada> paradas) {
         aplicacion = new JFrame("Seleccione la parada inicial");
 
         JPanel panelNorte = new JPanel();
@@ -69,7 +69,7 @@ public class Interfaz extends JFrame {
         dir.add("...");
         p = new ArrayList<>();
 
-        for (Parada parada : paradas.values()) {
+        for (Parada parada: paradas.values()) {
             p.add(parada);
             dir.add(parada.getCodigo() + " - " + parada.getDireccion());
         }
@@ -94,13 +94,11 @@ public class Interfaz extends JFrame {
         aplicacion.setSize(400, 250);
         aplicacion.setVisible(true);
 
-        respuesta = paradas.get("5");
-
         return respuesta;
     }
 
     // Usuario ingresa estacion destino
-    public static Parada ingresarEstacionDestino(TreeMap<String, Parada> paradas, Parada inicio) {
+    public static Parada ingresarEstacionDestino(TreeMap<Integer, Parada> paradas, Parada inicio) {
         aplicacion = new JFrame();
 
         JPanel panelNorte = new JPanel();
@@ -131,12 +129,13 @@ public class Interfaz extends JFrame {
         siguiente.setEnabled(false);
         cancelar.setFocusable(false);
 
+
         JPanel panelCentro = new JPanel();
         dir = new ArrayList<>();
         dir.add("...");
         p = new ArrayList<>();
 
-        for (Parada parada : paradas.values()) {
+        for (Parada parada: paradas.values()) {
             if (!parada.equals(inicio)) {
                 p.add(parada);
                 dir.add(parada.getCodigo() + " - " + parada.getDireccion());
@@ -170,14 +169,12 @@ public class Interfaz extends JFrame {
         int tiempoTotal = 0;
         final StringBuilder sb = new StringBuilder("Recorrido: " + "\n");
         for (Tramo t : recorrido) {
-            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo()
-                    + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
+            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
             tiempoTotal += t.getTiempo();
         }
         sb.append("Tiempo total: " + tiempoTotal + " minutos");
         if (tiempoTotal == 0) {
-            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas",
-                    "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas", "Resultado", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, sb, "Resultado", JOptionPane.INFORMATION_MESSAGE);
         }

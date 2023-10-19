@@ -1,6 +1,6 @@
 package controlador;
 
-import datastructures.List;
+import java.util.List;
 import datastructures.TreeMap;
 import datos.Datos;
 import negocio.Calculo;

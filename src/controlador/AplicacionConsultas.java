@@ -1,7 +1,7 @@
 package controlador;
 
 import java.io.IOException;
-import datastructures.List;
+import java.util.List;
 import datastructures.TreeMap;
 import datos.CargarParametros;
 import interfaz.Interfaz;
@@ -34,15 +34,15 @@ public class AplicacionConsultas {
     private void consultar() throws IOException {
         CargarParametros.parametros();
         TreeMap<Integer, Parada> paradas = coordinador.listarParadas();
-        //TreeMap<String, Linea> linea = coordinador.listarLineas();
+        TreeMap<String, Linea> lineas = coordinador.listarLineas();
         List<Tramo> tramos = coordinador.listarTramos();
         int opcion = Interfaz.opcion();
-		calculo.cargarDatos(paradas, tramos);
+		calculo.cargarDatos(paradas, lineas, tramos);
         Parada origen = Interfaz.ingresarEstacionOrigen(paradas);
         Parada destino = Interfaz.ingresarEstacionDestino(paradas, origen);
         origen = paradas.get(1);
         destino = paradas.get(2);
-		List<Tramo> recorrido1 = calculo.rapido(origen, destino);
+		List<Tramo> recorrido1 = calculo.masRapido(origen, destino);
 		Interfaz.resultado(recorrido1);
     }
 }
