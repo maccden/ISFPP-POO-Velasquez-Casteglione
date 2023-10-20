@@ -3,6 +3,7 @@ package dao.secuencial;
 import datastructures.TreeMap;
 import dao.ParadaDAO;
 import dao.TramoDAO;
+import factory.Factory;
 import modelo.Parada;
 import modelo.Tramo;
 
@@ -14,7 +15,7 @@ public class TramoSecuencialDAO implements TramoDAO {
 
     private List<Tramo> list;
     private String name;
-    private Hashtable<String, Parada> paradas;
+    private Hashtable<Integer, Parada> paradas;
     private boolean actualizar;
 
     public TramoSecuencialDAO() {
@@ -32,8 +33,8 @@ public class TramoSecuencialDAO implements TramoDAO {
             inFile.useDelimiter("\\s*;\\s*");
             while (inFile.hasNext()) {
                 Tramo e = new Tramo();
-                e.setInicio(paradas.get(inFile.next()));
-                e.setFin(paradas.get(inFile.next()));
+                e.setInicio(paradas.get(Integer.parseInt(inFile.next())));
+                e.setFin(paradas.get(Integer.parseInt(inFile.next())));
                 e.setTiempo(inFile.nextInt());
                 e.setTipo(inFile.nextInt());
                 list.add(e);
@@ -103,12 +104,12 @@ public class TramoSecuencialDAO implements TramoDAO {
         actualizar = true;
     }
 
-    private Hashtable<String, Parada> cargarParadas() {
-        Hashtable<String, Parada> paradas = new Hashtable<String, Parada>();
-        ParadaDAO paradaDAO = new ParadaSecuencialDAO();
+    private Hashtable<Integer, Parada> cargarParadas() {
+        Hashtable<Integer, Parada> paradas = new Hashtable<Integer, Parada>();
+        ParadaDAO paradaDAO = (ParadaDAO) Factory.getInstancia("PARADA");
         TreeMap<Integer, Parada> ds = paradaDAO.buscarTodos();
         for (Parada d : ds.values())
-            paradas.put(String.valueOf(d.getCodigo()), d);
+            paradas.put(d.getCodigo(), d);
         return paradas;
     }
 }

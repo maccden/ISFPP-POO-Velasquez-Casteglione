@@ -2,6 +2,7 @@ package servicio;
 
 import dao.ParadaDAO;
 import datastructures.TreeMap;
+import factory.Factory;
 import modelo.Parada;
 import dao.secuencial.ParadaSecuencialDAO;
 
@@ -9,7 +10,7 @@ public class ParadaServiceImpl implements ParadaService {
     private ParadaDAO paradaDAO;
 
     public ParadaServiceImpl(){
-        paradaDAO = new ParadaSecuencialDAO();
+        paradaDAO = (ParadaDAO) Factory.getInstancia("PARADA");
     }
 
     @Override

@@ -3,12 +3,12 @@ package dao.secuencial;
 import dao.LineaDAO;
 import dao.ParadaDAO;
 import datastructures.TreeMap;
+import factory.Factory;
 import modelo.Linea;
 import modelo.Parada;
 import negocio.Empresa;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 
 public class LineaSecuencialDAO implements LineaDAO {
@@ -24,45 +24,55 @@ public class LineaSecuencialDAO implements LineaDAO {
         actualizar = true;
     }
 
-    /* <!>  <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>
+    private TreeMap<String, Linea> readFromFile(String file) throws IOException {
+        BufferedReader bf = null;
+        TreeMap<String, Linea> lineas = new TreeMap<>();
+        String reader;
 
-    No reescribe el mapa paradas
-
-       <!>  <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>
-     */
-
-    private TreeMap<String, Linea> readFromFile(String file) {
-        TreeMap<String, Linea> list = new TreeMap<>();
-        Scanner inFile = null;
         try {
-            inFile = new Scanner(new File(file));
-            String registro;
-            Linea linea = null;
-            while (inFile.hasNext()) {
-                registro = inFile.next();
-                String[] campos = registro.split(";");
-                for (Linea l: list.values()) {
-                    if (l.getCodigo().equals(campos[0]))
-                        linea = l;
-                }
-                if (linea == null) {
-                    linea = new Linea(campos[0]);
-                    list.put(campos[0], linea);
-                }
-                if (campos[1].equals("I"))
-                    for (int i = 2; i < campos.length; i++) {
-                        linea.agregarIda(paradas.get(Integer.valueOf(campos[i])));
+            bf = new BufferedReader(new FileReader(file));
+            while ((reader = bf.readLine()) != null) {
+                String[] partes = reader.split(";");
+                String idLinea = partes[0];
+                String sentido = partes[1];
 
-
+                if (lineas.get(idLinea) != null) {
+                    if (sentido.equals("I")) {
+                        for (int i = 2; i < partes.length; i++) {
+                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
+                                lineas.get(idLinea).agregarIda(paradas.get(Integer.valueOf(partes[i])));
+                                paradas.get(Integer.valueOf(partes[i])).setLinea(lineas.get(idLinea));
+                            }
+                        }
+                    } else if (sentido.equals("R")) {
+                        for (int i = 2; i < partes.length; i++) {
+                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
+                                lineas.get(idLinea).agregarVuelta(paradas.get(Integer.valueOf(partes[i])));
+                                paradas.get(Integer.valueOf(partes[i])).setLinea(lineas.get(idLinea));
+                            }
+                        }
                     }
-                if (campos[1].equals("R"))
-                    for (int i = 2; i < campos.length; i++) {
-                        linea.agregarVuelta(paradas.get(Integer.valueOf(campos[i])));
-
-
+                } else {
+                    Linea linea = new Linea(idLinea);
+                    if (sentido.equals("I")) {
+                        for (int i = 2; i < partes.length; i++) {
+                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
+                                linea.agregarIda(paradas.get(Integer.valueOf(partes[i])));
+                                paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
+                            }
+                        }
+                    } else if (sentido.equals("R")) {
+                        for (int i = 2; i < partes.length; i++) {
+                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
+                                linea.agregarVuelta(paradas.get(Integer.valueOf(partes[i])));
+                                paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
+                            }
+                        }
                     }
+                    lineas.put(idLinea, linea);
+                }
             }
-            inFile.close();
+            bf.close();
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error opening file.");
             fileNotFoundException.printStackTrace();
@@ -73,10 +83,11 @@ public class LineaSecuencialDAO implements LineaDAO {
             System.err.println("Error reading from file.");
             illegalStateException.printStackTrace();
         } finally {
-            if (inFile != null)
-                inFile.close();
+            if (bf != null)
+                bf.close();
         }
-        return list;
+
+        return lineas;
     }
 
     private void writeToFile(TreeMap<String, Linea> list, String file) {
@@ -104,7 +115,7 @@ public class LineaSecuencialDAO implements LineaDAO {
     }
 
     @Override
-    public TreeMap<String, Linea> buscarTodos() {
+    public TreeMap<String, Linea> buscarTodos() throws IOException {
         if (actualizar) {
             list = readFromFile(name);
             actualizar = false;
@@ -135,7 +146,7 @@ public class LineaSecuencialDAO implements LineaDAO {
 
     private Hashtable<Integer, Parada> cargarParada() {
         Hashtable<Integer, Parada> parada = new Hashtable<Integer, Parada>();
-        ParadaDAO ParadaDAO = new ParadaSecuencialDAO();
+        ParadaDAO ParadaDAO = (ParadaDAO) Factory.getInstancia("PARADA");
         TreeMap<Integer, Parada> ds = ParadaDAO.buscarTodos();
         for (Parada d : ds.values())
             parada.put(d.getCodigo(), d);

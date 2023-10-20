@@ -7,13 +7,13 @@ import modelo.Tramo;
 import servicio.*;
 
 //import java.util.TreeMap;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Empresa {
 
     private static Empresa empresa = null;
-
     private String nombre;
     private TreeMap<String, Linea> lineas;
     private LineaService lineaService;
@@ -22,14 +22,14 @@ public class Empresa {
     private List<Tramo> tramos;
     private TramoService tramoService;
 
-    public static Empresa getEmpresa() {
+    public static Empresa getEmpresa() throws IOException {
         if (empresa == null) {
             empresa = new Empresa();
         }
         return empresa;
     }
 
-    private Empresa() {
+    private Empresa() throws IOException {
         super();
         paradas = new TreeMap<>();
         paradaService = new ParadaServiceImpl();

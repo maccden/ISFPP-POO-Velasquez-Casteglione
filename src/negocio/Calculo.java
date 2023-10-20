@@ -36,6 +36,21 @@ public class Calculo {
         for (Tramo t : tramos)
             tramoMap.put(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), t);
 
+        for (Tramo tramo: tramoMap.values())
+            System.out.println(tramo);
+
+        System.out.println();
+
+        for (Parada parada: paradaMap.values())
+            System.out.println(parada);
+
+        System.out.println();
+
+        for (Linea linea: lineaMap.values())
+            System.out.println(linea);
+
+        System.out.println();
+
         // Map paradaLinea
         TreeMap<String, ParadaLinea> paradaLinea = new TreeMap<String, ParadaLinea>();
         for (Parada p : paradaMap.values())
@@ -65,10 +80,10 @@ public class Calculo {
                 System.out.println(origen.getCodigo() + l.getCodigo());
                 System.out.println(destino.getCodigo() + l.getCodigo());
                 System.out.println(origen.getCodigo() + "-" + destino.getCodigo());
-                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()));
-                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()));
-                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()), vertices.get(destino.getCodigo() + l.getCodigo()),
-                        tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
+                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()).getElement());
+                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()).getElement());
+                System.out.println(tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
+                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()), vertices.get(destino.getCodigo() + l.getCodigo()), tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
             }
             for (int i = 0; i < l.getParadasVuelta().size() - 1; i++) {
                 origen = l.getParadasVuelta().get(i);

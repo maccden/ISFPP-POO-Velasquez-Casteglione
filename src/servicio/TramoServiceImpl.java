@@ -1,6 +1,7 @@
 package servicio;
 
 import dao.secuencial.TramoSecuencialDAO;
+import factory.Factory;
 import modelo.Tramo;
 import dao.TramoDAO;
 
@@ -11,7 +12,7 @@ public class TramoServiceImpl implements TramoService {
     private TramoDAO tramoDAO;
 
     public TramoServiceImpl(){
-        tramoDAO = new TramoSecuencialDAO();
+        tramoDAO = (TramoDAO) Factory.getInstancia("TRAMO");
     }
 
     @Override

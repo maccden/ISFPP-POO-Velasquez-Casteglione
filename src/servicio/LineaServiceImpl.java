@@ -1,16 +1,20 @@
 package servicio;
 
 import dao.LineaDAO;
+import dao.TramoDAO;
 import dao.secuencial.LineaSecuencialDAO;
 import datastructures.TreeMap;
+import factory.Factory;
 import modelo.Linea;
+
+import java.io.IOException;
 
 public class LineaServiceImpl implements LineaService {
 
     private LineaDAO lineaDAO;
 
     public LineaServiceImpl(){
-        lineaDAO = new LineaSecuencialDAO();
+        lineaDAO = (LineaDAO) Factory.getInstancia("LINEA");
     }
 
     @Override
@@ -29,7 +33,7 @@ public class LineaServiceImpl implements LineaService {
     }
 
     @Override
-    public TreeMap<String, Linea> buscarTodos() {
+    public TreeMap<String, Linea> buscarTodos() throws IOException {
         return lineaDAO.buscarTodos();
     }
 }
