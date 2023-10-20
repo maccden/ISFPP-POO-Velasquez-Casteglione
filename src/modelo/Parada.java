@@ -6,12 +6,15 @@ import datastructures.List;
 public class Parada {
     private int codigo;
     private String direccion;
-    private List<Linea> lineas;
+    private List<Linea> lineas = new ArrayList<>();
+
+    public Parada() {
+
+    }
 
     public Parada(int codigo, String direccion) {
         this.codigo = codigo;
         this.direccion = direccion;
-        lineas = new ArrayList<>();
     }
 
     public int getCodigo() {
@@ -30,6 +33,14 @@ public class Parada {
                 if (l.equals(linea))
                     return;
         lineas.add(lineas.size(), linea);
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     @Override

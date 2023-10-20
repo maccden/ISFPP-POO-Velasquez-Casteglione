@@ -4,6 +4,10 @@ public class Tramo {
     private Parada inicio, fin;
     private int tiempo, tipo;
 
+    public Tramo() {
+
+    }
+
     public Tramo(Parada inicio, Parada fin, int tiempo, int tipo) {
         this.inicio = inicio;
         this.fin = fin;
@@ -25,6 +29,22 @@ public class Tramo {
 
     public int getTipo() {
         return tipo;
+    }
+
+    public void setInicio(Parada inicio) {
+        this.inicio = inicio;
+    }
+
+    public void setFin(Parada fin) {
+        this.fin = fin;
+    }
+
+    public void setTiempo(int tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    public void setTipo(int tipo) {
+        this.tipo = tipo;
     }
 
     @Override

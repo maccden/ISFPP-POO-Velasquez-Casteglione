@@ -2,15 +2,15 @@ package controlador;
 
 import java.io.IOException;
 import java.util.List;
-import datastructures.TreeMap;
-import datos.CargarParametros;
 import interfaz.Interfaz;
-import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 import negocio.Calculo;
+import negocio.Empresa;
 
 public class AplicacionConsultas {
+
+    private Empresa empresa;
 	private Calculo calculo;
 	private Interfaz interfaz;
 	private Coordinador coordinador;
@@ -22,27 +22,34 @@ public class AplicacionConsultas {
     }
 
     private void iniciar() throws IOException {
-        coordinador = new Coordinador();
+
+        empresa = Empresa.getEmpresa();
         calculo = new Calculo();
+        coordinador = new Coordinador();
         interfaz = new Interfaz();
+
         calculo.setCoordinador(coordinador);
         interfaz.setCoordinador(coordinador);
+
+        coordinador.setEmpresa(empresa);
         coordinador.setCalculo(calculo);
         coordinador.setInterfaz(interfaz);
+
+        calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
     }
 
     private void consultar() throws IOException {
-        CargarParametros.parametros();
-        TreeMap<Integer, Parada> paradas = coordinador.listarParadas();
-        TreeMap<String, Linea> lineas = coordinador.listarLineas();
-        List<Tramo> tramos = coordinador.listarTramos();
+
         int opcion = Interfaz.opcion();
-		calculo.cargarDatos(paradas, lineas, tramos);
-        Parada origen = Interfaz.ingresarEstacionOrigen(paradas);
-        Parada destino = Interfaz.ingresarEstacionDestino(paradas, origen);
-        origen = paradas.get(1);
-        destino = paradas.get(2);
-		List<Tramo> recorrido1 = calculo.masRapido(origen, destino);
-		Interfaz.resultado(recorrido1);
+        Parada origen = Interfaz.ingresarEstacionOrigen(coordinador.listarParadas());
+        Parada destino = Interfaz.ingresarEstacionDestino(coordinador.listarParadas(), origen);
+
+        calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
+
+        origen = coordinador.listarParadas().get(1);
+        destino = coordinador.listarParadas().get(2);
+
+		List<Tramo> recorrido = calculo.masRapido(origen, destino);
+		Interfaz.resultado(recorrido);
     }
 }

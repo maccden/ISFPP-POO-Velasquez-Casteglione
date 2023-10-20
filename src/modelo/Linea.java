@@ -5,20 +5,24 @@ import datastructures.List;
 
 public class Linea {
     private String codigo;
-    private List<Parada> paradasVuelta, paradasIda;
+    private List<Parada> paradasVuelta = new ArrayList<>(), paradasIda = new ArrayList<>();
+
+    public Linea() {
+
+    }
 
     public Linea(String codigo) {
         this.codigo = codigo;
-        paradasVuelta = new ArrayList<>();
-        paradasIda = new ArrayList<>();
     }
 
     public void agregarIda(Parada parada) {
         paradasIda.add(paradasIda.size(), parada);
+        parada.setLinea(this);
     }
 
     public void agregarVuelta(Parada parada) {
         paradasVuelta.add(paradasVuelta.size(), parada);
+        parada.setLinea(this);
     }
 
     public String getCodigo() {

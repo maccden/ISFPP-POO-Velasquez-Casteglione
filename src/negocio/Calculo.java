@@ -7,15 +7,13 @@ import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 
-import java.util.ArrayList;
 import java.util.List;
-
+import java.util.ArrayList;
 
 public class Calculo {
     private static final int CAMBIO_LINEA = 10000;
     private Graph<ParadaLinea, Integer> red;
     private TreeMap<String, Vertex<ParadaLinea>> vertices;
-
     private TreeMap<String, Linea> lineaMap;
     private TreeMap<Integer, Parada> paradaMap;
     private TreeMap<String, Tramo> tramoMap;
@@ -24,7 +22,6 @@ public class Calculo {
     public Calculo() {
 
     }
-
 
     public void cargarDatos (TreeMap<Integer, Parada> paradaMap, TreeMap<String, Linea> lineaMap, List<Tramo> tramos) {
 
@@ -65,8 +62,12 @@ public class Calculo {
             for (int i = 0; i < l.getParadasIda().size() - 1; i++) {
                 origen = l.getParadasIda().get(i);
                 destino = l.getParadasIda().get(i + 1);
-                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()),
-                        vertices.get(destino.getCodigo() + l.getCodigo()),
+                System.out.println(origen.getCodigo() + l.getCodigo());
+                System.out.println(destino.getCodigo() + l.getCodigo());
+                System.out.println(origen.getCodigo() + "-" + destino.getCodigo());
+                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()));
+                System.out.println(vertices.get(origen.getCodigo() + l.getCodigo()));
+                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()), vertices.get(destino.getCodigo() + l.getCodigo()),
                         tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
             }
             for (int i = 0; i < l.getParadasVuelta().size() - 1; i++) {
@@ -174,8 +175,7 @@ public class Calculo {
         }
         for (int i = 1; i < paradas.size() - 1; i++)
             if ((t = tramoMap.get(paradas.get(i) + "-" + paradas.get(i + 1))) != null)
-                tramos.add(
-                        new Tramo(pMap.get(paradas.get(i)), pMap.get(paradas.get(i + 1)), t.getTipo(), t.getTiempo()));
+                tramos.add(new Tramo(pMap.get(paradas.get(i)), pMap.get(paradas.get(i + 1)), t.getTipo(), t.getTiempo()));
 
         return tramos;
     }

@@ -1,17 +1,19 @@
 package controlador;
 
 import java.util.List;
+
 import datastructures.TreeMap;
-import datos.Datos;
 import negocio.Calculo;
 import interfaz.Interfaz;
 import modelo.*;
+import negocio.Empresa;
 
 import java.io.IOException;
 
 public class Coordinador {
-    private Interfaz interfaz;
+    private Empresa empresa;
     private Calculo calculo;
+    private Interfaz interfaz;
 
     public Interfaz getInterfaz() {
         return interfaz;
@@ -29,19 +31,23 @@ public class Coordinador {
         this.calculo = calculo;
     }
 
-    public Linea buscarLinea(Linea linea) throws IOException {
-        return listarLineas().get(linea.getCodigo());
+    public Empresa getEmpresa() { return empresa; }
+
+    public void setEmpresa(Empresa empresa) { this.empresa = empresa; }
+
+    public Linea buscarLinea(Linea linea) {
+        return empresa.buscarLinea(linea);
     }
 
     public TreeMap<Integer, Parada> listarParadas() throws IOException {
-        return Datos.getParadas();
+        return empresa.getParadas();
     }
     
     public TreeMap<String, Linea> listarLineas() throws IOException {
-        return Datos.getLineas();
+        return empresa.getLineas();
     }
 
     public List<Tramo> listarTramos() throws IOException {
-        return Datos.getTramos();
+        return empresa.getTramos();
     }
 }
