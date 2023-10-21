@@ -46,8 +46,14 @@ public class AplicacionConsultas {
 
         calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
 
-        origen = coordinador.listarParadas().get(1);
-        destino = coordinador.listarParadas().get(2);
+        // <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>
+
+        // Lo de abajo es la unica manera de ingresar las paradas, ya que la interfaz aun no funciona completamente
+
+        // <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>
+
+        origen = coordinador.listarParadas().get(84);
+        destino = coordinador.listarParadas().get(85);
 
 		List<Tramo> recorrido = calculo.masRapido(origen, destino);
 		Interfaz.resultado(recorrido);
