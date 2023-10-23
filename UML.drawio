@@ -239,7 +239,7 @@
         <mxCell id="cFbSNhtvID81yVxfwSZ4-3" value="- coordinador: Coordinador" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-2">
           <mxGeometry y="26" width="160" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="cFbSNhtvID81yVxfwSZ4-7" value="- interfaz: Interfaz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-2">
+        <mxCell id="cFbSNhtvID81yVxfwSZ4-7" value="- gui: Interfaz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-2">
           <mxGeometry y="52" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="cFbSNhtvID81yVxfwSZ4-8" value="- calculo: Calculo" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-2">
@@ -257,7 +257,7 @@
         <mxCell id="cFbSNhtvID81yVxfwSZ4-10" value="Coordinador" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="320" y="700" width="260" height="190" as="geometry" />
         </mxCell>
-        <mxCell id="cFbSNhtvID81yVxfwSZ4-11" value="- interfaz: Interfaz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-10">
+        <mxCell id="cFbSNhtvID81yVxfwSZ4-11" value="- gui: Interfaz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-10">
           <mxGeometry y="26" width="260" height="26" as="geometry" />
         </mxCell>
         <mxCell id="cFbSNhtvID81yVxfwSZ4-14" value="- calculo: Calculo" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="cFbSNhtvID81yVxfwSZ4-10">

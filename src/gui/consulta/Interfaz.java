@@ -1,4 +1,4 @@
-package interfaz;
+package gui.consulta;
 
 import java.util.List;
 

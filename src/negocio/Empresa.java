@@ -22,14 +22,14 @@ public class Empresa {
     private List<Tramo> tramos;
     private TramoService tramoService;
 
-    public static Empresa getEmpresa() throws IOException {
+    public static Empresa getEmpresa() {
         if (empresa == null) {
             empresa = new Empresa();
         }
         return empresa;
     }
 
-    private Empresa() throws IOException {
+    private Empresa() {
         super();
         paradas = new TreeMap<>();
         paradaService = new ParadaServiceImpl();
@@ -55,8 +55,11 @@ public class Empresa {
     }
 
     public void borrarLinea(Linea linea) {
-        Linea emp = buscarLinea(linea);
-        lineas.remove(emp.getCodigo());
+        for (Parada parada : paradas.values())
+            if (parada.getLinea(linea))
+                throw new LineaReferenciaException();
+        Linea l = buscarLinea(linea);
+        lineas.remove(l.getCodigo());
         lineaService.borrar(linea);
     }
 

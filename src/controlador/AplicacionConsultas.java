@@ -2,7 +2,7 @@ package controlador;
 
 import java.io.IOException;
 import java.util.List;
-import interfaz.Interfaz;
+import gui.consulta.Interfaz;
 import modelo.Parada;
 import modelo.Tramo;
 import negocio.Calculo;

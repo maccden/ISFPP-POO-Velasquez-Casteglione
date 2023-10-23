@@ -13,5 +13,5 @@ public interface LineaDAO {
 
     void borrar(Linea linea);
 
-    TreeMap<String, Linea> buscarTodos() throws IOException;
+    TreeMap<String, Linea> buscarTodos();
 }

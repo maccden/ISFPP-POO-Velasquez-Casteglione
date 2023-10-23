@@ -24,7 +24,7 @@ public class LineaSecuencialDAO implements LineaDAO {
         actualizar = true;
     }
 
-    private TreeMap<String, Linea> readFromFile(String file) throws IOException {
+    private TreeMap<String, Linea> readFromFile(String file) {
         BufferedReader bf = null;
         TreeMap<String, Linea> lineas = new TreeMap<>();
         String reader;
@@ -82,9 +82,18 @@ public class LineaSecuencialDAO implements LineaDAO {
         } catch (IllegalStateException illegalStateException) {
             System.err.println("Error reading from file.");
             illegalStateException.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error: an I/O error occur");
+            throw new RuntimeException(e);
         } finally {
-            if (bf != null)
-                bf.close();
+            if (bf != null) {
+                try {
+                    bf.close();
+                } catch (IOException e) {
+                    System.err.println("Error: an I/O error occur");
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         return lineas;
@@ -115,7 +124,7 @@ public class LineaSecuencialDAO implements LineaDAO {
     }
 
     @Override
-    public TreeMap<String, Linea> buscarTodos() throws IOException {
+    public TreeMap<String, Linea> buscarTodos() {
         if (actualizar) {
             list = readFromFile(name);
             actualizar = false;

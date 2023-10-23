@@ -33,7 +33,7 @@ public class LineaServiceImpl implements LineaService {
     }
 
     @Override
-    public TreeMap<String, Linea> buscarTodos() throws IOException {
+    public TreeMap<String, Linea> buscarTodos() {
         return lineaDAO.buscarTodos();
     }
 }
