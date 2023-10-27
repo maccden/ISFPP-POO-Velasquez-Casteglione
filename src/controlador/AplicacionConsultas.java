@@ -7,6 +7,7 @@ import modelo.Parada;
 import modelo.Tramo;
 import negocio.Calculo;
 import negocio.Empresa;
+import util.Time;
 
 public class AplicacionConsultas {
 
@@ -55,7 +56,7 @@ public class AplicacionConsultas {
         origen = coordinador.listarParadas().get(84);
         destino = coordinador.listarParadas().get(85);
 
-		List<Tramo> recorrido = calculo.masRapido(origen, destino);
-		Interfaz.resultado(recorrido);
+		List<List<Tramo>> recorrido = calculo.recorridos(origen, destino, Time.toMins("10:25"), 2);
+		Interfaz.resultado(recorrido, Time.toMins("10:25"), coordinador.listarLineas());
     }
 }

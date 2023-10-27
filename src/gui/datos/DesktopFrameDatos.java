@@ -36,12 +36,18 @@ public class DesktopFrameDatos extends JFrame {
         JMenuItem lineas = new JMenuItem("Lineas");
         lineas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                coordinador.mostrarLineaList();
+                //coordinador.mostrarLineaList();
             }
         });
         datos.add(lineas);
 
         JMenuItem paradas = new JMenuItem("Paradas");
+        paradas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                coordinador.mostrarParadaList();
+            }
+        });
         datos.add(paradas);
 
         JMenuItem tramos = new JMenuItem("Tramos");

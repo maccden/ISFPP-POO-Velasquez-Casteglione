@@ -7,6 +7,7 @@ import factory.Factory;
 import modelo.Linea;
 import modelo.Parada;
 import negocio.Empresa;
+import util.Time;
 
 import java.io.*;
 import java.util.*;
@@ -34,43 +35,15 @@ public class LineaSecuencialDAO implements LineaDAO {
             while ((reader = bf.readLine()) != null) {
                 String[] partes = reader.split(";");
                 String idLinea = partes[0];
-                String sentido = partes[1];
 
-                if (lineas.get(idLinea) != null) {
-                    if (sentido.equals("I")) {
-                        for (int i = 2; i < partes.length; i++) {
-                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
-                                lineas.get(idLinea).agregarIda(paradas.get(Integer.valueOf(partes[i])));
-                                paradas.get(Integer.valueOf(partes[i])).setLinea(lineas.get(idLinea));
-                            }
-                        }
-                    } else if (sentido.equals("R")) {
-                        for (int i = 2; i < partes.length; i++) {
-                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
-                                lineas.get(idLinea).agregarVuelta(paradas.get(Integer.valueOf(partes[i])));
-                                paradas.get(Integer.valueOf(partes[i])).setLinea(lineas.get(idLinea));
-                            }
-                        }
+                Linea linea = new Linea(partes[0], Time.toMins(partes[1]), Time.toMins(partes[2]), Integer.parseInt(partes[3]));
+                for (int i = 4; i < partes.length; i++) {
+                    if (paradas.get(Integer.valueOf(partes[i])) != null) {
+                            linea.agregarParada(paradas.get(Integer.valueOf(partes[i])));
+                            paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
                     }
-                } else {
-                    Linea linea = new Linea(idLinea);
-                    if (sentido.equals("I")) {
-                        for (int i = 2; i < partes.length; i++) {
-                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
-                                linea.agregarIda(paradas.get(Integer.valueOf(partes[i])));
-                                paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
-                            }
-                        }
-                    } else if (sentido.equals("R")) {
-                        for (int i = 2; i < partes.length; i++) {
-                            if (paradas.get(Integer.valueOf(partes[i])) != null) {
-                                linea.agregarVuelta(paradas.get(Integer.valueOf(partes[i])));
-                                paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
-                            }
-                        }
-                    }
-                    lineas.put(idLinea, linea);
                 }
+                lineas.put(idLinea, linea);
             }
             bf.close();
         } catch (FileNotFoundException fileNotFoundException) {
@@ -103,14 +76,14 @@ public class LineaSecuencialDAO implements LineaDAO {
         Formatter outFile = null;
         try {
             outFile = new Formatter(file);
-            for (Linea e : list.values()) {
-                outFile.format("%s;%s;", e.getCodigo(), "I");
-                for (Parada parada: e.getParadasIda())
-                    outFile.format("%s;",parada.getCodigo());
-                outFile.format("\n");
-                outFile.format("%s;%s;", e.getCodigo(), "R");
-                for (Parada parada: e.getParadasVuelta())
-                    outFile.format("%s;",parada.getCodigo());
+            for (Linea l : list.values()) {
+                outFile.format("%s;%s;%s;%s;", l.getCodigo(), l.getComienza(), l.getFinaliza(), l.getFrecuencia());
+                for (Parada parada: l.getParadas()) {
+                    if (l.getParadas().get(l.getParadas().size() - 1).equals(parada))
+                        outFile.format("", parada.getCodigo());
+                    else
+                        outFile.format("%s;", parada.getCodigo());
+                }
                 outFile.format("\n");
             }
         } catch (FileNotFoundException fileNotFoundException) {

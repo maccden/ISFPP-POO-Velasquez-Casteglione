@@ -512,4 +512,8 @@ public boolean containsKey(String idLinea) {
     return this.checkKey((K) idLinea);
 }
 
+public boolean containsKey(int idParada) {
+    return this.checkKey((K) String.valueOf(idParada));
+}
+
 }

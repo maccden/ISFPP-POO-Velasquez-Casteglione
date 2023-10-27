@@ -1,199 +1,184 @@
 package negocio;
 
-import controlador.Constantes;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import controlador.Coordinador;
-import datastructures.*;
+import org.jgrapht.Graph;
+
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.YenKShortestPath;
+import org.jgrapht.graph.DirectedMultigraph;
+
+import controlador.Constantes;
 import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
-
-import java.util.List;
-import java.util.ArrayList;
+import util.Time;
+import datastructures.TreeMap;
 
 public class Calculo {
-    private static final int CAMBIO_LINEA = 10000;
-    private Graph<ParadaLinea, Integer> red;
-    private TreeMap<String, Vertex<ParadaLinea>> vertices;
-    private TreeMap<String, Linea> lineaMap;
+
+    private Coordinador coordinador;
+    private Graph<Parada, ParadaLinea> red;
     private TreeMap<Integer, Parada> paradaMap;
     private TreeMap<String, Tramo> tramoMap;
-    private Coordinador coordinador;
 
     public Calculo() {
 
     }
 
-    public void cargarDatos (TreeMap<Integer, Parada> paradaMap, TreeMap<String, Linea> lineaMap, List<Tramo> tramos) {
-
-        // Map parada
+    public void cargarDatos(TreeMap<Integer, Parada> paradaMap, TreeMap<String, Linea> lineaMap, List<Tramo> tramos) {
+        // Map paradas
         this.paradaMap = paradaMap;
-
-        // Map Linea
-        this.lineaMap = lineaMap;
 
         // Map tramo
         tramoMap = new TreeMap<String, Tramo>();
         for (Tramo t : tramos)
-            tramoMap.put(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), t);
+            tramoMap.put(t.getInicio().getCodigo()+ "-" + t.getFin().getCodigo(), t);
 
-        // Map paradaLinea
-        TreeMap<String, ParadaLinea> paradaLinea = new TreeMap<String, ParadaLinea>();
-        for (Parada p : paradaMap.values())
-            for (Linea l : p.getLineas())
-                paradaLinea.put(p.getCodigo() + l.getCodigo(), new ParadaLinea(p.getCodigo(), l.getCodigo()));
-
-        // Cargar paradas caminando
-        for (Tramo t : tramos)
-            if (t.getTipo() == Constantes.TRAMO_CAMINANDO) {
-                paradaLinea.put(t.getInicio().getCodigo() + "", new ParadaLinea(t.getInicio().getCodigo(), ""));
-                paradaLinea.put(t.getFin().getCodigo() + "", new ParadaLinea(t.getFin().getCodigo(), ""));
-            }
-
-        red = new AdjacencyMapGraph<>(true);
+        red = new DirectedMultigraph<>(null, null, false);
 
         // Cargar paradas
-        vertices = new TreeMap<String, Vertex<ParadaLinea>>();
-        for (Entry<String, ParadaLinea> pl : paradaLinea.entrySet())
-            vertices.put(pl.getKey(), red.insertVertex(pl.getValue()));
-
-        // Cargar tramos
-        Parada origen, destino;
-        for (Linea l : lineaMap.values()) {
-            for (int i = 0; i < l.getParadasIda().size() - 1; i++) {
-                origen = l.getParadasIda().get(i);
-                destino = l.getParadasIda().get(i + 1);
-                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()), vertices.get(destino.getCodigo() + l.getCodigo()), tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
-            }
-            for (int i = 0; i < l.getParadasVuelta().size() - 1; i++) {
-                origen = l.getParadasVuelta().get(i);
-                destino = l.getParadasVuelta().get(i + 1);
-                red.insertEdge(vertices.get(origen.getCodigo() + l.getCodigo()),
-                        vertices.get(destino.getCodigo() + l.getCodigo()),
-                        tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo());
-            }
-        }
-
-        // Cargar cambio de linea
         for (Parada p : paradaMap.values())
-            for (Linea ori : p.getLineas())
-                for (Linea des : p.getLineas())
-                    if (!ori.equals(des))
-                        if (red.getEdge(vertices.get(p.getCodigo() + ori.getCodigo()),
-                                vertices.get(p.getCodigo() + des.getCodigo())) == null)
-                            red.insertEdge(vertices.get(p.getCodigo() + ori.getCodigo()),
-                                    vertices.get(p.getCodigo() + des.getCodigo()), CAMBIO_LINEA);
+            red.addVertex(p);
+
+        // Cargar tramos lineas
+        Parada origen, destino;
+        for (Linea l : lineaMap.values())
+            for (int i = 0; i < l.getParadas().size() - 1; i++) {
+                origen = l.getParadas().get(i);
+                destino = l.getParadas().get(i + 1);
+                red.addEdge(origen, destino, new ParadaLinea(origen, l));
+            }
 
         // Cargar tramos caminando
+        Linea linea;
         for (Tramo t : tramos)
             if (t.getTipo() == Constantes.TRAMO_CAMINANDO) {
-                red.insertEdge(vertices.get(t.getInicio().getCodigo() + ""), vertices.get(t.getFin().getCodigo() + ""),
-                        t.getTiempo());
-                for (Linea ori : t.getInicio().getLineas()) {
-                    red.insertEdge(vertices.get(t.getInicio().getCodigo() + ""),
-                            vertices.get(t.getInicio().getCodigo() + ori.getCodigo()), CAMBIO_LINEA);
-                    red.insertEdge(vertices.get(t.getInicio().getCodigo() + ori.getCodigo()),
-                            vertices.get(t.getInicio().getCodigo() + ""), 0);
-                }
-                for (Linea des : t.getFin().getLineas()) {
-                    red.insertEdge(vertices.get(t.getFin().getCodigo() + ""),
-                            vertices.get(t.getFin().getCodigo() + des.getCodigo()), CAMBIO_LINEA);
-                    red.insertEdge(vertices.get(t.getFin().getCodigo() + des.getCodigo()),
-                            vertices.get(t.getFin().getCodigo() + ""), 0);
-                }
+                linea = new Linea(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), Time.toMins("00:00"),
+                        Time.toMins("24:00"), 0);
+                red.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
             }
+
     }
 
-    public List<Tramo> masRapido(Parada paradaOrigen, Parada paradaDestino) {
-        // copia grafo
-        Graph<ParadaLinea, Integer> copia = new AdjacencyMapGraph<>(true);
-        Map<ParadaLinea, Vertex<ParadaLinea>> res = new ProbeHashMap<>();
+    public List<List<Tramo>> recorridos(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {
 
-        for (Vertex<ParadaLinea> result : red.vertices())
-            res.put(result.getElement(), copia.insertVertex(result.getElement()));
+        // Todos los recorridos
+        YenKShortestPath<Parada, ParadaLinea> yksp = new YenKShortestPath<Parada, ParadaLinea>(red);
+        List<GraphPath<Parada, ParadaLinea>> caminos = yksp.getPaths(paradaOrigen, paradaDestino, Integer.MAX_VALUE);
 
-        Vertex<ParadaLinea>[] vert;
-
-        for (Edge<Integer> result : red.edges()) {
-            vert = red.endVertices(result);
-            copia.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), result.getElement());
+        // Eliminar recorridos superan cambioLineas
+        List<Linea> lineas;
+        Iterator<GraphPath<Parada, ParadaLinea>> r = caminos.iterator();
+        while (r.hasNext()) {
+            lineas = new ArrayList<Linea>();
+            int cambioLineas = 0;
+            for (ParadaLinea pl : r.next().getEdgeList())
+                if (lineas.isEmpty())
+                    lineas.add(pl.getLinea());
+                else if (!lineas.get(lineas.size() - 1).equals(pl.getLinea()))
+                    lineas.add(pl.getLinea());
+            for (Linea l : lineas)
+                if (l.getFrecuencia() != 0)
+                    cambioLineas++;
+            if (cambioLineas > nroLineas)
+                r.remove();
         }
 
-        // Agregar vertice inicio y fin
-        ParadaLinea plOrigen = new ParadaLinea(0, "Inicio");
-        Vertex<ParadaLinea> origen = copia.insertVertex(plOrigen);
-        res.put(plOrigen, origen);
-        for (Linea l : paradaOrigen.getLineas())
-            if (copia.getEdge(origen, res.get(vertices.get(paradaOrigen.getCodigo() + l.getCodigo()).getElement())) == null)
-                copia.insertEdge(origen, res.get(vertices.get(paradaOrigen.getCodigo() + l.getCodigo()).getElement()), 0);
-
-        ParadaLinea plDestino = new ParadaLinea(0, "Fin");
-        Vertex<ParadaLinea> destino = copia.insertVertex(plDestino);
-        res.put(plDestino, destino);
-        for (Linea l : paradaDestino.getLineas())
-            if (copia.getEdge(res.get(vertices.get(paradaDestino.getCodigo() + l.getCodigo()).getElement()), destino) == null)
-                copia.insertEdge(res.get(vertices.get(paradaDestino.getCodigo() + l.getCodigo()).getElement()), destino, 0);
-
-        // Calcular camino mas corto
-        PositionalList<Vertex<ParadaLinea>> lista = GraphAlgorithms.shortestPathList(copia, origen, destino);
-
-        List<Tramo> tramos = new ArrayList<Tramo>();
-        List<Integer> tiempos = new ArrayList<Integer>();
-        List<Integer> paradas = new ArrayList<Integer>();
-        List<String> lineas = new ArrayList<String>();
-
-        Vertex<ParadaLinea> v1, v2 = null;
-        Position<Vertex<ParadaLinea>> aux = lista.first();
-        while (lista.after(aux) != null) {
-            v1 = aux.getElement();
-            aux = lista.after(aux);
-            v2 = aux.getElement();
-            tiempos.add(copia.getEdge(res.get(v1.getElement()), res.get(v2.getElement())).getElement());
-            paradas.add(v1.getElement().getParada());
-            lineas.add(v1.getElement().getLinea());
-
-        }
-
-        // System.out.println(copia);
-        // System.out.println(tiempos);
-        // System.out.println(paradas);
-        // System.out.println(lineas);
-
-        Tramo t;
-        TreeMap<Integer, Parada> pMap = new TreeMap<Integer, Parada>();
-        for (int i = 1; i < paradas.size(); i++) {
-            if (pMap.get(paradas.get(i)) == null) {
-                Parada p = paradaMap.get(paradas.get(i));
-                pMap.put(p.getCodigo(), new Parada(p.getCodigo(), p.getDireccion()));
+        // Realizar c�lculo de tiempo y preparar resultados
+        List<List<Tramo>> listaTramos = new ArrayList<List<Tramo>>();
+        Tramo t = null;
+        int proximoColectivo;
+        int tiempo = 0;
+        List<Tramo> tramos;
+        List<ParadaLinea> paradalineas;
+        List<Parada> paradas;
+        Parada origen = null;
+        Parada destino = null;
+        TreeMap<Integer, Parada> pMap;
+        for (GraphPath<Parada, ParadaLinea> gp : caminos) {
+            pMap = new TreeMap<Integer, Parada>();
+            paradas = gp.getVertexList();
+            for (Parada p : paradas)
+                pMap.put(p.getCodigo(), new Parada(p.getCodigo(), paradaMap.get(p.getCodigo()).getDireccion()));
+            proximoColectivo = horario;
+            tramos = new ArrayList<Tramo>();
+            paradalineas = gp.getEdgeList();
+            for (int i = 0; i < paradalineas.size(); i++) {
+                t = tramoMap.get(paradas.get(i).getCodigo() + "-" + paradas.get(i + 1).getCodigo());
+                origen = pMap.get(paradas.get(i).getCodigo());
+                origen.setLinea(paradalineas.get(i).getLinea());
+                destino = pMap.get(paradas.get(i + 1).getCodigo());
+                proximoColectivo = proximoColectivo(paradalineas.get(i).getLinea(), paradas.get(i),
+                        proximoColectivo + tiempo);
+                tramos.add(new Tramo(origen, destino, t.getTipo(), proximoColectivo));
+                tiempo = t.getTiempo();
             }
-            pMap.get(paradas.get(i)).setLinea(lineaMap.get((lineas.get(i))));
+            destino.setLinea(origen.getLineas().get(0));
+            tramos.add(new Tramo(destino, destino, t.getTipo(), proximoColectivo + t.getTiempo()));
+            listaTramos.add(tramos);
         }
-        for (int i = 1; i < paradas.size() - 1; i++)
-            if ((t = tramoMap.get(paradas.get(i) + "-" + paradas.get(i + 1))) != null)
-                tramos.add(new Tramo(pMap.get(paradas.get(i)), pMap.get(paradas.get(i + 1)), t.getTipo(), t.getTiempo()));
+        return listaTramos;
+    }
 
-        return tramos;
+    private int proximoColectivo(Linea linea, Parada parada, int horario) {
+        int nroParada = linea.getParadas().indexOf(parada);
+        // Tramo caminando
+        if (nroParada == -1)
+            return horario;
+
+        // Calcular el tiempo desde el inicio del recorrido a la parada
+        Parada origen, destino;
+        int tiempo = 0;
+        for (int i = 0; i < nroParada; i++) {
+            origen = linea.getParadas().get(i);
+            destino = linea.getParadas().get(i + 1);
+            tiempo += tramoMap.get(origen.getCodigo() + "-" + destino.getCodigo()).getTiempo();
+        }
+
+        // Ya pas� el �ltimo colectivo
+        if (linea.getFinaliza() + tiempo < horario)
+            return -1;
+
+        // Tiempo del pr�ximo colectivo
+        for (int j = linea.getComienza(); j <= linea.getFinaliza(); j += linea.getFrecuencia())
+            if (j + tiempo >= horario)
+                return j + tiempo;
+
+        return -1;
     }
 
     private class ParadaLinea {
-        private Integer parada;
-        private String linea;
+        private Parada parada;
+        private Linea linea;
 
-        public ParadaLinea(Integer parada, String linea) {
+        public ParadaLinea(Parada parada, Linea linea) {
             this.parada = parada;
             this.linea = linea;
         }
 
-        public Integer getParada() {
+        public Parada getParada() {
             return parada;
         }
 
-        public String getLinea() {
+        public void setParada(Parada parada) {
+            this.parada = parada;
+        }
+
+        public Linea getLinea() {
             return linea;
+        }
+
+        public void setLinea(Linea linea) {
+            this.linea = linea;
         }
 
         @Override
         public String toString() {
-            return parada + linea;
+            return parada.getCodigo() + " " + linea.getCodigo();
         }
 
     }
@@ -201,17 +186,5 @@ public class Calculo {
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-}
 
-/*
- * Cosas para anotar:
- * 
- * el peso de cada tramo
- * 
- * Armar un grafo por cada linea. Si el resultado es null, la linea no pasa por
- * la parada <!>
- * Si hay 2 lineas que pasan por la parada, comparar cual es el mas rapido <!>
- * 
- * 2 Aplicaciones, 1 para modificar, sacar e ingresar paradas, y la otra para
- * consultar <!>
- */
+}

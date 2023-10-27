@@ -8,9 +8,7 @@ import negocio.Calculo;
 import gui.consulta.Interfaz;
 import modelo.*;
 import negocio.Empresa;
-import negocio.LineaExistenteException;
-
-import java.io.IOException;
+import negocio.ParadaExistenteException;
 
 public class Coordinador {
     private Empresa empresa;
@@ -18,8 +16,10 @@ public class Coordinador {
     private Interfaz interfaz;
 //  private DesktopFrameConsulta desktopFrameConsulta;
     private DesktopFrameDatos desktopFrameDatos;
+    /*
     private LineaList lineaList;
     private LineaForm lineaForm;
+     */
     private ParadaList paradaList;
     private ParadaForm paradaForm;
     private TramoList tramoList;
@@ -69,6 +69,10 @@ public class Coordinador {
         return empresa.buscarLinea(linea);
     }
 
+    public Parada buscarParada(Parada parada) {
+        return empresa.buscarParada(parada);
+    }
+
     // <o> GUI Consulta <o>
 
     // <o> GUI Datos <o>
@@ -81,6 +85,7 @@ public class Coordinador {
         this.desktopFrameDatos = desktopFrameDatos;
     }
 
+    /*
     public LineaList getLineaList() {
         return lineaList;
     }
@@ -100,6 +105,27 @@ public class Coordinador {
     public void salirLineaList() {
         lineaList.setVisible(false);
     }
+     */
+
+    public ParadaList getParadaList() {
+        return paradaList;
+    }
+
+    public void setParadaList(ParadaList paradaList) {
+        this.paradaList = paradaList;
+    }
+
+    public ParadaForm getParadaForm() {
+        return paradaForm;
+    }
+
+    public void setParadaForm(ParadaForm paradaForm) {
+        this.paradaForm = paradaForm;
+    }
+
+    public void salirParadaList() {
+        paradaList.setVisible(false);
+    }
 
     // <o> DesktopFrame Consulta <o>
 
@@ -112,13 +138,21 @@ public class Coordinador {
 
     // <o> DesktopFrame Datos <o>
 
+    /*
     public void mostrarLineaList() {
         lineaList.loadTable();
         lineaList.setVisible(true);
     }
+     */
+
+    public void mostrarParadaList() {
+        paradaList.loadTable();
+        paradaList.setVisible(true);
+    }
 
     // <o> LineaList <o>
 
+    /*
     public void insertarLineaForm() {
         lineaForm.accion(Constantes.INSERTAR, null);
         lineaForm.setVisible(true);
@@ -158,4 +192,48 @@ public class Coordinador {
         lineaList.setAccion(Constantes.BORRAR);
         lineaForm.setVisible(false);
     }
+    */
+
+    // <o> ParadaList <o>
+
+    public void insertarParadaForm() {
+        paradaForm.accion(Constantes.INSERTAR, null);
+        paradaForm.setVisible(true);
+    }
+
+    public void modificarParadaForm(Parada parada) {
+        paradaForm.accion(Constantes.MODIFICAR, parada);
+        paradaForm.setVisible(true);
+    }
+
+    public void borrarParadaForm(Parada parada) {
+        paradaForm.accion(Constantes.BORRAR, parada);
+        paradaForm.setVisible(true);
+    }
+
+    // <o> ParadaForm <o>
+
+    public void cancelarParada() {
+        paradaForm.setVisible(false);
+    }
+
+    public void insertarParada(Parada parada) throws ParadaExistenteException {
+        empresa.agregarParada(parada);
+        paradaForm.setVisible(false);
+        paradaList.addRow(parada);
+    }
+
+    public void modificarParada(Parada parada) {
+        empresa.modificarParada(parada);
+        paradaList.setAccion(Constantes.MODIFICAR);
+        paradaList.setParada(parada);
+        paradaForm.setVisible(false);
+    }
+
+    public void borrarParada(Parada parada) {
+        empresa.borrarParada(parada);
+        paradaList.setAccion(Constantes.BORRAR);
+        paradaForm.setVisible(false);
+    }
+
 }

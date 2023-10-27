@@ -69,6 +69,36 @@ public class Empresa {
         return lineas.get(linea.getCodigo());
     }
 
+    public void agregarParada(Parada parada) throws ParadaExistenteException {
+        if (paradas.containsKey(parada.getCodigo()))
+            throw new ParadaExistenteException();
+        paradas.put(parada.getCodigo(), parada);
+        paradaService.insertar(parada);
+    }
+
+    public void modificarParada(Parada parada) {
+        paradas.put(parada.getCodigo(), parada);
+        paradaService.actualizar(parada);
+    }
+
+    public void borrarParada(Parada parada) {
+        for (Linea linea : lineas.values())
+            if (linea.contains(parada))
+                throw new LineaReferenciaException();
+        for (Tramo tramo: tramos)
+            if (tramo.getInicio().equals(parada) || tramo.getFin().equals(parada))
+                throw new TramoReferenciaException();
+        Parada p = buscarParada(parada);
+        paradas.remove(p.getCodigo());
+
+        paradaService.borrar(parada);    }
+
+    public Parada buscarParada(Parada parada) {
+        if (!paradas.containsKey(parada.getCodigo()))
+            return null;
+        return paradas.get(parada.getCodigo());
+    }
+
     public String getNombre() {
         return nombre;
     }

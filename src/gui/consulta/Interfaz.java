@@ -3,6 +3,7 @@ package gui.consulta;
 import java.util.List;
 
 import datastructures.TreeMap;
+import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 
@@ -10,6 +11,7 @@ import javax.swing.*;
 
 import controlador.Constantes;
 import controlador.Coordinador;
+import util.Time;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -166,18 +168,26 @@ public class Interfaz extends JFrame {
         return respuesta;
     }
 
-    public static void resultado(List<Tramo> recorrido) {
-        int tiempoTotal = 0;
-        final StringBuilder sb = new StringBuilder("Recorrido: " + "\n");
-        for (Tramo t : recorrido) {
-            sb.append(t.getInicio().getCodigo() + " - " + t.getInicio().getDireccion() + " > " + t.getFin().getCodigo() + " - " + t.getFin().getDireccion() + " : " + t.getTiempo() + "minuto").append('\n');
-            tiempoTotal += t.getTiempo();
-        }
-        sb.append("Tiempo total: " + tiempoTotal + " minutos");
-        if (tiempoTotal == 0) {
-            JOptionPane.showMessageDialog(null, "No hay un recorrido en el que se pueda llegar entre las 2 paradas", "Resultado", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(null, sb, "Resultado", JOptionPane.INFORMATION_MESSAGE);
+    public static void resultado(List<List<Tramo>> recorridos, int horario, TreeMap<String, Linea> lineas) {
+        Linea linea;
+        Tramo tramo;
+        String nombreLinea;
+        for (List<Tramo> tramos : recorridos) {
+            System.out.println(Time.toTime(horario) + " - Llega a la parada");
+            for (int i = 0; i < tramos.size() - 1; i++) {
+                tramo = tramos.get(i);
+                linea = tramo.getInicio().getLineas().get(0);
+                nombreLinea = linea.getCodigo();
+                if (lineas.get(linea.getCodigo())==null)
+                    nombreLinea = "CAMINANDO";
+                System.out.println(Time.toTime(tramo.getTiempo()) + " - " + nombreLinea + " ("
+                        + tramo.getInicio().getDireccion() + " " + " > " + tramo.getFin().getDireccion() + ")");
+            }
+            tramo = tramos.get(tramos.size() - 1);
+            System.out.println(Time.toTime(tramo.getTiempo()) + " - Fin de recorrido");
+            System.out.println("Tiempo Total: " + Time.toTime(tramo.getTiempo() - horario));
+            System.out.println("============================================================");
+            System.out.println();
         }
     }
 
