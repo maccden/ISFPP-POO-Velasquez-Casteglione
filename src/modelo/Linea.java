@@ -63,6 +63,7 @@ public class Linea {
     public boolean contains(Parada parada) {
         return paradas.contains(parada);
     }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -92,5 +93,4 @@ public class Linea {
     public String toString() {
         return codigo;
     }
-
 }

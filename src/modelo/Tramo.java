@@ -5,7 +5,6 @@ public class Tramo {
     private int tiempo, tipo;
 
     public Tramo() {
-
     }
 
     public Tramo(Parada inicio, Parada fin, int tiempo, int tipo) {
@@ -13,6 +12,15 @@ public class Tramo {
         this.fin = fin;
         this.tiempo = tiempo;
         this.tipo = tipo;
+    }
+
+    public int getCongestion() {
+        int promedioCongestion = 0;
+        for (Linea linea : inicio.getLineas())
+            promedioCongestion += linea.getFrecuencia();
+        for (Linea linea : fin.getLineas())
+            promedioCongestion += linea.getFrecuencia();
+        return promedioCongestion / (inicio.getLineas().size() + fin.getLineas().size());
     }
 
     public Parada getInicio() {

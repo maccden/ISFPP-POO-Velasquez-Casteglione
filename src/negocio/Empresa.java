@@ -55,7 +55,7 @@ public class Empresa {
 
     public void borrarLinea(Linea linea) {
         for (Parada parada : paradas.values())
-            if (parada.getLinea(linea))
+            if (parada.isLinea(linea))
                 throw new LineaReferenciaException();
         Linea l = buscarLinea(linea);
         lineas.remove(l.getCodigo());
