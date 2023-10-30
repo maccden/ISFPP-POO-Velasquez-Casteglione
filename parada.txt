@@ -95,5 +95,3 @@
 95;Soldado Desconocido, 1265;
 96;Vicente Lopez Y Planes, 315;
 97;Villegas, 700;
-100;A;
-200;BB;
