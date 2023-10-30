@@ -26,7 +26,7 @@ public class AplicacionDatos {
         miAplicacion.iniciar();
     }
 
-    private void iniciar() throws LineaExistenteException {
+    private void iniciar() {
         /* Se instancian las clases */
         empresa = Empresa.getEmpresa();
         coordinador = new Coordinador();

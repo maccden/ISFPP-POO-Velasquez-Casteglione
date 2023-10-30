@@ -19,6 +19,8 @@ public class ParadaForm extends JDialog {
     private JButton btnCancelar, btnInsertar, btnModificar, btnEliminar;
     private JLabel errorCodigo, errorDireccion, tituloModificar, tituloInsertar, tituloEliminar;
     public ParadaForm() {
+        setBounds(100, 100, 550, 190);
+
         getContentPane().setLayout(null);
 
         Handler handler = new Handler();
@@ -39,86 +41,99 @@ public class ParadaForm extends JDialog {
         getContentPane().add(textoDireccion);
 
         jtfDireccion = new JTextField();
-        jtfDireccion.setBounds(68, 78, 86, 20);
+        jtfDireccion.setBounds(68, 78, 220, 20);
         getContentPane().add(jtfDireccion);
         jtfDireccion.setColumns(10);
 
         btnCancelar = new JButton("Cancelar");
         btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnCancelar.setBounds(106, 120, 86, 23);
+        btnCancelar.setFocusable(false);
         getContentPane().add(btnCancelar);
         btnCancelar.addActionListener(handler);
 
         btnModificar = new JButton("Modificar");
         btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnModificar.setBounds(10, 120, 86, 23);
+        btnModificar.setFocusable(false);
         getContentPane().add(btnModificar);
         btnModificar.addActionListener(handler);
 
         tituloModificar = new JLabel("Seleccione y modifique los datos de la parada.");
         tituloModificar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        tituloModificar.setBounds(37, 15, 251, 14);
+        tituloModificar.setBounds(141, 15, 251, 14);
         getContentPane().add(tituloModificar);
 
         btnEliminar = new JButton("Eliminar");
         btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnEliminar.setBounds(10, 121, 86, 23);
+        btnEliminar.setFocusable(false);
         getContentPane().add(btnEliminar);
         btnEliminar.addActionListener(handler);
 
         btnInsertar = new JButton("Insertar");
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 121, 86, 23);
+        btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
         btnInsertar.addActionListener(handler);
 
         tituloInsertar = new JLabel("Ingrese los datos para la nueva parada.");
         tituloInsertar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        tituloInsertar.setBounds(37, 16, 251, 14);
+        tituloInsertar.setBounds(141, 16, 251, 14);
         getContentPane().add(tituloInsertar);
 
         tituloEliminar = new JLabel("Datos de la parada.");
         tituloEliminar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        tituloEliminar.setBounds(37, 16, 251, 14);
+        tituloEliminar.setBounds(141, 16, 251, 14);
         getContentPane().add(tituloEliminar);
 
-        errorCodigo = new JLabel("Solo numeros, no letras.");
+        errorCodigo = new JLabel("");
         errorCodigo.setForeground(Color.RED);
         errorCodigo.setFont(new Font("Tahoma", Font.BOLD, 12));
         errorCodigo.setBounds(162, 50, 150, 14);
         getContentPane().add(errorCodigo);
 
-        errorDireccion  = new JLabel("Campo obligatorio");
+        errorDireccion  = new JLabel("");
         errorDireccion.setForeground(Color.RED);
         errorDireccion.setFont(new Font("Tahoma", Font.BOLD, 12));
-        errorDireccion.setBounds(162, 80, 150, 14);
+        errorDireccion.setBounds(295, 80, 150, 14);
         getContentPane().add(errorDireccion);
+
+        setModal(true);
     }
 
     public void accion(int accion, Parada parada) {
+        tituloEliminar.setVisible(false);
+        tituloModificar.setVisible(false);
+        tituloInsertar.setVisible(false);
         btnInsertar.setVisible(false);
         btnModificar.setVisible(false);
         btnEliminar.setVisible(false);
         jtfCodigo.setEditable(true);
         jtfDireccion.setEditable(true);
+        errorCodigo.setText("");
+        errorDireccion.setText("");
 
         if (accion == Constantes.INSERTAR) {
+            setTitle("Insertar parada");
             tituloInsertar.setVisible(true);
             btnInsertar.setVisible(true);
             limpiar();
         }
 
         if (accion == Constantes.MODIFICAR) {
+            setTitle("Modificar parada");
             tituloModificar.setVisible(true);
             btnModificar.setVisible(true);
-            jtfCodigo.setEditable(false);
             mostrar(parada);
         }
 
         if (accion == Constantes.BORRAR) {
+            setTitle("Borrar parada");
             tituloEliminar.setVisible(true);
             btnEliminar.setVisible(true);
             jtfCodigo.setEditable(false);
@@ -140,24 +155,29 @@ public class ParadaForm extends JDialog {
     private class Handler implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
-            int codigo = Integer.parseInt(jtfCodigo.getText().trim());
+            if (event.getSource() == btnCancelar) {
+                coordinador.cancelarParada();
+                return;
+            }
+
+            String codigo = jtfCodigo.getText().trim();
             String direccion = jtfDireccion.getText().trim();
-            Parada parada = new Parada(codigo, direccion);
+
+            if (!registroValido())
+                return;
+
+            Parada parada = new Parada(Integer.parseInt(codigo), direccion);
 
             if (event.getSource() == btnInsertar) {
-                if (!registroValido())
-                    return;
                 try {
                     coordinador.insertarParada(parada);
                 } catch (ParadaExistenteException e) {
-                    JOptionPane.showMessageDialog(null, "Esta l�nea ya existe!");
+                    JOptionPane.showMessageDialog(null, "¡Esta parada ya existe!");
                     return;
                 }
             }
 
             if (event.getSource() == btnModificar) {
-                if (!registroValido())
-                    return;
                 coordinador.modificarParada(parada);
             }
 
@@ -177,10 +197,6 @@ public class ParadaForm extends JDialog {
                 return;
             }
 
-            if (event.getSource() == btnCancelar) {
-                coordinador.cancelarParada();
-                return;
-            }
         }
     }
 
@@ -194,8 +210,10 @@ public class ParadaForm extends JDialog {
             errorCodigo.setText("Campo obligatorio");
             return false;
         }
-        if (codigo.matches("[A-Z][a-zA-Z]*") != true) {
-            errorCodigo.setText("Solo letras. Primera con may�scula");
+        try {
+            Integer.parseInt(jtfCodigo.getText().trim());
+        } catch (NumberFormatException e) {
+            errorCodigo.setText("¡Solo numeros!");
             return false;
         }
 

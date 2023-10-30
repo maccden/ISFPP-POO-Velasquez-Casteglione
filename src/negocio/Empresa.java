@@ -7,7 +7,6 @@ import modelo.Tramo;
 import servicio.*;
 
 //import java.util.TreeMap;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,8 +69,9 @@ public class Empresa {
     }
 
     public void agregarParada(Parada parada) throws ParadaExistenteException {
-        if (paradas.containsKey(parada.getCodigo()))
-            throw new ParadaExistenteException();
+        for (Parada p: paradas.values())
+            if (p.equals(parada))
+                throw new ParadaExistenteException();
         paradas.put(parada.getCodigo(), parada);
         paradaService.insertar(parada);
     }

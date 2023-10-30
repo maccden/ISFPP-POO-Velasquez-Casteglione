@@ -2,7 +2,6 @@ package gui.datos;
 
 import controlador.Constantes;
 import controlador.Coordinador;
-import modelo.Linea;
 import modelo.Parada;
 
 import javax.swing.*;
@@ -18,15 +17,22 @@ public class ParadaList extends JDialog {
     private JButton btnInsertar, btnSalir;
     private JTable table;
     private Parada parada;
+    private JScrollPane scrollPane;
     private int accion;
     public ParadaList() {
+        setBounds(100, 100, 500, 360);
+
         setTitle("Lista de paradas");
         getContentPane().setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Seleccione una de las opciones para realizar acciones en las paradas cargadas:");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        lblNewLabel.setBounds(31, 11, 421, 14);
-        getContentPane().add(lblNewLabel);
+        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en las paradas cargadas:");
+        titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+        titulo.setBounds(31, 11, 421, 14);
+        getContentPane().add(titulo);
+
+        scrollPane = new JScrollPane();
+        scrollPane.setBounds(10, 30, 464, 250);
+        add(scrollPane);
 
         table = new JTable();
         table.setRowSelectionAllowed(false);
@@ -45,17 +51,26 @@ public class ParadaList extends JDialog {
         btnInsertar = new JButton("Insertar");
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 291, 89, 23);
+        btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
 
         btnSalir = new JButton("Salir");
         btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSalir.setBounds(109, 291, 89, 23);
+        btnSalir.setFocusable(false);
         getContentPane().add(btnSalir);
+        btnSalir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                coordinador.salirParadaList();
+            }
+        });
 
         table.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
         table.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox()));
         table.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
         table.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox()));
+        scrollPane.setViewportView(table);
 
         Handler handler = new Handler();
         btnInsertar.addActionListener(handler);
@@ -172,7 +187,7 @@ public class ParadaList extends JDialog {
         public Object getCellEditorValue() {
             if (isPushed) {
                 String id = table.getValueAt(table.getSelectedRow(), 0).toString();
-                Parada p = (Parada) coordinador.buscarParada(new Parada());
+                Parada p = (Parada) coordinador.buscarParada(new Parada(Integer.parseInt(id), null));
                 if (label.equals("edit"))
                     coordinador.modificarParadaForm(p);
                 else
