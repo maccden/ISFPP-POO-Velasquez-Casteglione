@@ -111,6 +111,48 @@ public class ArrayList<E> implements List<E> {
   }
 
   /**
+   * Returns {@code true} if this list contains the specified element.
+   * More formally, returns {@code true} if and only if this list contains
+   * at least one element {@code e} such that
+   * {@code Objects.equals(o, e)}.
+   *
+   * @param o element whose presence in this list is to be tested
+   * @return {@code true} if this list contains the specified element
+   */
+  public boolean contains(Object o) {
+    return indexOf(o) >= 0;
+  }
+
+  /**
+   * Returns the index of the first occurrence of the specified element
+   * in this list, or -1 if this list does not contain the element.
+   * More formally, returns the lowest index {@code i} such that
+   * {@code Objects.equals(o, get(i))},
+   * or -1 if there is no such index.
+   */
+  public int indexOf(Object o) {
+    return indexOfRange(o, 0, size);
+  }
+
+  int indexOfRange(Object o, int start, int end) {
+    Object[] es = data;
+    if (o == null) {
+      for (int i = start; i < end; i++) {
+        if (es[i] == null) {
+          return i;
+        }
+      }
+    } else {
+      for (int i = start; i < end; i++) {
+        if (o.equals(es[i])) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
+
+  /**
    * Removes and returns the element at the given index, shifting all subsequent
    * elements in the list one position closer to the front.
    * @param  i   the index of the element to be removed

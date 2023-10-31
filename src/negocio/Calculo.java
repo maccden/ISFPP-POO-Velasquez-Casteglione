@@ -1,8 +1,11 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import controlador.Coordinador;
 import org.jgrapht.Graph;
@@ -16,7 +19,13 @@ import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 import util.Time;
+import datastructures.AdjacencyMapGraph;
+import datastructures.Edge;
+import datastructures.GraphAlgorithms;
+import datastructures.PositionalList;
+import datastructures.ProbeHashMap;
 import datastructures.TreeMap;
+import datastructures.Vertex;
 
 public class Calculo {
 
@@ -24,9 +33,10 @@ public class Calculo {
     private Graph<Parada, ParadaLinea> red;
     private TreeMap<Integer, Parada> paradaMap;
     private TreeMap<String, Tramo> tramoMap;
+    private HashMap<Integer, Double> congestiones;
+    private static final int MAX_TIEMPO = 1000;
 
     public Calculo() {
-
     }
 
     public void cargarDatos(TreeMap<Integer, Parada> paradaMap, TreeMap<String, Linea> lineaMap, List<Tramo> tramos) {
@@ -36,7 +46,7 @@ public class Calculo {
         // Map tramo
         tramoMap = new TreeMap<String, Tramo>();
         for (Tramo t : tramos)
-            tramoMap.put(t.getInicio().getCodigo()+ "-" + t.getFin().getCodigo(), t);
+            tramoMap.put(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), t);
 
         red = new DirectedMultigraph<>(null, null, false);
 
@@ -61,10 +71,122 @@ public class Calculo {
                         Time.toMins("24:00"), 0);
                 red.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
             }
+    }
 
+    public List<List<Tramo>> menosCongestion(Parada parada1, Parada parada2) {
+        // copia grafo
+        Graph<Parada, Integer> grafo = new AdjacencyMapGraph<>(false);
+        Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
+        List<List<Tramo>> lista = new ArrayList<List<Tramo>>();
+
+        for (Vertex<Parada> result : red.vertices())
+            res.put(result.getElement(), grafo.insertVertex(result.getElement()));
+
+        Vertex<Parada>[] vert;
+        double tiempo, congestion;
+        int indiceCongestion, tiempoFinal;
+        for (Edge<Tramo> result : red.edges()) {
+            vert = red.endVertices(result);
+            tiempo = result.getElement().getTiempo();
+            indiceCongestion = result.getElement().getCongestion();
+            congestion = (tiempo * (congestiones.get(indiceCongestion)));
+            tiempoFinal = (int) Math.round(congestion);
+            grafo.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), tiempoFinal);
+        }
+        lista = GraphAlgorithms.shortestPathList(grafo, res.get(parada1), res.get(parada2));
+        return lista;
+    }
+
+    public List<List<Tramo>> menosTrasbordo(Parada parada1, Parada parada2) {
+        // copia grafo
+        Graph<Parada, Integer> grafo = new AdjacencyMapGraph<>(false);
+        Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
+        List<List<Tramo>> lista = new ArrayList<List<Tramo>>();
+
+        for (Vertex<Parada> result : red.vertices())
+            res.put(result.getElement(), grafo.insertVertex(result.getElement()));
+
+        Vertex<Parada>[] vert;
+        int tiempo;
+
+        for (Edge<Tramo> result : red.edges()) {
+            vert = red.endVertices(result);
+            for (Linea linea : vert[1].getElement().getLineas())
+                if (vert[0].getElement().getLineas().contains(linea))
+                    tiempo = 1;
+                else
+                    tiempo = MAX_TIEMPO;
+            grafo.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), tiempo);
+        }
+
+        lista = GraphAlgorithms.shortestPathList(grafo, res.get(parada1), res.get(parada2));
+        return lista;
     }
 
     public List<List<Tramo>> recorridos(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {
+
+        // Crear grafo
+        Graph<Parada, ParadaLinea> redConsulta = grafoRecorrido(paradaOrigen, paradaDestino);
+
+        // Todos los recorridos
+        YenKShortestPath<Parada, ParadaLinea> yksp = new YenKShortestPath<Parada, ParadaLinea>(redConsulta);
+        List<GraphPath<Parada, ParadaLinea>> caminos = yksp.getPaths(paradaOrigen, paradaDestino, Integer.MAX_VALUE);
+
+        // Eliminar recorridos superan cambioLineas
+        List<Linea> lineas;
+        Iterator<GraphPath<Parada, ParadaLinea>> r = caminos.iterator();
+        while (r.hasNext()) {
+            lineas = new ArrayList<Linea>();
+            int cambioLineas = 0;
+            for (ParadaLinea pl : r.next().getEdgeList())
+                if (lineas.isEmpty())
+                    lineas.add(pl.getLinea());
+                else if (!lineas.get(lineas.size() - 1).equals(pl.getLinea()))
+                    lineas.add(pl.getLinea());
+            for (Linea l : lineas)
+                if (l.getFrecuencia() != 0)
+                    cambioLineas++;
+            if (cambioLineas > nroLineas)
+                r.remove();
+        }
+
+        // Realizar c�lculo de tiempo y preparar resultados
+        List<List<Tramo>> listaTramos = new ArrayList<List<Tramo>>();
+        Tramo t = null;
+        int proximoColectivo;
+        int tiempo = 0;
+        List<Tramo> tramos;
+        List<ParadaLinea> paradalineas;
+        List<Parada> paradas;
+        Parada origen = null;
+        Parada destino = null;
+        TreeMap<Integer, Parada> pMap;
+        for (GraphPath<Parada, ParadaLinea> gp : caminos) {
+            pMap = new TreeMap<Integer, Parada>();
+            paradas = gp.getVertexList();
+            for (Parada p : paradas)
+                pMap.put(p.getCodigo(), new Parada(p.getCodigo(), paradaMap.get(p.getCodigo()).getDireccion()));
+            proximoColectivo = horario;
+            tramos = new ArrayList<Tramo>();
+            paradalineas = gp.getEdgeList();
+            for (int i = 0; i < paradalineas.size(); i++) {
+                t = tramoMap.get(paradas.get(i).getCodigo() + "-" + paradas.get(i + 1).getCodigo());
+                origen = pMap.get(paradas.get(i).getCodigo());
+                origen.setLinea(paradalineas.get(i).getLinea());
+                destino = pMap.get(paradas.get(i + 1).getCodigo());
+                proximoColectivo = proximoColectivo(paradalineas.get(i).getLinea(), paradas.get(i),
+                        proximoColectivo + tiempo);
+                tramos.add(new Tramo(origen, destino, t.getTipo(), proximoColectivo));
+                tiempo = t.getTiempo();
+            }
+            destino.setLinea(origen.getLineas().get(0));
+            tramos.add(new Tramo(destino, destino, t.getTipo(), proximoColectivo + t.getTiempo()));
+            listaTramos.add(tramos);
+        }
+        return listaTramos;
+    }
+
+    public List<List<Tramo>> recorridos1(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {
 
         // Todos los recorridos
         YenKShortestPath<Parada, ParadaLinea> yksp = new YenKShortestPath<Parada, ParadaLinea>(red);
@@ -124,6 +246,42 @@ public class Calculo {
         return listaTramos;
     }
 
+    private Graph<Parada, ParadaLinea> grafoRecorrido(Parada paradaOrigen, Parada paradaDestino) {
+
+        Set<ParadaLinea> paradaLineas = new HashSet<ParadaLinea>();
+        paradaLineas.addAll(red.outgoingEdgesOf(paradaOrigen));
+        paradaLineas.addAll(red.incomingEdgesOf(paradaDestino));
+
+        Set<Linea> lineas = new HashSet<Linea>();
+        for (ParadaLinea p : paradaLineas)
+            lineas.add(p.getLinea());
+
+        Graph<Parada, ParadaLinea> recorrido = new DirectedMultigraph<>(null, null, false);
+
+        // Cargar paradas
+        for (Parada p : paradaMap.values())
+            recorrido.addVertex(p);
+
+        // Cargar tramos lineas
+        Parada origen, destino;
+        for (Linea l : lineas)
+            for (int i = 0; i < l.getParadas().size() - 1; i++) {
+                origen = l.getParadas().get(i);
+                destino = l.getParadas().get(i + 1);
+                recorrido.addEdge(origen, destino, new ParadaLinea(origen, l));
+            }
+
+        // Cargar tramos caminando
+        Linea linea;
+        for (Tramo t : tramoMap.values())
+            if (t.getTipo() == Constantes.TRAMO_CAMINANDO) {
+                linea = new Linea(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), Time.toMins("00:00"),
+                        Time.toMins("24:00"), 0);
+                recorrido.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
+            }
+        return recorrido;
+    }
+
     private int proximoColectivo(Linea linea, Parada parada, int horario) {
         int nroParada = linea.getParadas().indexOf(parada);
         // Tramo caminando
@@ -147,7 +305,6 @@ public class Calculo {
         for (int j = linea.getComienza(); j <= linea.getFinaliza(); j += linea.getFrecuencia())
             if (j + tiempo >= horario)
                 return j + tiempo;
-
         return -1;
     }
 
@@ -180,11 +337,9 @@ public class Calculo {
         public String toString() {
             return parada.getCodigo() + " " + linea.getCodigo();
         }
-
     }
 
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-
 }

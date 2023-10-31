@@ -27,7 +27,7 @@ public class Parada {
 
     public List<Linea> getLineas() { return lineas; }
 
-    public boolean getLinea(Linea linea) {
+    public boolean isLinea(Linea linea) {
         for (Linea l: lineas)
             if (l.equals(linea))
                 return true;

@@ -1,29 +1,26 @@
 package controlador;
 
 import java.util.List;
-
 import datastructures.TreeMap;
 import gui.datos.*;
 import negocio.Calculo;
+import gui.consulta.ConsultaForm;
 import gui.consulta.Interfaz;
+import gui.consulta.ResultadoForm;
 import modelo.*;
 import negocio.Empresa;
 import negocio.ParadaExistenteException;
+import util.Time;
 
 public class Coordinador {
     private Empresa empresa;
     private Calculo calculo;
     private Interfaz interfaz;
-//  private DesktopFrameConsulta desktopFrameConsulta;
     private DesktopFrameDatos desktopFrameDatos;
-    /*
-    private LineaList lineaList;
-    private LineaForm lineaForm;
-     */
     private ParadaList paradaList;
     private ParadaForm paradaForm;
-    private TramoList tramoList;
-    private TramoForm tramoForm;
+    private ConsultaForm consultaForm;
+    private ResultadoForm resultadoForm;
 
     // <o> Getters y Setters de Empresa, Calculo e Interfaz <o>
 
@@ -51,6 +48,24 @@ public class Coordinador {
         this.interfaz = interfaz;
     }
 
+    public void masRapido(Parada parada1, Parada parada2, String horario, int nrolineas) {
+        List<List<Tramo>> resultado = calculo.recorridos(parada1, parada2, Time.toMins(horario), nrolineas);
+        resultadoForm.accion(resultadoForm.verDatos(resultado));
+        resultadoForm.setVisible(true);
+    }
+
+    public void menosTrasbordo(Parada parada1, Parada parada2) {
+        List<List<Tramo>> resultado = calculo.menosTrasbordo(parada1, parada2);
+        resultadoForm.accion(resultadoForm.verDatos(resultado));
+        resultadoForm.setVisible(true);
+    }
+
+    public void menosCongestion(Parada parada1, Parada parada2) {
+        List<List<Tramo>> resultado = calculo.menosCongestion(parada1, parada2);
+        resultadoForm.accion(resultadoForm.verDatos(resultado));
+        resultadoForm.setVisible(true);
+    }
+
     // <o> Listar Modelos <o>
 
     public TreeMap<Integer, Parada> listarParadas() {
@@ -74,6 +89,27 @@ public class Coordinador {
     }
 
     // <o> GUI Consulta <o>
+
+    public void cancelarConsulta() {
+        consultaForm.setVisible(false);
+    }
+
+    public void cancelarResultado() {
+        resultadoForm.setVisible(false);
+    }
+
+    public void mostrarConsulta() {
+        consultaForm.accion();
+        consultaForm.setVisible(true);
+    }
+
+    public int numeroLineas() {
+        return interfaz.numeroLineas();
+    }
+
+    public String horaLlegadaParada() {
+        return interfaz.horaLlegadaParada();
+    }
 
     // <o> GUI Datos <o>
 
@@ -235,5 +271,4 @@ public class Coordinador {
         paradaList.setAccion(Constantes.BORRAR);
         paradaForm.setVisible(false);
     }
-
 }
