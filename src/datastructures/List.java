@@ -103,6 +103,4 @@ public interface List<E> extends Iterable<E> {
    *                              "Collection.html#optional-restrictions">optional</a>)
    */
   boolean contains(Object o);
-
-boolean contains(Object forEach);
 }
