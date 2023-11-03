@@ -2,6 +2,7 @@ package controlador;
 
 import java.util.List;
 import datastructures.TreeMap;
+import gui.consulta.DesktopFrameConsulta;
 import gui.datos.*;
 import negocio.Calculo;
 import gui.consulta.ConsultaForm;
@@ -16,6 +17,7 @@ public class Coordinador {
     private Empresa empresa;
     private Calculo calculo;
     private Interfaz interfaz;
+    private DesktopFrameConsulta desktopFrameConsulta;
     private DesktopFrameDatos desktopFrameDatos;
     private ParadaList paradaList;
     private ParadaForm paradaForm;
@@ -97,6 +99,30 @@ public class Coordinador {
 
     public String horaLlegadaParada() {
         return interfaz.horaLlegadaParada();
+    }
+
+    public DesktopFrameConsulta getDesktopFrameConsulta() {
+        return desktopFrameConsulta;
+    }
+
+    public void setDesktopFrameConsulta(DesktopFrameConsulta desktopFrameConsulta) {
+        this.desktopFrameConsulta = desktopFrameConsulta;
+    }
+
+    public ConsultaForm getConsultaForm() {
+        return consultaForm;
+    }
+
+    public void setConsultaForm(ConsultaForm consultaForm) {
+        this.consultaForm = consultaForm;
+    }
+
+    public ResultadoForm getResultadoForm() {
+        return resultadoForm;
+    }
+
+    public void setResultadoForm(ResultadoForm resultadoForm) {
+        this.resultadoForm = resultadoForm;
     }
 
     // <o> GUI Datos <o>

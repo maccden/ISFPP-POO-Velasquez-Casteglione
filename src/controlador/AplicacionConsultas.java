@@ -1,62 +1,53 @@
 package controlador;
 
-import java.io.IOException;
-import java.util.List;
+import gui.consulta.ConsultaForm;
+import gui.consulta.DesktopFrameConsulta;
 import gui.consulta.Interfaz;
-import modelo.Parada;
-import modelo.Tramo;
+import gui.consulta.ResultadoForm;
 import negocio.Calculo;
 import negocio.Empresa;
-import util.Time;
 
 public class AplicacionConsultas {
 
     private Empresa empresa;
+    private DesktopFrameConsulta desktopFrameConsulta;
+    private ConsultaForm consultaForm;
+    private ResultadoForm resultadoForm;
 	private Calculo calculo;
 	private Interfaz interfaz;
 	private Coordinador coordinador;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         AplicacionConsultas miAplicacion = new AplicacionConsultas();
         miAplicacion.iniciar();
-        miAplicacion.consultar();
     }
 
-    private void iniciar() throws IOException {
+    private void iniciar() {
 
         empresa = Empresa.getEmpresa();
-        calculo = new Calculo();
         coordinador = new Coordinador();
+        desktopFrameConsulta = new DesktopFrameConsulta();
+        consultaForm = new ConsultaForm();
+        resultadoForm = new ResultadoForm();
+        calculo = new Calculo();
         interfaz = new Interfaz();
 
+        desktopFrameConsulta.setCoordinador(coordinador);
+        consultaForm.setCoordinador(coordinador);
+        resultadoForm.setCoordinador(coordinador);
         calculo.setCoordinador(coordinador);
         interfaz.setCoordinador(coordinador);
 
         coordinador.setEmpresa(empresa);
+        coordinador.setDesktopFrameConsulta(desktopFrameConsulta);
+        coordinador.setConsultaForm(consultaForm);
+        coordinador.setResultadoForm(resultadoForm);
         coordinador.setCalculo(calculo);
         coordinador.setInterfaz(interfaz);
 
         calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
+
+        desktopFrameConsulta.setVisible(true);
     }
 
-    private void consultar() throws IOException {
-
-        int opcion = Interfaz.opcion();
-        Parada origen = Interfaz.ingresarEstacionOrigen(coordinador.listarParadas());
-        Parada destino = Interfaz.ingresarEstacionDestino(coordinador.listarParadas(), origen);
-
-        calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
-
-        // <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>
-
-        // Lo de abajo es la unica manera de ingresar las paradas, ya que la interfaz aun no funciona completamente
-
-        // <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>  <!>
-
-        origen = coordinador.listarParadas().get(84);
-        destino = coordinador.listarParadas().get(85);
-
-		List<List<Tramo>> recorrido = calculo.recorridos(origen, destino, Time.toMins("10:25"), 2);
-		Interfaz.resultado(recorrido, Time.toMins("10:25"), coordinador.listarLineas());
-    }
 }

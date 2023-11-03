@@ -121,6 +121,5 @@ public class TramoForm extends JDialog {
         errorTipo.setFont(new Font("Tahoma", Font.BOLD, 12));
         errorTipo.setBounds(144, 130, 274, 14);
         getContentPane().add(errorTipo);
-
     }
 }

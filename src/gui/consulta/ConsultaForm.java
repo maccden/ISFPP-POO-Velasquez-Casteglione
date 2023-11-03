@@ -11,13 +11,13 @@ import javax.swing.border.EmptyBorder;
 import datastructures.TreeMap;
 import controlador.Coordinador;
 import modelo.Parada;
+import org.apache.log4j.Logger;
 
 public class ConsultaForm extends JDialog {
+	final static Logger logger = Logger.getLogger(ConsultaForm.class);
 	private Coordinador coordinador;
 	private JPanel contentPane;
 	private JButton btnRapido;
-	private JButton btnTrasbordo;
-	private JButton btnCongestion;
 	private JButton btnCancelar;
 	private JLabel lblParada1;
 	private JLabel lblParada2;
@@ -33,30 +33,20 @@ public class ConsultaForm extends JDialog {
 		contentPane.setLayout(null);
 		Handler handler = new Handler();
 
-		btnRapido = new JButton("M�s R�pido");
+		btnRapido = new JButton("Mas Rapido");
 		btnRapido.setBounds(65, 150, 156, 32);
 		contentPane.add(btnRapido);
 		btnRapido.addActionListener(handler);
-
-		btnTrasbordo = new JButton("Menos Trasbordos");
-		btnTrasbordo.setBounds(231, 150, 155, 32);
-		contentPane.add(btnTrasbordo);
-		btnTrasbordo.addActionListener(handler);
-
-		btnCongestion = new JButton("Menos Congesti�n");
-		btnCongestion.setBounds(397, 150, 155, 32);
-		contentPane.add(btnCongestion);
-		btnCongestion.addActionListener(handler);
 
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setBounds(231, 206, 155, 32);
 		contentPane.add(btnCancelar);
 
-		lblParada1 = new JLabel("Estaci\u00F3n Origen:");
+		lblParada1 = new JLabel("Parada Origen:");
 		lblParada1.setBounds(34, 35, 118, 14);
 		contentPane.add(lblParada1);
 
-		lblParada2 = new JLabel("Estaci\u00F3n Destino:");
+		lblParada2 = new JLabel("Parada Destino:");
 		lblParada2.setBounds(34, 71, 118, 14);
 		contentPane.add(lblParada2);
 
@@ -86,13 +76,17 @@ public class ConsultaForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnCancelar) {
 				coordinador.cancelarConsulta();
+				logger.info("Cancelar consultaForm");
 				return;
 			}
 
-			if (event.getSource() == btnRapido)
+			if (event.getSource() == btnRapido) {
 				coordinador.masRapido((Parada) cbxParada1.getSelectedItem(),
 						(Parada) cbxParada2.getSelectedItem(), coordinador.horaLlegadaParada(),
 						coordinador.numeroLineas());
+				logger.info("Consulta masRapido");
+
+			}
 		}
 	}
 

@@ -52,7 +52,7 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         try {
             outFile = new Formatter(file);
             for (Parada p : list.values()) {
-                outFile.format("%s;%s;%s;\n", p.getCodigo(), p.getDireccion());
+                outFile.format("%s;%s;\n", p.getCodigo(), p.getDireccion());
             }
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error creating file.");
