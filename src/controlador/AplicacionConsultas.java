@@ -2,7 +2,6 @@ package controlador;
 
 import gui.consulta.ConsultaForm;
 import gui.consulta.DesktopFrameConsulta;
-import gui.consulta.Interfaz;
 import gui.consulta.ResultadoForm;
 import negocio.Calculo;
 import negocio.Empresa;
@@ -14,7 +13,6 @@ public class AplicacionConsultas {
     private ConsultaForm consultaForm;
     private ResultadoForm resultadoForm;
 	private Calculo calculo;
-	private Interfaz interfaz;
 	private Coordinador coordinador;
 
     public static void main(String[] args) {
@@ -23,31 +21,25 @@ public class AplicacionConsultas {
     }
 
     private void iniciar() {
-
         empresa = Empresa.getEmpresa();
         coordinador = new Coordinador();
         desktopFrameConsulta = new DesktopFrameConsulta();
         consultaForm = new ConsultaForm();
         resultadoForm = new ResultadoForm();
         calculo = new Calculo();
-        interfaz = new Interfaz();
 
         desktopFrameConsulta.setCoordinador(coordinador);
         consultaForm.setCoordinador(coordinador);
         resultadoForm.setCoordinador(coordinador);
         calculo.setCoordinador(coordinador);
-        interfaz.setCoordinador(coordinador);
 
         coordinador.setEmpresa(empresa);
         coordinador.setDesktopFrameConsulta(desktopFrameConsulta);
         coordinador.setConsultaForm(consultaForm);
         coordinador.setResultadoForm(resultadoForm);
         coordinador.setCalculo(calculo);
-        coordinador.setInterfaz(interfaz);
 
         calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
-
         desktopFrameConsulta.setVisible(true);
     }
-
 }

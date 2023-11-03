@@ -7,7 +7,6 @@ import gui.datos.DesktopFrameDatos;
 import gui.datos.ParadaForm;
 import gui.datos.ParadaList;
 import negocio.Empresa;
-import negocio.LineaExistenteException;
 
 
 public class AplicacionDatos {
