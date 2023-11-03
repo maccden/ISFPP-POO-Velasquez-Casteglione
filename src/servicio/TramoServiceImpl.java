@@ -1,7 +1,6 @@
 package servicio;
 
-import dao.secuencial.TramoSecuencialDAO;
-import factory.Factory;
+import conexion.Factory;
 import modelo.Tramo;
 import dao.TramoDAO;
 

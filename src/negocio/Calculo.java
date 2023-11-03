@@ -6,26 +6,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import controlador.Coordinador;
 import org.jgrapht.Graph;
-
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DirectedMultigraph;
-
 import controlador.Constantes;
 import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 import util.Time;
-import datastructures.AdjacencyMapGraph;
-import datastructures.Edge;
-import datastructures.GraphAlgorithms;
-import datastructures.PositionalList;
-import datastructures.ProbeHashMap;
 import datastructures.TreeMap;
-import datastructures.Vertex;
 
 public class Calculo {
 
@@ -71,56 +62,6 @@ public class Calculo {
                         Time.toMins("24:00"), 0);
                 red.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
             }
-    }
-
-    public List<List<Tramo>> menosCongestion(Parada parada1, Parada parada2) {
-        // copia grafo
-        Graph<Parada, Integer> grafo = new AdjacencyMapGraph<>(false);
-        Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
-        List<List<Tramo>> lista = new ArrayList<List<Tramo>>();
-
-        for (Vertex<Parada> result : red.vertices())
-            res.put(result.getElement(), grafo.insertVertex(result.getElement()));
-
-        Vertex<Parada>[] vert;
-        double tiempo, congestion;
-        int indiceCongestion, tiempoFinal;
-        for (Edge<Tramo> result : red.edges()) {
-            vert = red.endVertices(result);
-            tiempo = result.getElement().getTiempo();
-            indiceCongestion = result.getElement().getCongestion();
-            congestion = (tiempo * (congestiones.get(indiceCongestion)));
-            tiempoFinal = (int) Math.round(congestion);
-            grafo.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), tiempoFinal);
-        }
-        lista = GraphAlgorithms.shortestPathList(grafo, res.get(parada1), res.get(parada2));
-        return lista;
-    }
-
-    public List<List<Tramo>> menosTrasbordo(Parada parada1, Parada parada2) {
-        // copia grafo
-        Graph<Parada, Integer> grafo = new AdjacencyMapGraph<>(false);
-        Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
-        List<List<Tramo>> lista = new ArrayList<List<Tramo>>();
-
-        for (Vertex<Parada> result : red.vertices())
-            res.put(result.getElement(), grafo.insertVertex(result.getElement()));
-
-        Vertex<Parada>[] vert;
-        int tiempo;
-
-        for (Edge<Tramo> result : red.edges()) {
-            vert = red.endVertices(result);
-            for (Linea linea : vert[1].getElement().getLineas())
-                if (vert[0].getElement().getLineas().contains(linea))
-                    tiempo = 1;
-                else
-                    tiempo = MAX_TIEMPO;
-            grafo.insertEdge(res.get(vert[0].getElement()), res.get(vert[1].getElement()), tiempo);
-        }
-
-        lista = GraphAlgorithms.shortestPathList(grafo, res.get(parada1), res.get(parada2));
-        return lista;
     }
 
     public List<List<Tramo>> recorridos(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {

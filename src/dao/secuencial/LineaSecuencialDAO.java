@@ -6,7 +6,6 @@ import datastructures.TreeMap;
 import factory.Factory;
 import modelo.Linea;
 import modelo.Parada;
-import negocio.Empresa;
 import util.Time;
 
 import java.io.*;

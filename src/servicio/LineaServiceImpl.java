@@ -1,13 +1,9 @@
 package servicio;
 
 import dao.LineaDAO;
-import dao.TramoDAO;
-import dao.secuencial.LineaSecuencialDAO;
 import datastructures.TreeMap;
-import factory.Factory;
+import conexion.Factory;
 import modelo.Linea;
-
-import java.io.IOException;
 
 public class LineaServiceImpl implements LineaService {
 

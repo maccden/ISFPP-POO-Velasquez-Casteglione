@@ -54,18 +54,6 @@ public class Coordinador {
         resultadoForm.setVisible(true);
     }
 
-    public void menosTrasbordo(Parada parada1, Parada parada2) {
-        List<List<Tramo>> resultado = calculo.menosTrasbordo(parada1, parada2);
-        resultadoForm.accion(resultadoForm.verDatos(resultado));
-        resultadoForm.setVisible(true);
-    }
-
-    public void menosCongestion(Parada parada1, Parada parada2) {
-        List<List<Tramo>> resultado = calculo.menosCongestion(parada1, parada2);
-        resultadoForm.accion(resultadoForm.verDatos(resultado));
-        resultadoForm.setVisible(true);
-    }
-
     // <o> Listar Modelos <o>
 
     public TreeMap<Integer, Parada> listarParadas() {

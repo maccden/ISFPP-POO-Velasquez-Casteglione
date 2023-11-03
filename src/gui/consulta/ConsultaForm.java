@@ -93,14 +93,6 @@ public class ConsultaForm extends JDialog {
 				coordinador.masRapido((Parada) cbxParada1.getSelectedItem(),
 						(Parada) cbxParada2.getSelectedItem(), coordinador.horaLlegadaParada(),
 						coordinador.numeroLineas());
-
-			if (event.getSource() == btnTrasbordo)
-				coordinador.menosTrasbordo((Parada) cbxParada1.getSelectedItem(),
-						(Parada) cbxParada2.getSelectedItem());
-
-			if (event.getSource() == btnCongestion)
-				coordinador.menosCongestion((Parada) cbxParada1.getSelectedItem(),
-						(Parada) cbxParada2.getSelectedItem());
 		}
 	}
 
