@@ -59,9 +59,9 @@ public class TramoSecuencialDAO implements TramoDAO {
         Formatter outFile = null;
         try {
             outFile = new Formatter(file);
-            for (Tramo e : list) {
-                outFile.format("%s;%s;%d;%d;\n", e.getInicio().getCodigo(), e.getFin().getCodigo(),
-                        e.getTiempo(), e.getTipo());
+            for (Tramo t : list) {
+                outFile.format("%s;%s;%s;%s;\n", t.getInicio().getCodigo(), t.getFin().getCodigo(),
+                        t.getTiempo(), t.getTipo());
             }
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error creating file.");

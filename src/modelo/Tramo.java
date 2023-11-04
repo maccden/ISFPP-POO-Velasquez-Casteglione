@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.Objects;
+
 public class Tramo {
     private Parada inicio, fin;
     private int tiempo, tipo;
@@ -61,18 +63,10 @@ public class Tramo {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Tramo other = (Tramo) obj;
-        if (inicio == null) {
-            if (other.inicio != null)
-                return false;
-        } else if (!inicio.equals(other.inicio))
-            return false;
-        if (fin == null) {
-            if (other.fin != null)
-                return false;
-        } else if (!fin.equals(other.fin))
-            return false;
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tramo tramo)) return false;
+        return tipo == tramo.tipo && Objects.equals(inicio, tramo.inicio) && Objects.equals(fin, tramo.fin);
     }
+
 }

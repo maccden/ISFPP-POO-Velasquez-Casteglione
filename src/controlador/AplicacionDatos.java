@@ -1,11 +1,10 @@
 package controlador;
 
-import gui.datos.DesktopFrameDatos;
+import gui.datos.*;
 //import gui.datos.LineaForm;
 //import gui.datos.LineaList;
 
-import gui.datos.ParadaForm;
-import gui.datos.ParadaList;
+import modelo.Tramo;
 import negocio.Empresa;
 import negocio.LineaExistenteException;
 
@@ -13,12 +12,12 @@ import negocio.LineaExistenteException;
 public class AplicacionDatos {
     private Empresa empresa;
     private DesktopFrameDatos desktopFrameDatos;
-    /*
     private LineaList lineaList;
     private LineaForm lineaForm;
-     */
     private ParadaList paradaList;
     private ParadaForm paradaForm;
+    private TramoList tramoList;
+    private TramoForm tramoForm;
     private Coordinador coordinador;
 
     public static void main(String[] args) {
@@ -31,25 +30,31 @@ public class AplicacionDatos {
         empresa = Empresa.getEmpresa();
         coordinador = new Coordinador();
         desktopFrameDatos = new DesktopFrameDatos();
-        //lineaList = new LineaList();
-        //lineaForm = new LineaForm();
+        lineaList = new LineaList();
+        lineaForm = new LineaForm();
         paradaList = new ParadaList();
         paradaForm = new ParadaForm();
+        tramoList = new TramoList();
+        tramoForm = new TramoForm();
 
         /* Se establecen las relaciones entre clases */
         desktopFrameDatos.setCoordinador(coordinador);
-        //lineaList.setCoordinador(coordinador);
-        //lineaForm.setCoordinador(coordinador);
+        lineaList.setCoordinador(coordinador);
+        lineaForm.setCoordinador(coordinador);
         paradaList.setCoordinador(coordinador);
         paradaForm.setCoordinador(coordinador);
+        tramoList.setCoordinador(coordinador);
+        tramoForm.setCoordinador(coordinador);
 
         /* Se establecen relaciones con la clase coordinador */
         coordinador.setEmpresa(empresa);
         coordinador.setDesktopFrameDatos(desktopFrameDatos);
-        //coordinador.setLineaList(lineaList);
-        //coordinador.setLineaForm(lineaForm);
+        coordinador.setLineaList(lineaList);
+        coordinador.setLineaForm(lineaForm);
         coordinador.setParadaList(paradaList);
         coordinador.setParadaForm(paradaForm);
+        coordinador.setTramoList(tramoList);
+        coordinador.setTramoForm(tramoForm);
 
         desktopFrameDatos.setVisible(true);
     }

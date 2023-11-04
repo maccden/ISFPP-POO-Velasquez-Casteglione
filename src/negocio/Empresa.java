@@ -41,32 +41,36 @@ public class Empresa {
         tramos.addAll(tramoService.buscarTodos());
     }
 
+    // <o> Linea <o>
+
     public void agregarLinea(Linea linea) throws LineaExistenteException {
-        if (lineas.containsKey(linea.getCodigo()))
-            throw new LineaExistenteException();
+        for (Linea l: lineas.values())
+            if (l.equals(linea))
+                throw new LineaExistenteException();
         lineas.put(linea.getCodigo(), linea);
         lineaService.insertar(linea);
     }
 
     public void modificarLinea(Linea linea) {
+        lineas.remove(linea.getCodigo());
         lineas.put(linea.getCodigo(), linea);
         lineaService.actualizar(linea);
     }
 
     public void borrarLinea(Linea linea) {
-        for (Parada parada : paradas.values())
-            if (parada.isLinea(linea))
-                throw new LineaReferenciaException();
         Linea l = buscarLinea(linea);
         lineas.remove(l.getCodigo());
         lineaService.borrar(linea);
     }
 
     public Linea buscarLinea(Linea linea) {
-        if (!lineas.containsKey(linea.getCodigo()))
-            return null;
-        return lineas.get(linea.getCodigo());
+        for (Linea l: lineas.values())
+            if (l.equals(linea))
+                return lineas.get(linea.getCodigo());
+        return null;
     }
+
+    // <o> Parada <o>
 
     public void agregarParada(Parada parada) throws ParadaExistenteException {
         for (Parada p: paradas.values())
@@ -91,12 +95,40 @@ public class Empresa {
         Parada p = buscarParada(parada);
         paradas.remove(p.getCodigo());
 
-        paradaService.borrar(parada);    }
+        paradaService.borrar(parada);
+    }
 
     public Parada buscarParada(Parada parada) {
         if (!paradas.containsKey(parada.getCodigo()))
             return null;
         return paradas.get(parada.getCodigo());
+    }
+
+    // <o> Tramo <o>
+
+    public void agregarTramo(Tramo tramo) {
+        for (Tramo t: tramos)
+            if (t.equals(tramo))
+                throw new TramoExistenteException();
+        tramos.add(tramo);
+        tramoService.insertar(tramo);
+    }
+
+    public void modificarTramo(Tramo tramo) {
+        tramos.remove(tramo);
+        tramos.add(tramo);
+        tramoService.insertar(tramo);
+    }
+
+    public void borrarTramo(Tramo tramo) {
+        tramos.remove(tramo);
+        tramoService.borrar(tramo);
+    }
+
+    public Tramo buscarTramo(Tramo tramo) {
+        if (!tramos.contains(tramo))
+            return null;
+        return tramos.get(tramos.indexOf(tramo));
     }
 
     public String getNombre() {

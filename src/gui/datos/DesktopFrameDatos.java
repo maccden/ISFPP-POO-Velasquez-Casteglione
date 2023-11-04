@@ -36,7 +36,7 @@ public class DesktopFrameDatos extends JFrame {
         JMenuItem lineas = new JMenuItem("Lineas");
         lineas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                //coordinador.mostrarLineaList();
+                coordinador.mostrarLineaList();
             }
         });
         datos.add(lineas);
@@ -51,6 +51,10 @@ public class DesktopFrameDatos extends JFrame {
         datos.add(paradas);
 
         JMenuItem tramos = new JMenuItem("Tramos");
+        tramos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { coordinador.mostrarTramoList(); }
+        });
         datos.add(tramos);
 
         aplicacion = new JPanel();

@@ -77,14 +77,14 @@ public class LineaSecuencialDAO implements LineaDAO {
         try {
             outFile = new Formatter(file);
             for (Linea l : list.values()) {
-                outFile.format("%s;%s;%s;%s;", l.getCodigo(), l.getComienza(), l.getFinaliza(), l.getFrecuencia());
+                outFile.format("%s;%s;%s;%s;", l.getCodigo(), Time.toTime(l.getComienza()), Time.toTime(l.getFinaliza()), l.getFrecuencia());
                 for (Parada parada: l.getParadas()) {
-                    if (l.getParadas().get(l.getParadas().size() - 1).equals(parada))
-                        outFile.format("", parada.getCodigo());
+                    if (l.getParadas().indexOf(parada) == l.getParadas().size() - 1) {
+                        outFile.format("%s\n", parada.getCodigo());
+                    }
                     else
                         outFile.format("%s;", parada.getCodigo());
                 }
-                outFile.format("\n");
             }
         } catch (FileNotFoundException fileNotFoundException) {
             System.err.println("Error creating file.");
@@ -114,6 +114,7 @@ public class LineaSecuencialDAO implements LineaDAO {
 
     @Override
     public void actualizar(Linea linea) {
+        list.remove(linea.getCodigo());
         list.put(linea.getCodigo(), linea);
         writeToFile(list, name);
         actualizar = true;

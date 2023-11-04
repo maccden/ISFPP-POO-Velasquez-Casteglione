@@ -24,6 +24,10 @@ public class Linea {
         parada.setLinea(this);
     }
 
+    public void setParadas(List<Parada> paradas) {
+        this.paradas = paradas;
+    }
+
     public String getCodigo() {
         return codigo;
     }
@@ -56,9 +60,7 @@ public class Linea {
         this.frecuencia = frecuencia;
     }
 
-    public List<Parada> getParadas() {
-        return paradas;
-    }
+    public List<Parada> getParadas() { return paradas; }
 
     public boolean contains(Parada parada) {
         return paradas.contains(parada);
@@ -91,6 +93,16 @@ public class Linea {
 
     @Override
     public String toString() {
-        return codigo;
+        final StringBuilder sb = new StringBuilder("Linea{");
+        sb.append("codigo='").append(codigo).append('\'');
+        sb.append(", comienza=").append(comienza);
+        sb.append(", finaliza=").append(finaliza);
+        sb.append(", frecuencia=").append(frecuencia);
+        sb.append(", paradas=");
+        for (Parada parada: paradas) {
+            sb.append(parada.getCodigo());
+        }
+        sb.append('}');
+        return sb.toString();
     }
 }

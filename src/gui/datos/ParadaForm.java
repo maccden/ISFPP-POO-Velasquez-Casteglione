@@ -216,6 +216,11 @@ public class ParadaForm extends JDialog {
             errorCodigo.setText("¡Solo numeros!");
             return false;
         }
+        if (Integer.parseInt(jtfCodigo.getText().trim()) <= 0) {
+            errorCodigo.setText("¡Solo numeros positivos!");
+            return false;
+        }
+
 
         // validar direccion
         String direccion = jtfDireccion.getText().trim();
