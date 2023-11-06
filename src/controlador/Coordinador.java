@@ -6,7 +6,6 @@ import gui.consulta.DesktopFrameConsulta;
 import gui.datos.*;
 import negocio.*;
 import gui.consulta.ConsultaForm;
-import gui.consulta.Interfaz;
 import gui.consulta.ResultadoForm;
 import modelo.*;
 import util.Time;
@@ -14,7 +13,6 @@ import util.Time;
 public class Coordinador {
     private Empresa empresa;
     private Calculo calculo;
-    private Interfaz interfaz;
     private DesktopFrameConsulta desktopFrameConsulta;
     private DesktopFrameDatos desktopFrameDatos;
     private LineaList lineaList;
@@ -42,14 +40,6 @@ public class Coordinador {
 
     public void setCalculo(Calculo calculo) {
         this.calculo = calculo;
-    }
-
-    public Interfaz getInterfaz() {
-        return interfaz;
-    }
-
-    public void setInterfaz(Interfaz interfaz) {
-        this.interfaz = interfaz;
     }
 
     public void masRapido(Parada parada1, Parada parada2, String horario, int nrolineas) {
@@ -84,12 +74,6 @@ public class Coordinador {
 
     // <o> GUI Consulta <o>
 
-    public DesktopFrameConsulta getDesktopFrameConsulta() { return desktopFrameConsulta; }
-
-    public void setDesktopFrameConsulta(DesktopFrameConsulta desktopFrameConsulta) {
-        this.desktopFrameConsulta = desktopFrameConsulta;
-    }
-
     public void cancelarConsulta() {
         consultaForm.setVisible(false);
     }
@@ -103,12 +87,24 @@ public class Coordinador {
         consultaForm.setVisible(true);
     }
 
+    //queda por ver donde obtener el numero de lineas y la hora de llagada a la parada
+
     public int numeroLineas() {
-        return interfaz.numeroLineas();
+        return 2;
     }
 
     public String horaLlegadaParada() {
-        return interfaz.horaLlegadaParada();
+        return "10:25";
+    }
+
+    //por ahora los valores son hardcodeados
+
+    public DesktopFrameConsulta getDesktopFrameConsulta() {
+        return desktopFrameConsulta;
+    }
+
+    public void setDesktopFrameConsulta(DesktopFrameConsulta desktopFrameConsulta) {
+        this.desktopFrameConsulta = desktopFrameConsulta;
     }
 
     public ConsultaForm getConsultaForm() {

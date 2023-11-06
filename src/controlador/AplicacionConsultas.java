@@ -43,7 +43,6 @@ public class AplicacionConsultas {
         coordinador.setConsultaForm(consultaForm);
         coordinador.setResultadoForm(resultadoForm);
         coordinador.setCalculo(calculo);
-        coordinador.setInterfaz(interfaz);
 
         calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
 

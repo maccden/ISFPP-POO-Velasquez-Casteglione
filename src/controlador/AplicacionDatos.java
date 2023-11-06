@@ -1,13 +1,8 @@
 package controlador;
 
 import gui.datos.*;
-//import gui.datos.LineaForm;
-//import gui.datos.LineaList;
 
-import modelo.Tramo;
 import negocio.Empresa;
-import negocio.LineaExistenteException;
-
 
 public class AplicacionDatos {
     private Empresa empresa;
