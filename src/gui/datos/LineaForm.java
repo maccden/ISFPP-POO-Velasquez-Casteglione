@@ -328,6 +328,10 @@ public class LineaForm extends JDialog {
                     paradas.add(coordinador.buscarParada(parada));
                     parada.setLinea(linea);
                 }
+                for (Parada parada: linea.getParadas()) {
+                    if (!paradas.contains(parada))
+                        parada.removeLinea(linea);
+                }
                 linea.setParadas(paradas);
                 coordinador.modificarLinea(linea);
             }

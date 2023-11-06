@@ -59,6 +59,8 @@ public class Empresa {
 
     public void borrarLinea(Linea linea) {
         Linea l = buscarLinea(linea);
+        for (Parada parada: l.getParadas())
+            parada.removeLinea(buscarLinea(linea));
         lineas.remove(l.getCodigo());
         lineaService.borrar(linea);
     }

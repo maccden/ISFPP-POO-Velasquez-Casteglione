@@ -42,6 +42,15 @@ public class Parada {
         lineas.add(lineas.size(), linea);
     }
 
+    public void removeLinea(Linea linea) {
+        for (int i = 0; i < lineas.size(); i++) {
+            if (lineas.get(i).equals(linea)) {
+                lineas.remove(i);
+                return;
+            }
+        }
+    }
+
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
