@@ -1,76 +1,78 @@
 package negocio;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import controlador.Coordinador;
+import org.apache.log4j.Logger;
 import org.jgrapht.Graph;
-
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.graph.DirectedMultigraph;
-
 import controlador.Constantes;
 import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 import util.Time;
-import datastructures.AdjacencyMapGraph;
-import datastructures.Edge;
-import datastructures.GraphAlgorithms;
-import datastructures.PositionalList;
-import datastructures.ProbeHashMap;
 import datastructures.TreeMap;
-import datastructures.Vertex;
 
-public class Calculo {
-
+public class Calculo implements Observer {
     private Coordinador coordinador;
+    private final static Logger logger = Logger.getLogger(Calculo.class);
+    private Subject subject;
     private Graph<Parada, ParadaLinea> red;
     private TreeMap<Integer, Parada> paradaMap;
     private TreeMap<String, Tramo> tramoMap;
-    private HashMap<Integer, Double> congestiones;
-    private static final int MAX_TIEMPO = 1000;
+    private boolean actualizar;
 
     public Calculo() {
     }
 
+    public void init(Subject subject) {
+        this.subject = subject;
+        this.subject.attach(this);
+        this.actualizar = true;
+    }
+
     public void cargarDatos(TreeMap<Integer, Parada> paradaMap, TreeMap<String, Linea> lineaMap, List<Tramo> tramos) {
-        // Map paradas
-        this.paradaMap = paradaMap;
+        if (actualizar) {
+            // Map paradas
+            this.paradaMap = paradaMap;
 
-        // Map tramo
-        tramoMap = new TreeMap<String, Tramo>();
-        for (Tramo t : tramos)
-            tramoMap.put(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), t);
+            // Map tramo
+            tramoMap = new TreeMap<String, Tramo>();
+            for (Tramo t : tramos)
+                tramoMap.put(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), t);
 
-        red = new DirectedMultigraph<>(null, null, false);
+            red = new DirectedMultigraph<>(null, null, false);
 
-        // Cargar paradas
-        for (Parada p : paradaMap.values())
-            red.addVertex(p);
+            // Cargar paradas
+            for (Parada p : paradaMap.values())
+                red.addVertex(p);
 
-        // Cargar tramos lineas
-        Parada origen, destino;
-        for (Linea l : lineaMap.values())
-            for (int i = 0; i < l.getParadas().size() - 1; i++) {
-                origen = l.getParadas().get(i);
-                destino = l.getParadas().get(i + 1);
-                red.addEdge(origen, destino, new ParadaLinea(origen, l));
-            }
+            // Cargar tramos lineas
+            Parada origen, destino;
+            for (Linea l : lineaMap.values())
+                for (int i = 0; i < l.getParadas().size() - 1; i++) {
+                    origen = l.getParadas().get(i);
+                    destino = l.getParadas().get(i + 1);
+                    red.addEdge(origen, destino, new ParadaLinea(origen, l));
+                }
 
-        // Cargar tramos caminando
-        Linea linea;
-        for (Tramo t : tramos)
-            if (t.getTipo() == Constantes.TRAMO_CAMINANDO) {
-                linea = new Linea(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), Time.toMins("00:00"),
-                        Time.toMins("24:00"), 0);
-                red.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
-            }
+            // Cargar tramos caminando
+            Linea linea;
+            for (Tramo t : tramos)
+                if (t.getTipo() == Constantes.TRAMO_CAMINANDO) {
+                    linea = new Linea(t.getInicio().getCodigo() + "-" + t.getFin().getCodigo(), Time.toMins("00:00"),
+                            Time.toMins("24:00"), 0);
+                    red.addEdge(t.getInicio(), t.getFin(), new ParadaLinea(t.getInicio(), linea));
+                }
+            actualizar = false;
+            logger.info("Se actualizaron los datos para realizar calculos");
+        }
+        logger.info("No se actualizaron los datos");
     }
 
     public List<List<Tramo>> recorridos(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {
@@ -291,5 +293,10 @@ public class Calculo {
 
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
+    }
+
+    @Override
+    public void update() {
+        actualizar = true;
     }
 }

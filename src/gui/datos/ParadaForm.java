@@ -6,6 +6,7 @@ import modelo.Parada;
 import negocio.LineaReferenciaException;
 import negocio.ParadaExistenteException;
 import negocio.TramoReferenciaException;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +14,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ParadaForm extends JDialog {
+    final static Logger logger = Logger.getLogger(ParadaForm.class);
     private Coordinador coordinador;
     private JTextField jtfCodigo;
     private JTextField jtfDireccion;
     private JButton btnCancelar, btnInsertar, btnModificar, btnEliminar;
     private JLabel errorCodigo, errorDireccion, tituloModificar, tituloInsertar, tituloEliminar;
+
     public ParadaForm() {
         setBounds(100, 100, 550, 190);
 
@@ -97,7 +100,7 @@ public class ParadaForm extends JDialog {
         errorCodigo.setBounds(162, 50, 150, 14);
         getContentPane().add(errorCodigo);
 
-        errorDireccion  = new JLabel("");
+        errorDireccion = new JLabel("");
         errorDireccion.setForeground(Color.RED);
         errorDireccion.setFont(new Font("Tahoma", Font.BOLD, 12));
         errorDireccion.setBounds(295, 80, 150, 14);
@@ -157,28 +160,35 @@ public class ParadaForm extends JDialog {
 
             if (event.getSource() == btnCancelar) {
                 coordinador.cancelarParada();
+                logger.info("cancelar paradaForm");
                 return;
             }
 
             String codigo = jtfCodigo.getText().trim();
             String direccion = jtfDireccion.getText().trim();
 
-            if (!registroValido())
+            if (!registroValido()) {
+                logger.error("registro no valido parada form");
                 return;
+            }
 
             Parada parada = new Parada(Integer.parseInt(codigo), direccion);
 
             if (event.getSource() == btnInsertar) {
                 try {
                     coordinador.insertarParada(parada);
+                    logger.info("insertar paradaForm");
+
                 } catch (ParadaExistenteException e) {
                     JOptionPane.showMessageDialog(null, "¡Esta parada ya existe!");
+                    logger.error("error insertar paradaForm");
                     return;
                 }
             }
 
             if (event.getSource() == btnModificar) {
                 coordinador.modificarParada(parada);
+                logger.info("modificar paradaForm");
             }
 
             if (event.getSource() == btnEliminar) {
@@ -187,16 +197,20 @@ public class ParadaForm extends JDialog {
                 if (JOptionPane.OK_OPTION == resp)
                     try {
                         coordinador.borrarParada(parada);
+                        logger.info("borrar paradaForm");
+
                     } catch (LineaReferenciaException e) {
                         JOptionPane.showMessageDialog(null, "¡Hay lineas que hacen referencia a esta parada!");
+                        logger.error("error lineaReferencia paradaForm");
+
                         return;
                     } catch (TramoReferenciaException e) {
                         JOptionPane.showMessageDialog(null, "¡Hay tramo que hacen referencia a esta parada!");
+                        logger.error("error tramoReferencia paradaForm");
                         return;
                     }
                 return;
             }
-
         }
     }
 
@@ -235,5 +249,4 @@ public class ParadaForm extends JDialog {
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
-
 }

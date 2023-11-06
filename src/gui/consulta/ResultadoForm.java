@@ -12,8 +12,10 @@ import javax.swing.border.EmptyBorder;
 import controlador.Coordinador;
 import modelo.Linea;
 import modelo.Tramo;
+import org.apache.log4j.Logger;
 
 public class ResultadoForm extends JDialog {
+	final static Logger logger = Logger.getLogger(ResultadoForm.class);
 	private Coordinador coordinador;
 	private JPanel contentPane;
 	private JButton btnCancelar;
@@ -68,6 +70,7 @@ public class ResultadoForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnCancelar) {
 				coordinador.cancelarResultado();
+				logger.info("Cancelar resultadoForm");
 				return;
 			}
 		}

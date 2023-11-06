@@ -2,9 +2,8 @@ package servicio;
 
 import dao.ParadaDAO;
 import datastructures.TreeMap;
-import factory.Factory;
+import conexion.Factory;
 import modelo.Parada;
-import dao.secuencial.ParadaSecuencialDAO;
 
 public class ParadaServiceImpl implements ParadaService {
     private ParadaDAO paradaDAO;

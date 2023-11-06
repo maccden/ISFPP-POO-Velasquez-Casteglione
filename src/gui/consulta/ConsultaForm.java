@@ -11,8 +11,10 @@ import javax.swing.border.EmptyBorder;
 import datastructures.TreeMap;
 import controlador.Coordinador;
 import modelo.Parada;
+import org.apache.log4j.Logger;
 
 public class ConsultaForm extends JDialog {
+	final static Logger logger = Logger.getLogger(ConsultaForm.class);
 	private Coordinador coordinador;
 	private JPanel contentPane;
 	private JButton btnRapido;
@@ -74,14 +76,17 @@ public class ConsultaForm extends JDialog {
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnCancelar) {
 				coordinador.cancelarConsulta();
+				logger.info("Cancelar consultaForm");
 				return;
 			}
 
-			if (event.getSource() == btnRapido)
+			if (event.getSource() == btnRapido) {
 				coordinador.masRapido((Parada) cbxParada1.getSelectedItem(),
 						(Parada) cbxParada2.getSelectedItem(), coordinador.horaLlegadaParada(),
 						coordinador.numeroLineas());
+				logger.info("Consulta masRapido");
 
+			}
 		}
 	}
 

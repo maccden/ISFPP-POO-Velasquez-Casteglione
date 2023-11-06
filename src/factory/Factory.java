@@ -16,7 +16,7 @@ public class Factory {
             if (obj == null) {
                 ResourceBundle rb = ResourceBundle.getBundle("factory");
                 String sClassname = rb.getString(objName);
-                obj = Class.forName(sClassname).newInstance();
+                obj = Class.forName(sClassname).getDeclaredConstructor().newInstance();
                 // agrego el objeto a la hashtable
                 instancias.put(objName, obj);
             }
