@@ -18,7 +18,7 @@ public class TramoForm extends JDialog {
     private JTextField jtfParadaInicio, jtfParadaFinal, jtfTiempo, jtfTipo;
     private JLabel tituloInsertar, tituloEliminar, tituloModificar, errorTiempo, errorTipo;
     private JButton btnInsertar, btnModificar, btnEliminar, btnCancelar;
-    private JComboBox comboBoxInicio, comboBoxFinal;
+    private JComboBox<Object> comboBoxInicio, comboBoxFinal;
     public TramoForm() {
         getContentPane().setLayout(null);
         //setBounds(100, 100, 470, 250);
@@ -87,7 +87,7 @@ public class TramoForm extends JDialog {
         tituloModificar.setBounds(107, 11, 239, 14);
         getContentPane().add(tituloModificar);
 
-        comboBoxInicio = new JComboBox<String>();
+        comboBoxInicio = new JComboBox<>();
         comboBoxInicio.setBounds(90, 36, 350, 22);
         getContentPane().add(comboBoxInicio);
         comboBoxInicio.addItemListener(new ItemListener() {
@@ -107,7 +107,7 @@ public class TramoForm extends JDialog {
             }
         });
 
-        comboBoxFinal = new JComboBox<String>();
+        comboBoxFinal = new JComboBox<>();
         comboBoxFinal.setBounds(90, 66, 350, 22);
         getContentPane().add(comboBoxFinal);
         comboBoxFinal.addItemListener(new ItemListener() {

@@ -5,20 +5,21 @@ import modelo.Linea;
 import modelo.Parada;
 import modelo.Tramo;
 import servicio.*;
-
-//import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class Empresa {
 
     private static Empresa empresa = null;
     private String nombre;
+    private Subject subject;
     private TreeMap<String, Linea> lineas;
     private LineaService lineaService;
     private TreeMap<Integer, Parada> paradas;
     private ParadaService paradaService;
     private List<Tramo> tramos;
+    private Logger logger;
     private TramoService tramoService;
 
     public static Empresa getEmpresa() {
@@ -41,6 +42,10 @@ public class Empresa {
         tramos.addAll(tramoService.buscarTodos());
     }
 
+    public void init(Subject subject) {
+        this.subject = subject;
+    }
+
     // <o> Linea <o>
 
     public void agregarLinea(Linea linea) throws LineaExistenteException {
@@ -49,12 +54,16 @@ public class Empresa {
                 throw new LineaExistenteException();
         lineas.put(linea.getCodigo(), linea);
         lineaService.insertar(linea);
+        subject.refresh();
+        logger.info("Se agrega una linea");
     }
 
     public void modificarLinea(Linea linea) {
         lineas.remove(linea.getCodigo());
         lineas.put(linea.getCodigo(), linea);
         lineaService.actualizar(linea);
+        subject.refresh();
+        logger.info("Se modifica una linea");
     }
 
     public void borrarLinea(Linea linea) {
@@ -63,6 +72,8 @@ public class Empresa {
             parada.removeLinea(buscarLinea(linea));
         lineas.remove(l.getCodigo());
         lineaService.borrar(linea);
+        subject.refresh();
+        logger.info("Se borra una linea");
     }
 
     public Linea buscarLinea(Linea linea) {
@@ -80,11 +91,15 @@ public class Empresa {
                 throw new ParadaExistenteException();
         paradas.put(parada.getCodigo(), parada);
         paradaService.insertar(parada);
+        subject.refresh();
+        logger.info("Se agrega una parada");
     }
 
     public void modificarParada(Parada parada) {
         paradas.put(parada.getCodigo(), parada);
         paradaService.actualizar(parada);
+        subject.refresh();
+        logger.info("Se modifica una parada");
     }
 
     public void borrarParada(Parada parada) {
@@ -96,8 +111,9 @@ public class Empresa {
                 throw new TramoReferenciaException();
         Parada p = buscarParada(parada);
         paradas.remove(p.getCodigo());
-
         paradaService.borrar(parada);
+        subject.refresh();
+        logger.info("Se borra una parada");
     }
 
     public Parada buscarParada(Parada parada) {
@@ -114,17 +130,23 @@ public class Empresa {
                 throw new TramoExistenteException();
         tramos.add(tramo);
         tramoService.insertar(tramo);
+        subject.refresh();
+        logger.info("Se agrega un tramo");
     }
 
     public void modificarTramo(Tramo tramo) {
         tramos.remove(tramo);
         tramos.add(tramo);
         tramoService.insertar(tramo);
+        subject.refresh();
+        logger.info("Se modifica un tramo");
     }
 
     public void borrarTramo(Tramo tramo) {
         tramos.remove(tramo);
         tramoService.borrar(tramo);
+        subject.refresh();
+        logger.info("Se borra un tramo");
     }
 
     public Tramo buscarTramo(Tramo tramo) {

@@ -81,7 +81,6 @@ public class ParadaList extends JDialog {
     private class Handler implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
-            ParadaForm paradaForm = null;
             if (event.getSource() == btnInsertar)
                 coordinador.insertarParadaForm();
         }

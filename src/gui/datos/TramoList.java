@@ -82,7 +82,6 @@ public class TramoList extends JDialog{
     private class Handler implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
-            TramoForm tramoForm = null;
             if (event.getSource() == btnInsertar)
                 coordinador.insertarTramoForm();
         }

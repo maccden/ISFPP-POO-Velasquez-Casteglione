@@ -1,7 +1,7 @@
 package controlador;
 
+import negocio.Subject;
 import gui.datos.*;
-
 import negocio.Empresa;
 
 public class AplicacionDatos {
@@ -14,6 +14,7 @@ public class AplicacionDatos {
     private TramoList tramoList;
     private TramoForm tramoForm;
     private Coordinador coordinador;
+    private Subject subject;
 
     public static void main(String[] args) {
         AplicacionDatos miAplicacion = new AplicacionDatos();
@@ -23,6 +24,7 @@ public class AplicacionDatos {
     private void iniciar() {
         /* Se instancian las clases */
         empresa = Empresa.getEmpresa();
+        subject = new Subject();
         coordinador = new Coordinador();
         desktopFrameDatos = new DesktopFrameDatos();
         lineaList = new LineaList();
@@ -50,6 +52,8 @@ public class AplicacionDatos {
         coordinador.setParadaForm(paradaForm);
         coordinador.setTramoList(tramoList);
         coordinador.setTramoForm(tramoForm);
+
+        empresa.init(subject);
 
         desktopFrameDatos.setVisible(true);
     }

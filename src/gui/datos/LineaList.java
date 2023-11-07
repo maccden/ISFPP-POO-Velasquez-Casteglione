@@ -83,7 +83,6 @@ public class LineaList extends JDialog {
     private class Handler implements ActionListener {
         public void actionPerformed(ActionEvent event) {
 
-            LineaForm lineaForm = null;
             if (event.getSource() == btnInsertar)
                 coordinador.insertarLineaForm();
         }
