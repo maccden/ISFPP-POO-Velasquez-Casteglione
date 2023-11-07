@@ -8,7 +8,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import datastructures.TreeMap;
 import controlador.Coordinador;
 import modelo.Parada;
 import org.apache.log4j.Logger;
@@ -21,9 +20,8 @@ public class ConsultaForm extends JDialog {
 	private JButton btnCancelar;
 	private JLabel lblParada1;
 	private JLabel lblParada2;
-	private JComboBox<Parada> cbxParada1;
-	private JComboBox<Parada> cbxParada2;
-	private TreeMap<Integer, Parada> paradas;
+	private JComboBox<Object> cbxParada1;
+	private JComboBox<Object> cbxParada2;
 
 	public ConsultaForm() {
 		setBounds(100, 100, 662, 300);
@@ -50,11 +48,11 @@ public class ConsultaForm extends JDialog {
 		lblParada2.setBounds(34, 71, 118, 14);
 		contentPane.add(lblParada2);
 
-		cbxParada1 = new JComboBox<Parada>();
+		cbxParada1 = new JComboBox<>();
 		cbxParada1.setBounds(162, 31, 390, 22);
 		contentPane.add(cbxParada1);
 
-		cbxParada2 = new JComboBox<Parada>();
+		cbxParada2 = new JComboBox<>();
 		cbxParada2.setBounds(162, 67, 390, 22);
 		contentPane.add(cbxParada2);
 
@@ -63,12 +61,9 @@ public class ConsultaForm extends JDialog {
 	}
 
 	public void accion() {
-		if (paradas != null)
-			return;
-		paradas = coordinador.listarParadas();
-		for (int i = 0; i < paradas.size(); i++) {
-			cbxParada1.addItem(paradas.get(i));
-			cbxParada2.addItem(paradas.get(i));
+		for (Parada parada : coordinador.listarParadas().values()) {
+			cbxParada1.addItem(parada.getCodigo() + " - " + parada.getDireccion());
+			cbxParada2.addItem(parada.getCodigo() + " - " + parada.getDireccion());
 		}
 	}
 
@@ -79,13 +74,15 @@ public class ConsultaForm extends JDialog {
 				logger.info("Cancelar consultaForm");
 				return;
 			}
-
 			if (event.getSource() == btnRapido) {
-				coordinador.masRapido((Parada) cbxParada1.getSelectedItem(),
-						(Parada) cbxParada2.getSelectedItem(), coordinador.horaLlegadaParada(),
+				Parada parada1 = new Parada(Integer.parseInt(((String) cbxParada1.getSelectedItem()).split(" - ")[0]),
+						null);
+				Parada parada2 = new Parada(Integer.parseInt(((String) cbxParada2.getSelectedItem()).split(" - ")[0]),
+						null);
+				coordinador.masRapido(coordinador.buscarParada(parada1),
+						coordinador.buscarParada(parada2), coordinador.horaLlegadaParada(),
 						coordinador.numeroLineas());
 				logger.info("Consulta masRapido");
-
 			}
 		}
 	}

@@ -53,8 +53,8 @@ public class Coordinador {
     public TreeMap<Integer, Parada> listarParadas() {
         return empresa.getParadas();
     }
-    
-    public TreeMap<String, Linea> listarLineas()  {
+
+    public TreeMap<String, Linea> listarLineas() {
         return empresa.getLineas();
     }
 
@@ -70,7 +70,9 @@ public class Coordinador {
         return empresa.buscarParada(parada);
     }
 
-    public Tramo buscarTramo(Tramo tramo) { return empresa.buscarTramo(tramo); }
+    public Tramo buscarTramo(Tramo tramo) {
+        return empresa.buscarTramo(tramo);
+    }
 
     // <o> GUI Consulta <o>
 
@@ -87,7 +89,8 @@ public class Coordinador {
         consultaForm.setVisible(true);
     }
 
-    //queda por ver donde obtener el numero de lineas y la hora de llagada a la parada
+    // queda por ver donde obtener el numero de lineas y la hora de llagada a la
+    // parada
 
     public int numeroLineas() {
         return 2;
@@ -97,7 +100,7 @@ public class Coordinador {
         return "10:25";
     }
 
-    //por ahora los valores son hardcodeados
+    // por ahora los valores son hardcodeados
 
     public DesktopFrameConsulta getDesktopFrameConsulta() {
         return desktopFrameConsulta;
@@ -129,45 +132,77 @@ public class Coordinador {
         return desktopFrameDatos;
     }
 
-    public void setDesktopFrameDatos(DesktopFrameDatos desktopFrameDatos) { this.desktopFrameDatos = desktopFrameDatos; }
+    public void setDesktopFrameDatos(DesktopFrameDatos desktopFrameDatos) {
+        this.desktopFrameDatos = desktopFrameDatos;
+    }
 
-    public LineaList getLineaList() { return lineaList; }
+    public LineaList getLineaList() {
+        return lineaList;
+    }
 
-    public void setLineaList(LineaList lineaList) { this.lineaList = lineaList; }
+    public void setLineaList(LineaList lineaList) {
+        this.lineaList = lineaList;
+    }
 
-    public LineaForm getLineaForm() { return lineaForm; }
+    public LineaForm getLineaForm() {
+        return lineaForm;
+    }
 
-    public void setLineaForm(LineaForm lineaForm) { this.lineaForm = lineaForm; }
+    public void setLineaForm(LineaForm lineaForm) {
+        this.lineaForm = lineaForm;
+    }
 
-    public ParadaList getParadaList() { return paradaList; }
+    public ParadaList getParadaList() {
+        return paradaList;
+    }
 
-    public void setParadaList(ParadaList paradaList) { this.paradaList = paradaList; }
+    public void setParadaList(ParadaList paradaList) {
+        this.paradaList = paradaList;
+    }
 
-    public ParadaForm getParadaForm() { return paradaForm; }
+    public ParadaForm getParadaForm() {
+        return paradaForm;
+    }
 
-    public void setParadaForm(ParadaForm paradaForm) { this.paradaForm = paradaForm; }
+    public void setParadaForm(ParadaForm paradaForm) {
+        this.paradaForm = paradaForm;
+    }
 
-    public TramoList getTramoList() { return tramoList; }
+    public TramoList getTramoList() {
+        return tramoList;
+    }
 
-    public void setTramoList(TramoList tramoList) { this.tramoList = tramoList; }
+    public void setTramoList(TramoList tramoList) {
+        this.tramoList = tramoList;
+    }
 
-    public TramoForm getTramoForm() { return tramoForm; }
+    public TramoForm getTramoForm() {
+        return tramoForm;
+    }
 
-    public void setTramoForm(TramoForm tramoForm) { this.tramoForm = tramoForm; }
+    public void setTramoForm(TramoForm tramoForm) {
+        this.tramoForm = tramoForm;
+    }
 
-    public void salirLineaList() { lineaList.setVisible(false);}
+    public void salirLineaList() {
+        lineaList.setVisible(false);
+    }
 
-    public void salirParadaList() { paradaList.setVisible(false); }
+    public void salirParadaList() {
+        paradaList.setVisible(false);
+    }
 
-    public void salirTramoList() { tramoList.setVisible(false); }
+    public void salirTramoList() {
+        tramoList.setVisible(false);
+    }
 
     // <o> DesktopFrame Consulta <o>
 
     /*
-    public void mostrarConsulta() {
-        consultaForm.accion();
-        consultaForm.setVisible(true);
-    }
+     * public void mostrarConsulta() {
+     * consultaForm.accion();
+     * consultaForm.setVisible(true);
+     * }
      */
 
     // <o> DesktopFrame Datos <o>

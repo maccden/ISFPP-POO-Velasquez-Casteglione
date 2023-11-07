@@ -138,66 +138,6 @@ public class Calculo implements Observer {
         return listaTramos;
     }
 
-    public List<List<Tramo>> recorridos1(Parada paradaOrigen, Parada paradaDestino, int horario, int nroLineas) {
-
-        // Todos los recorridos
-        YenKShortestPath<Parada, ParadaLinea> yksp = new YenKShortestPath<Parada, ParadaLinea>(red);
-        List<GraphPath<Parada, ParadaLinea>> caminos = yksp.getPaths(paradaOrigen, paradaDestino, Integer.MAX_VALUE);
-
-        // Eliminar recorridos superan cambioLineas
-        List<Linea> lineas;
-        Iterator<GraphPath<Parada, ParadaLinea>> r = caminos.iterator();
-        while (r.hasNext()) {
-            lineas = new ArrayList<Linea>();
-            int cambioLineas = 0;
-            for (ParadaLinea pl : r.next().getEdgeList())
-                if (lineas.isEmpty())
-                    lineas.add(pl.getLinea());
-                else if (!lineas.get(lineas.size() - 1).equals(pl.getLinea()))
-                    lineas.add(pl.getLinea());
-            for (Linea l : lineas)
-                if (l.getFrecuencia() != 0)
-                    cambioLineas++;
-            if (cambioLineas > nroLineas)
-                r.remove();
-        }
-
-        // Realizar c�lculo de tiempo y preparar resultados
-        List<List<Tramo>> listaTramos = new ArrayList<List<Tramo>>();
-        Tramo t = null;
-        int proximoColectivo;
-        int tiempo = 0;
-        List<Tramo> tramos;
-        List<ParadaLinea> paradalineas;
-        List<Parada> paradas;
-        Parada origen = null;
-        Parada destino = null;
-        TreeMap<Integer, Parada> pMap;
-        for (GraphPath<Parada, ParadaLinea> gp : caminos) {
-            pMap = new TreeMap<Integer, Parada>();
-            paradas = gp.getVertexList();
-            for (Parada p : paradas)
-                pMap.put(p.getCodigo(), new Parada(p.getCodigo(), paradaMap.get(p.getCodigo()).getDireccion()));
-            proximoColectivo = horario;
-            tramos = new ArrayList<Tramo>();
-            paradalineas = gp.getEdgeList();
-            for (int i = 0; i < paradalineas.size(); i++) {
-                t = tramoMap.get(paradas.get(i).getCodigo() + "-" + paradas.get(i + 1).getCodigo());
-                origen = pMap.get(paradas.get(i).getCodigo());
-                origen.setLinea(paradalineas.get(i).getLinea());
-                destino = pMap.get(paradas.get(i + 1).getCodigo());
-                proximoColectivo = proximoColectivo(paradalineas.get(i).getLinea(), paradas.get(i),
-                        proximoColectivo + tiempo);
-                tramos.add(new Tramo(origen, destino, t.getTipo(), proximoColectivo));
-                tiempo = t.getTiempo();
-            }
-            destino.setLinea(origen.getLineas().get(0));
-            tramos.add(new Tramo(destino, destino, t.getTipo(), proximoColectivo + t.getTiempo()));
-            listaTramos.add(tramos);
-        }
-        return listaTramos;
-    }
-
     private Graph<Parada, ParadaLinea> grafoRecorrido(Parada paradaOrigen, Parada paradaDestino) {
 
         Set<ParadaLinea> paradaLineas = new HashSet<ParadaLinea>();

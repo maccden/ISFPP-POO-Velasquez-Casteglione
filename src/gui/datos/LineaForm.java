@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
@@ -21,7 +20,7 @@ public class LineaForm extends JDialog {
     private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza, errorFrecuencia;
     private JTextField jtfCodigo, jtfComienzo, jtfFinaliza, jtfFrecuencia;
     private JButton btnInsertar, btnModificar, btnCancelar, btnEliminar, btnAgregar, btnQuitar;
-    private JComboBox comboBoxParadas, comboBoxParadasN;
+    private JComboBox<Object> comboBoxParadas, comboBoxParadasN;
 
     public LineaForm() {
         setBounds(100, 100, 750, 375);
@@ -110,7 +109,7 @@ public class LineaForm extends JDialog {
         getContentPane().add(btnEliminar);
         btnEliminar.addActionListener(handler);
 
-        comboBoxParadas = new JComboBox();
+        comboBoxParadas = new JComboBox<Object>();
         comboBoxParadas.setMaximumRowCount(6);
         comboBoxParadas.setBounds(10, 161, 300, 20);
         getContentPane().add(comboBoxParadas);
@@ -153,7 +152,7 @@ public class LineaForm extends JDialog {
             }
         });
 
-        comboBoxParadasN = new JComboBox();
+        comboBoxParadasN = new JComboBox<Object>();
         comboBoxParadasN.setMaximumRowCount(6);
         comboBoxParadasN.setBounds(419, 161, 304, 20);
         getContentPane().add(comboBoxParadasN);
