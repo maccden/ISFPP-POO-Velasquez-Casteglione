@@ -83,6 +83,7 @@ public class LineaSecuencialDAO implements LineaDAO {
                     }
                     else
                         outFile.format("%s;", parada.getCodigo());
+                    parada.setLinea(l);
                 }
             }
         } catch (FileNotFoundException fileNotFoundException) {
