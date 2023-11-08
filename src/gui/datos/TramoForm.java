@@ -93,9 +93,12 @@ public class TramoForm extends JDialog {
         comboBoxInicio.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                if (comboBoxInicio.getSelectedIndex() == 0)
+                if (comboBoxInicio.getSelectedIndex() == 0) {
                     comboBoxFinal.setEnabled(false);
-                else {
+                    comboBoxFinal.removeAllItems();
+                    btnInsertar.setEnabled(false);
+                    btnModificar.setEnabled(false);
+                } else {
                     comboBoxFinal.setEnabled(true);
                     comboBoxFinal.removeAllItems();
                     comboBoxFinal.addItem("Selecionar...");

@@ -1,5 +1,6 @@
 package gui.consulta;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ResultadoForm extends JDialog {
 
 	public ResultadoForm() {
 		setBounds(100, 100, 662, 300);
+		setTitle("Camino mas corto");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -32,6 +34,7 @@ public class ResultadoForm extends JDialog {
 		btnCancelar.setBounds(249, 205, 155, 32);
 		contentPane.add(btnCancelar);
 		txtResultado = new JTextArea();
+		txtResultado.setFont(new Font("Arial", Font.PLAIN, 13));
 		JScrollPane scroll = new JScrollPane(txtResultado);
 		scroll.setBounds(29, 23, 592, 171);
 		contentPane.add(scroll);
@@ -58,7 +61,7 @@ public class ResultadoForm extends JDialog {
 			}
 		resultado += "Tiempo Total: " + tiempoTotal + "\n";
 		resultado += "Tiempo Subte: " + tiempoSubte + "\n";
-		resultado += "Tiempo Caminando: " + tiempoCaminando + "\n";
+		resultado += "Tiempo Caminando: " + tiempoCaminando;
 		return resultado;
 	}
 

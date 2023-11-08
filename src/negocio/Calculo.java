@@ -49,7 +49,7 @@ public class Calculo implements Observer {
             red = new DirectedMultigraph<>(null, null, false);
 
             // Cargar paradas
-            for (Parada p : paradaMap.values())
+            for (Parada p : this.paradaMap.values())
                 red.addVertex(p);
 
             // Cargar tramos lineas
@@ -102,7 +102,7 @@ public class Calculo implements Observer {
                 r.remove();
         }
 
-        // Realizar c�lculo de tiempo y preparar resultados
+        // Realizar calculo de tiempo y preparar resultados
         List<List<Tramo>> listaTramos = new ArrayList<List<Tramo>>();
         Tramo t = null;
         int proximoColectivo;

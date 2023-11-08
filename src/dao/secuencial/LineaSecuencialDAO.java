@@ -6,6 +6,8 @@ import datastructures.TreeMap;
 import factory.Factory;
 import modelo.Linea;
 import modelo.Parada;
+import servicio.ParadaService;
+import servicio.ParadaServiceImpl;
 import util.Time;
 
 import java.io.*;
@@ -38,8 +40,9 @@ public class LineaSecuencialDAO implements LineaDAO {
                 Linea linea = new Linea(partes[0], Time.toMins(partes[1]), Time.toMins(partes[2]), Integer.parseInt(partes[3]));
                 for (int i = 4; i < partes.length; i++) {
                     if (paradas.get(Integer.valueOf(partes[i])) != null) {
-                            linea.agregarParada(paradas.get(Integer.valueOf(partes[i])));
-                            paradas.get(Integer.valueOf(partes[i])).setLinea(linea);
+                        linea.agregarParada(paradas.get(Integer.valueOf(partes[i])));
+                        ParadaService paradaService = new ParadaServiceImpl();
+                        paradaService.actualizar(paradas.get(Integer.valueOf(partes[i])));
                     }
                 }
                 lineas.put(idLinea, linea);
@@ -81,9 +84,9 @@ public class LineaSecuencialDAO implements LineaDAO {
                     if (l.getParadas().indexOf(parada) == l.getParadas().size() - 1) {
                         outFile.format("%s\n", parada.getCodigo());
                     }
-                    else
+                    else {
                         outFile.format("%s;", parada.getCodigo());
-                    parada.setLinea(l);
+                    }
                 }
             }
         } catch (FileNotFoundException fileNotFoundException) {
