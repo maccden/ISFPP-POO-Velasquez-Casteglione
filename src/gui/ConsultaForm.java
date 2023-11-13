@@ -1,4 +1,4 @@
-package gui.consulta;
+package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -133,6 +133,8 @@ public class ConsultaForm extends JDialog {
 			cbxParada1.addItem(parada.getCodigo() + " - " + parada.getDireccion());
 		cbxParada2.setEnabled(false);
 		btnCalcular.setEnabled(false);
+		jtfHora.setText("");
+		jtfLimiteColectivos.setText("");
 	}
 
 	private class Handler implements ActionListener {
@@ -144,12 +146,16 @@ public class ConsultaForm extends JDialog {
 			}
 			if (!registroValido())
 				return;
+
+			coordinador.setHoraLlegada(jtfHora.getText());
+			coordinador.setNumeroLimiteColectivos(Integer.parseInt(jtfLimiteColectivos.getText()));
+
 			if (event.getSource() == btnCalcular) {
 				Parada parada1 = new Parada(Integer.parseInt(((String) cbxParada1.getSelectedItem()).split(" - ")[0]),
 						null);
 				Parada parada2 = new Parada(Integer.parseInt(((String) cbxParada2.getSelectedItem()).split(" - ")[0]),
 						null);
-				coordinador.masRapido(coordinador.buscarParada(parada1),
+				coordinador.calculo(coordinador.buscarParada(parada1),
 						coordinador.buscarParada(parada2), Time.toMins(coordinador.horaLlegadaParada()),
 						coordinador.getNumeroLimiteColectivos());
 				logger.info("Consulta masRapido");
@@ -187,7 +193,6 @@ public class ConsultaForm extends JDialog {
 				errorHora.setText("¡Ingrese una hora valida!");
 				return false;
 			}
-			coordinador.setHoraLlegada(horario);
 		} catch (PatternSyntaxException e) {
 			errorHora.setText("¡Escriba bien la hora! (XX:XX)");
 			return false;

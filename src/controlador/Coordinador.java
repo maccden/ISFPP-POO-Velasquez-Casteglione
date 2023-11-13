@@ -2,18 +2,14 @@ package controlador;
 
 import java.util.List;
 import datastructures.TreeMap;
-import gui.consulta.DesktopFrameConsulta;
-import gui.datos.*;
+import gui.*;
 import negocio.*;
-import gui.consulta.ConsultaForm;
-import gui.consulta.ResultadoForm;
 import modelo.*;
+import util.Time;
 
 public class Coordinador {
     private Empresa empresa;
     private Calculo calculo;
-    private DesktopFrameConsulta desktopFrameConsulta;
-    private DesktopFrameDatos desktopFrameDatos;
     private LineaList lineaList;
     private LineaForm lineaForm;
     private ParadaList paradaList;
@@ -22,7 +18,9 @@ public class Coordinador {
     private TramoForm tramoForm;
     private ConsultaForm consultaForm;
     private ResultadoForm resultadoForm;
-    private String[] horaLlegada;
+    private SubResultadoForm subResultadoForm;
+    private DesktopFrame desktopFrame;
+    private String horaLlegada;
     private int limiteColectivos;
 
     // <o> Getters y Setters de Empresa, Calculo e Interfaz <o>
@@ -43,10 +41,20 @@ public class Coordinador {
         this.calculo = calculo;
     }
 
-    public void masRapido(Parada parada1, Parada parada2, int horario, int nrolineas) {
+    public void calculo (Parada parada1, Parada parada2, int horario, int nrolineas) {
         List<List<Tramo>> resultado = calculo.recorridos(parada1, parada2, horario, nrolineas);
-        resultadoForm.accion(resultadoForm.verDatos(resultado));
+        resultadoForm.accion(resultadoForm.verDatos(resultado, horario, listarLineas()));
         resultadoForm.setVisible(true);
+    }
+
+    public void masRapido (List<List<Tramo>> trayecto){
+        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MAS_RAPIDO, trayecto, Time.toMins(horaLlegada), listarLineas()));
+        subResultadoForm.setVisible(true);
+    }
+
+    public void menosCostoso (List<List<Tramo>> trayecto){
+        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MENOS_COSTOSO, trayecto, Time.toMins(horaLlegada), listarLineas()));
+        subResultadoForm.setVisible(true);
     }
 
     // <o> Listar Modelos <o>
@@ -81,17 +89,9 @@ public class Coordinador {
         consultaForm.setVisible(false);
     }
 
-    public void cancelarResultado() {
-        resultadoForm.setVisible(false);
-    }
+    public void cancelarResultado() { resultadoForm.setVisible(false); }
 
-    public void mostrarConsulta() {
-        consultaForm.accion();
-        consultaForm.setVisible(true);
-    }
-
-    // queda por ver donde obtener el numero de lineas y la hora de llagada a la
-    // parada
+    public void cancelaraSubResultado() { subResultadoForm.setVisible(false); }
 
     public void setNumeroLimiteColectivos(int limite) {
         this.limiteColectivos = limite;
@@ -101,22 +101,12 @@ public class Coordinador {
         return limiteColectivos;
     }
 
-    public void setHoraLlegada(String[] horaLlegada) {
+    public void setHoraLlegada(String horaLlegada) {
         this.horaLlegada = horaLlegada;
     }
 
     public String horaLlegadaParada() {
-        return horaLlegada[0] + ":" + horaLlegada[1];
-    }
-
-    // por ahora los valores son hardcodeados
-
-    public DesktopFrameConsulta getDesktopFrameConsulta() {
-        return desktopFrameConsulta;
-    }
-
-    public void setDesktopFrameConsulta(DesktopFrameConsulta desktopFrameConsulta) {
-        this.desktopFrameConsulta = desktopFrameConsulta;
+        return horaLlegada;
     }
 
     public ConsultaForm getConsultaForm() {
@@ -135,16 +125,19 @@ public class Coordinador {
         this.resultadoForm = resultadoForm;
     }
 
+    public SubResultadoForm getSubResultadoForm() { return subResultadoForm; }
+
+    public void setSubResultadoForm(SubResultadoForm subResultadoForm) { this.subResultadoForm = subResultadoForm; }
+
+    public DesktopFrame getDesktopFrame() {
+        return desktopFrame;
+    }
+
+    public void setDesktopFrame(DesktopFrame desktopFrame) {
+        this.desktopFrame = desktopFrame;
+    }
+
     // <o> GUI Datos <o>
-
-    public DesktopFrameDatos getDesktopFrameDatos() {
-        return desktopFrameDatos;
-    }
-
-    public void setDesktopFrameDatos(DesktopFrameDatos desktopFrameDatos) {
-        this.desktopFrameDatos = desktopFrameDatos;
-    }
-
     public LineaList getLineaList() {
         return lineaList;
     }
@@ -207,12 +200,20 @@ public class Coordinador {
 
     // <o> DesktopFrame Consulta <o>
 
-    /*
-     * public void mostrarConsulta() {
-     * consultaForm.accion();
-     * consultaForm.setVisible(true);
-     * }
-     */
+     public void mostrarConsulta() {
+         consultaForm.accion();
+         consultaForm.setVisible(true);
+     }
+
+    // <o> SubConsulta <o> //
+
+    public void mostrarMasRapido(String resultado) {
+        subResultadoForm.accion(resultado);
+    }
+
+    public void mostrarMenosCostoso(String resultado) {
+        subResultadoForm.accion(resultado);
+    }
 
     // <o> DesktopFrame Datos <o>
 
@@ -356,5 +357,4 @@ public class Coordinador {
         tramoList.setAccion(Constantes.BORRAR);
         tramoForm.setVisible(false);
     }
-
 }

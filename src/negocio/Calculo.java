@@ -132,7 +132,7 @@ public class Calculo implements Observer {
                 tiempo = t.getTiempo();
             }
             destino.setLinea(origen.getLineas().get(0));
-            tramos.add(new Tramo(destino, destino, t.getTipo(), proximoColectivo + t.getTiempo()));
+            tramos.add(new Tramo(destino, destino, proximoColectivo + t.getTiempo(), t.getTipo()));
             listaTramos.add(tramos);
         }
         return listaTramos;

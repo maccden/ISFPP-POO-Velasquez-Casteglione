@@ -1,4 +1,4 @@
-package gui.datos;
+package gui;
 
 import controlador.Constantes;
 import controlador.Coordinador;

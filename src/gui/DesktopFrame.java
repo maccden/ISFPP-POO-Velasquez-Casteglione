@@ -1,4 +1,4 @@
-package gui.datos;
+package gui;
 
 import controlador.Coordinador;
 
@@ -8,11 +8,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class DesktopFrameDatos extends JFrame {
+public class DesktopFrame extends JFrame {
     private Coordinador coordinador;
     private JPanel aplicacion;
 
-    public DesktopFrameDatos() {
+    public DesktopFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 650, 600);
 
@@ -56,6 +56,19 @@ public class DesktopFrameDatos extends JFrame {
             public void actionPerformed(ActionEvent e) { coordinador.mostrarTramoList(); }
         });
         datos.add(tramos);
+
+        JMenu consultas = new JMenu("Consultas");
+        setJMenuBar(menuBar);
+
+        JMenuItem consulta = new JMenuItem("Consultas");
+        consulta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                coordinador.mostrarConsulta();
+            }
+        });
+
+        menuBar.add(consultas);
+        consultas.add(consulta);
 
         aplicacion = new JPanel();
         aplicacion.setBorder(new EmptyBorder(5, 5, 5, 5));

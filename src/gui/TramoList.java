@@ -1,10 +1,8 @@
-package gui.datos;
+package gui;
 
 import controlador.Constantes;
 import controlador.Coordinador;
-import modelo.Linea;
-import modelo.Parada;
-import util.Time;
+import modelo.Tramo;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -14,26 +12,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LineaList extends JDialog {
+public class TramoList extends JDialog{
     private Coordinador coordinador;
     private JButton btnInsertar, btnSalir;
     private JTable table;
-    private Linea linea;
+    private Tramo tramo;
     private JScrollPane scrollPane;
     private int accion;
-    public LineaList() {
-        setBounds(100, 100, 825, 360);
+    public TramoList() {
+        setBounds(100, 100, 635, 360);
 
         setTitle("Lista de tramos");
         getContentPane().setLayout(null);
 
-        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en las lineas cargadas:");
+        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en los tramos cargados:");
         titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        titulo.setBounds(180, 11, 421, 14);
+        titulo.setBounds(90, 11, 421, 14);
         getContentPane().add(titulo);
 
         scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 30, 790, 250);
+        scrollPane.setBounds(10, 30, 600, 250);
         add(scrollPane);
 
         table = new JTable();
@@ -42,10 +40,11 @@ public class LineaList extends JDialog {
                 new Object[][] {
                 },
                 new String[] {
-                        "Codigo", "Hora inicio", "Hora finaliza" , "Frecuencia", "Paradas", "Modificar", "Eliminar"
+                        "Parada Inicio", "Parada Final", "Tiempo" , "Tipo", "Modificar", "Eliminar"
                 }
         ));
-        table.getColumnModel().getColumn(4).setPreferredWidth(390);
+        table.getColumnModel().getColumn(0).setPreferredWidth(250);
+        table.getColumnModel().getColumn(1).setPreferredWidth(250);
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         table.setBounds(10, 30, 464, 250);
         getContentPane().add(table);
@@ -64,7 +63,7 @@ public class LineaList extends JDialog {
         btnSalir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                coordinador.salirLineaList();
+                coordinador.salirTramoList();
             }
         });
 
@@ -84,47 +83,34 @@ public class LineaList extends JDialog {
         public void actionPerformed(ActionEvent event) {
 
             if (event.getSource() == btnInsertar)
-                coordinador.insertarLineaForm();
+                coordinador.insertarTramoForm();
         }
     }
 
     public void loadTable() {
         // Eliminar todas las filas
         ((DefaultTableModel) table.getModel()).setRowCount(0);
-        for (Linea l : coordinador.listarLineas().values())
-            if (l instanceof Linea)
-                addRow((Linea) l);
+        for (Tramo tramo : coordinador.listarTramos())
+            if (tramo instanceof Tramo)
+                addRow((Tramo) tramo);
     }
 
-    public void addRow(Linea linea) {
+    public void addRow(Tramo tramo) {
         Object[] row = new Object[table.getModel().getColumnCount()];
-        row[0] = linea.getCodigo();
-        row[1] = Time.toTime(linea.getComienza());
-        row[2] = Time.toTime(linea.getFinaliza());
-        row[3] = linea.getFrecuencia() + "m";
-        row[4] = "";
-        for (Parada parada: linea.getParadas())
-            if (linea.getParadas().indexOf(parada) == linea.getParadas().size() - 1)
-                row[4] += String.valueOf(parada.getCodigo());
-            else
-                row[4] += parada.getCodigo() + " - ";
-        row[5] = "edit";
-        row[6] = "drop";
+        row[0] = tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion();
+        row[1] = tramo.getFin().getCodigo() + " - " + tramo.getFin().getDireccion();
+        row[2] = tramo.getTiempo();
+        row[3] = tramo.getTipo();
+        row[4] = "edit";
+        row[5] = "drop";
         ((DefaultTableModel) table.getModel()).addRow(row);
     }
 
     private void updateRow(int row) {
-        table.setValueAt(linea.getCodigo(), row, 0);
-        table.setValueAt(Time.toTime(linea.getComienza()), row, 1);
-        table.setValueAt(Time.toTime(linea.getFinaliza()), row, 2);
-        table.setValueAt(linea.getFrecuencia() + "m", row, 3);
-        StringBuilder columna = new StringBuilder(new String());
-        for (Parada parada: linea.getParadas())
-            if (linea.getParadas().indexOf(parada) == linea.getParadas().size() - 1)
-                columna.append(parada.getCodigo());
-            else
-                columna.append(parada.getCodigo()).append(" - ");
-        table.setValueAt(columna, row, 4);
+        table.setValueAt(tramo.getInicio(), row, 0);
+        table.setValueAt(tramo.getFin(), row, 1);
+        table.setValueAt(tramo.getTiempo(), row, 2);
+        table.setValueAt(tramo.getTipo(), row, 3);
     }
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -203,12 +189,14 @@ public class LineaList extends JDialog {
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
-                String codigo = table.getValueAt(table.getSelectedRow(), 0).toString();
-                Linea l = (Linea) coordinador.buscarLinea(new Linea(codigo, 0, 0, 0));
+                int pI = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString().split(" - ")[0]);
+                int pF = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 1).toString().split(" - ")[0]);
+                int tipo = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 3).toString());
+                Tramo t = (Tramo) coordinador.buscarTramo(new Tramo(coordinador.listarParadas().get(pI), coordinador.listarParadas().get(pF),0, tipo));
                 if (label.equals("edit"))
-                    coordinador.modificarLineaForm(l);
+                    coordinador.modificarTramoForm(t);
                 else
-                    coordinador.borrarLineaForm(l);
+                    coordinador.borrarTramoForm(t);
             }
             if (accion == Constantes.BORRAR)
                 isDeleteRow = true;
@@ -246,7 +234,7 @@ public class LineaList extends JDialog {
         this.accion = accion;
     }
 
-    public void setLinea(Linea linea) {
-        this.linea = linea;
+    public void setTramo(Tramo tramo) {
+        this.tramo = tramo;
     }
 }
