@@ -172,7 +172,6 @@ public class ConsultaForm extends JDialog {
 		}
 		try {
 			String[] horario = jtfHora.getText().trim().split(":");
-			coordinador.setHoraLlegada(horario);
 			if (horario.length < 2) {
 				errorHora.setText("¡Escriba bien la hora! (XX:XX)");
 				return false;
@@ -180,7 +179,7 @@ public class ConsultaForm extends JDialog {
 			Integer.parseInt(horario[0]);
 			Integer.parseInt(horario[1]);
 			if (Integer.parseInt(horario[0]) > 24 || Integer.parseInt(horario[1]) > 60
-					|| Integer.parseInt(horario[0]) < 0 || Integer.parseInt(horario[1]) < 0) {
+			|| Integer.parseInt(horario[0]) < 0 || Integer.parseInt(horario[1]) < 0) {
 				errorHora.setText("¡Ingrese una hora valida!");
 				return false;
 			}
@@ -188,6 +187,7 @@ public class ConsultaForm extends JDialog {
 				errorHora.setText("¡Ingrese una hora valida!");
 				return false;
 			}
+			coordinador.setHoraLlegada(horario);
 		} catch (PatternSyntaxException e) {
 			errorHora.setText("¡Escriba bien la hora! (XX:XX)");
 			return false;
@@ -195,10 +195,9 @@ public class ConsultaForm extends JDialog {
 			errorHora.setText("¡Ingrese una hora valida!");
 			return false;
 		}
-
+		
 		// validar limite colectivos
 		String limiteColectivos = jtfLimiteColectivos.getText().trim();
-		coordinador.setNumeroLimiteColectivos(Integer.parseInt(limiteColectivos));
 		if (limiteColectivos.isEmpty()) {
 			errorNumeroLineas.setText("Campo obligatorio");
 			return false;
@@ -213,7 +212,7 @@ public class ConsultaForm extends JDialog {
 			errorNumeroLineas.setText("¡Solo numeros positivos!");
 			return false;
 		}
-
+		coordinador.setNumeroLimiteColectivos(Integer.parseInt(limiteColectivos));
 		return true;
 	}
 }
