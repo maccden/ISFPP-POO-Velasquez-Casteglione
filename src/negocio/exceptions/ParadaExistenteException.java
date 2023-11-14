@@ -1,4 +1,4 @@
-package negocio;
+package negocio.exceptions;
 
 public class ParadaExistenteException extends RuntimeException{
 }

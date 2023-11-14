@@ -3,9 +3,17 @@ package controlador;
 import java.util.List;
 import datastructures.TreeMap;
 import gui.*;
+import gui.consulta.ConsultaForm;
+import gui.consulta.ResultadoForm;
+import gui.consulta.SubResultadoForm;
+import gui.datos.*;
 import negocio.*;
 import modelo.*;
-import util.Time;
+import negocio.exceptions.LineaExistenteException;
+import negocio.exceptions.ParadaExistenteException;
+import negocio.exceptions.TramoExistenteException;
+
+import javax.swing.*;
 
 public class Coordinador {
     private Empresa empresa;
@@ -20,8 +28,7 @@ public class Coordinador {
     private ResultadoForm resultadoForm;
     private SubResultadoForm subResultadoForm;
     private DesktopFrame desktopFrame;
-    private String horaLlegada;
-    private int limiteColectivos;
+    private SwingWorker<Void, Void> hilo;
 
     // <o> Getters y Setters de Empresa, Calculo e Interfaz <o>
 
@@ -42,18 +49,21 @@ public class Coordinador {
     }
 
     public void calculo (Parada parada1, Parada parada2, int horario, int nrolineas) {
-        List<List<Tramo>> resultado = calculo.recorridos(parada1, parada2, horario, nrolineas);
+        List<List<Tramo>> resultado = calculo.recorridos(buscarParada(parada1), buscarParada(parada2), horario, nrolineas);
+        consultaForm.terminar();
         resultadoForm.accion(resultadoForm.verDatos(resultado, horario, listarLineas()));
         resultadoForm.setVisible(true);
     }
 
-    public void masRapido (List<List<Tramo>> trayecto){
-        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MAS_RAPIDO, trayecto, Time.toMins(horaLlegada), listarLineas()));
+    public void masRapido (List<List<Tramo>> trayecto, int horaLlegada){
+        resultadoForm.terminar();
+        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MAS_RAPIDO, trayecto, horaLlegada , listarLineas()));
         subResultadoForm.setVisible(true);
     }
 
-    public void menosCostoso (List<List<Tramo>> trayecto){
-        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MENOS_COSTOSO, trayecto, Time.toMins(horaLlegada), listarLineas()));
+    public void menosCostoso (List<List<Tramo>> trayecto, int horaLlegada){
+        resultadoForm.terminar();
+        subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MENOS_COSTOSO, trayecto, horaLlegada, listarLineas()));
         subResultadoForm.setVisible(true);
     }
 
@@ -85,29 +95,11 @@ public class Coordinador {
 
     // <o> GUI Consulta <o>
 
-    public void cancelarConsulta() {
-        consultaForm.setVisible(false);
-    }
+    public void cancelarConsulta() { consultaForm.setVisible(false); }
 
     public void cancelarResultado() { resultadoForm.setVisible(false); }
 
     public void cancelaraSubResultado() { subResultadoForm.setVisible(false); }
-
-    public void setNumeroLimiteColectivos(int limite) {
-        this.limiteColectivos = limite;
-    }
-
-    public int getNumeroLimiteColectivos() {
-        return limiteColectivos;
-    }
-
-    public void setHoraLlegada(String horaLlegada) {
-        this.horaLlegada = horaLlegada;
-    }
-
-    public String horaLlegadaParada() {
-        return horaLlegada;
-    }
 
     public ConsultaForm getConsultaForm() {
         return consultaForm;
@@ -356,5 +348,26 @@ public class Coordinador {
         empresa.borrarTramo(tramo);
         tramoList.setAccion(Constantes.BORRAR);
         tramoForm.setVisible(false);
+    }
+
+    // <o> Hilos <o>
+
+    public void ejecutarHilo(SwingWorker<Void, Void> sw) {
+        this.hilo = sw;
+        hilo.execute();
+    }
+
+
+    public void cancelarHilo() {
+        this.hilo.cancel(true);
+    }
+
+
+    public void actualizarBarraConsulta(int i) {
+        consultaForm.actualizarBarra(i);
+    }
+
+    public void actualizarBarraResultado(int i) {
+        resultadoForm.actualizarBarra(i);
     }
 }

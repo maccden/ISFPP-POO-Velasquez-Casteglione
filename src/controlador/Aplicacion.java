@@ -1,6 +1,10 @@
 package controlador;
 
 import gui.*;
+import gui.consulta.ConsultaForm;
+import gui.consulta.ResultadoForm;
+import gui.consulta.SubResultadoForm;
+import gui.datos.*;
 import negocio.Calculo;
 import negocio.Empresa;
 import negocio.Subject;

@@ -1,10 +1,10 @@
-package gui;
+package gui.datos;
 
 import controlador.Constantes;
 import controlador.Coordinador;
 import modelo.Linea;
 import modelo.Parada;
-import negocio.LineaExistenteException;
+import negocio.exceptions.LineaExistenteException;
 import util.Time;
 
 import javax.swing.*;

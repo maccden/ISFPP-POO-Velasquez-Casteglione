@@ -1,4 +1,4 @@
-package negocio;
+package negocio.exceptions;
 
 public class TramoExistenteException extends RuntimeException{
 }

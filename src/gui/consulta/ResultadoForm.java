@@ -1,19 +1,19 @@
-package gui;
+package gui.consulta;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import controlador.Constantes;
 import controlador.Coordinador;
 import datastructures.TreeMap;
 import modelo.Linea;
 import modelo.Tramo;
+import negocio.hilos.MasRapidoHilo;
+import negocio.hilos.MenosCostosoHilo;
 import org.apache.log4j.Logger;
 import util.Time;
 
@@ -21,8 +21,10 @@ public class ResultadoForm extends JDialog {
 	final static Logger logger = Logger.getLogger(ResultadoForm.class);
 	private Coordinador coordinador;
 	private JPanel contentPane;
-	private JButton btnCancelar, btnMasRapido, btnMenosCostoso;
+	private JButton btnCancelar, btnMasRapido, btnMenosCostoso, btnCancelarSub;
 	private JTextArea txtResultado;
+	private JProgressBar progressBar;
+	private int horario;
 	private List<List<Tramo>> trayecto;
 
 	public ResultadoForm() {
@@ -56,6 +58,16 @@ public class ResultadoForm extends JDialog {
 		contentPane.add(btnMenosCostoso);
 		btnMenosCostoso.addActionListener(handler);
 
+		progressBar = new JProgressBar();
+		progressBar.setBounds(249, 205, 155, 32);
+		contentPane.add(progressBar);
+		progressBar.setVisible(false);
+
+		btnCancelarSub = new JButton("Cancelar");
+		btnCancelarSub.setFocusable(false);
+		contentPane.add(btnCancelarSub);
+		btnCancelarSub.addActionListener(handler);
+
 		setModal(true);
 	}
 
@@ -69,6 +81,7 @@ public class ResultadoForm extends JDialog {
 		}
 
 		trayecto = tramos;
+		this.horario = horario;
 		Linea linea;
 		Tramo tramo;
 		String nombreLinea;
@@ -104,17 +117,70 @@ public class ResultadoForm extends JDialog {
 				return;
 			}
 
+			if (event.getSource() == btnCancelarSub) {
+				coordinador.cancelarHilo();
+				progressBar.setVisible(false);
+				progressBar.setValue(0);
+				terminar();
+				logger.info("Cancelar subcalculo");
+				return;
+			}
+
 			if (event.getSource() == btnMasRapido) {
-				coordinador.masRapido(trayecto);
+				//coordinador.masRapido(trayecto, horario);
+				btnCancelarSub.setBounds(84, 205, 155, 32);
+				coordinador.ejecutarHilo(new MasRapidoHilo(trayecto, horario, coordinador, trayecto.size()));
+				calculando(Constantes.MAS_RAPIDO);
+				logger.info("Calcula rapido");
 			}
 
 			if (event.getSource() == btnMenosCostoso) {
-				coordinador.menosCostoso(trayecto);
+				btnCancelarSub.setBounds(414, 205, 155, 32);
+				coordinador.ejecutarHilo(new MenosCostosoHilo(trayecto, horario, coordinador, trayecto.size()));
+				calculando(Constantes.MENOS_COSTOSO);
+				logger.info("Calcula menos costoso");
 			}
 		}
 	}
 
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
+	}
+
+	public void actualizarBarra(int i) {
+		progressBar.setValue(i);
+		progressBar.repaint();
+	}
+
+	public void calculando(int consulta) {
+		progressBar.setValue(0);
+		progressBar.setVisible(true);
+		btnCancelar.setVisible(false);
+		btnCancelar.setEnabled(false);
+		if (consulta == Constantes.MAS_RAPIDO) {
+			btnMasRapido.setVisible(false);
+			btnMasRapido.setEnabled(false);
+			btnMenosCostoso.setVisible(true);
+			btnMenosCostoso.setEnabled(false);
+		}
+		if (consulta == Constantes.MENOS_COSTOSO) {
+			btnMasRapido.setVisible(true);
+			btnMasRapido.setEnabled(false);
+			btnMenosCostoso.setVisible(false);
+			btnMenosCostoso.setEnabled(false);
+		}
+		btnCancelarSub.setVisible(true);
+	}
+
+	public void terminar() {
+		progressBar.setValue(0);
+		progressBar.setVisible(false);
+		btnCancelar.setVisible(true);
+		btnCancelar.setEnabled(true);
+		btnMasRapido.setVisible(true);
+		btnMasRapido.setEnabled(true);
+		btnMenosCostoso.setVisible(true);
+		btnMenosCostoso.setEnabled(true);
+		btnCancelarSub.setVisible(false);
 	}
 }

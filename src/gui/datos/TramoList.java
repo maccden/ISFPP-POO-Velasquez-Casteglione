@@ -1,8 +1,8 @@
-package gui;
+package gui.datos;
 
 import controlador.Constantes;
 import controlador.Coordinador;
-import modelo.Parada;
+import modelo.Tramo;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -12,26 +12,26 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ParadaList extends JDialog {
+public class TramoList extends JDialog{
     private Coordinador coordinador;
     private JButton btnInsertar, btnSalir;
     private JTable table;
-    private Parada parada;
+    private Tramo tramo;
     private JScrollPane scrollPane;
     private int accion;
-    public ParadaList() {
-        setBounds(100, 100, 500, 360);
+    public TramoList() {
+        setBounds(100, 100, 635, 360);
 
-        setTitle("Lista de paradas");
+        setTitle("Lista de tramos");
         getContentPane().setLayout(null);
 
-        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en las paradas cargadas:");
+        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en los tramos cargados:");
         titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        titulo.setBounds(31, 11, 421, 14);
+        titulo.setBounds(90, 11, 421, 14);
         getContentPane().add(titulo);
 
         scrollPane = new JScrollPane();
-        scrollPane.setBounds(10, 30, 464, 250);
+        scrollPane.setBounds(10, 30, 600, 250);
         add(scrollPane);
 
         table = new JTable();
@@ -40,9 +40,10 @@ public class ParadaList extends JDialog {
                 new Object[][] {
                 },
                 new String[] {
-                        "Codigo", "Direccion", "Modificar", "Eliminar"
+                        "Parada Inicio", "Parada Final", "Tiempo" , "Tipo", "Modificar", "Eliminar"
                 }
         ));
+        table.getColumnModel().getColumn(0).setPreferredWidth(250);
         table.getColumnModel().getColumn(1).setPreferredWidth(250);
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         table.setBounds(10, 30, 464, 250);
@@ -62,7 +63,7 @@ public class ParadaList extends JDialog {
         btnSalir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                coordinador.salirParadaList();
+                coordinador.salirTramoList();
             }
         });
 
@@ -82,30 +83,34 @@ public class ParadaList extends JDialog {
         public void actionPerformed(ActionEvent event) {
 
             if (event.getSource() == btnInsertar)
-                coordinador.insertarParadaForm();
+                coordinador.insertarTramoForm();
         }
     }
 
     public void loadTable() {
         // Eliminar todas las filas
         ((DefaultTableModel) table.getModel()).setRowCount(0);
-        for (Parada parada : coordinador.listarParadas().values())
-            if (parada instanceof Parada)
-                addRow((Parada) parada);
+        for (Tramo tramo : coordinador.listarTramos())
+            if (tramo instanceof Tramo)
+                addRow((Tramo) tramo);
     }
 
-    public void addRow(Parada parada) {
+    public void addRow(Tramo tramo) {
         Object[] row = new Object[table.getModel().getColumnCount()];
-        row[0] = parada.getCodigo();
-        row[1] = parada.getDireccion();
-        row[2] = "edit";
-        row[3] = "drop";
+        row[0] = tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion();
+        row[1] = tramo.getFin().getCodigo() + " - " + tramo.getFin().getDireccion();
+        row[2] = tramo.getTiempo();
+        row[3] = tramo.getTipo();
+        row[4] = "edit";
+        row[5] = "drop";
         ((DefaultTableModel) table.getModel()).addRow(row);
     }
 
     private void updateRow(int row) {
-        table.setValueAt(parada.getCodigo(), row, 0);
-        table.setValueAt(parada.getDireccion(), row, 1);
+        table.setValueAt(tramo.getInicio(), row, 0);
+        table.setValueAt(tramo.getFin(), row, 1);
+        table.setValueAt(tramo.getTiempo(), row, 2);
+        table.setValueAt(tramo.getTipo(), row, 3);
     }
 
     class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -156,8 +161,7 @@ public class ParadaList extends JDialog {
         }
 
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                                                     int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
             if (isSelected) {
                 button.setForeground(table.getSelectionForeground());
@@ -185,12 +189,14 @@ public class ParadaList extends JDialog {
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
-                String id = table.getValueAt(table.getSelectedRow(), 0).toString();
-                Parada p = (Parada) coordinador.buscarParada(new Parada(Integer.parseInt(id), null));
+                int pI = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString().split(" - ")[0]);
+                int pF = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 1).toString().split(" - ")[0]);
+                int tipo = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 3).toString());
+                Tramo t = (Tramo) coordinador.buscarTramo(new Tramo(coordinador.listarParadas().get(pI), coordinador.listarParadas().get(pF),0, tipo));
                 if (label.equals("edit"))
-                    coordinador.modificarParadaForm(p);
+                    coordinador.modificarTramoForm(t);
                 else
-                    coordinador.borrarParadaForm(p);
+                    coordinador.borrarTramoForm(t);
             }
             if (accion == Constantes.BORRAR)
                 isDeleteRow = true;
@@ -228,7 +234,7 @@ public class ParadaList extends JDialog {
         this.accion = accion;
     }
 
-    public void setParada(Parada parada) {
-        this.parada = parada;
+    public void setTramo(Tramo tramo) {
+        this.tramo = tramo;
     }
 }

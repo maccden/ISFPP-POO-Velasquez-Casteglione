@@ -60,7 +60,11 @@ public class Linea {
         this.frecuencia = frecuencia;
     }
 
-    public List<Parada> getParadas() { return paradas; }
+    public List<Parada> getParadas() {
+        List<Parada> paradaList = new ArrayList<>();
+        paradaList.addAll(paradas);
+        return paradaList;
+    }
 
     public boolean contains(Parada parada) {
         return paradas.contains(parada);

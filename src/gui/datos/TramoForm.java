@@ -1,10 +1,10 @@
-package gui;
+package gui.datos;
 
 import controlador.Constantes;
 import controlador.Coordinador;
 import modelo.Parada;
 import modelo.Tramo;
-import negocio.TramoExistenteException;
+import negocio.exceptions.TramoExistenteException;
 
 import javax.swing.*;
 import java.awt.*;

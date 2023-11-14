@@ -1,9 +1,7 @@
 package modelo;
 
-import datastructures.ArrayList;
-import datastructures.List;
-import servicio.ParadaService;
-import servicio.ParadaServiceImpl;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parada {
     private int codigo;
@@ -27,7 +25,9 @@ public class Parada {
         return direccion;
     }
 
-    public List<Linea> getLineas() { return lineas; }
+    public List<Linea> getLineas() {
+        return new ArrayList<>(lineas);
+    }
 
     public boolean isLinea(Linea linea) {
         for (Linea l: lineas)

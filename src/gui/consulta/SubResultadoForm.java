@@ -1,4 +1,4 @@
-package gui;
+package gui.consulta;
 
 import controlador.Constantes;
 import controlador.Coordinador;
@@ -24,7 +24,7 @@ public class SubResultadoForm extends JDialog {
     private JTextArea txtResultado;
 
     public SubResultadoForm() {
-        setBounds(100, 100, 662, 300);
+        setBounds(125, 125, 662, 300);
         setTitle("Trayectos");
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

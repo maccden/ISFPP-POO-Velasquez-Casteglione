@@ -1,11 +1,11 @@
-package gui;
+package gui.datos;
 
 import controlador.Constantes;
 import controlador.Coordinador;
 import modelo.Parada;
-import negocio.LineaReferenciaException;
-import negocio.ParadaExistenteException;
-import negocio.TramoReferenciaException;
+import negocio.exceptions.LineaReferenciaException;
+import negocio.exceptions.ParadaExistenteException;
+import negocio.exceptions.TramoReferenciaException;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

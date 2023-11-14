@@ -1,4 +1,4 @@
-package gui;
+package gui.consulta;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import controlador.Coordinador;
 import modelo.Parada;
+import negocio.hilos.CalcularHilo;
 import util.Time;
 
 import org.apache.log4j.Logger;
@@ -19,10 +20,11 @@ public class ConsultaForm extends JDialog {
 	final static Logger logger = Logger.getLogger(ConsultaForm.class);
 	private Coordinador coordinador;
 	private JPanel contentPane;
-	private JButton btnCalcular, btnCancelar;
+	private JButton btnCalcular, btnCancelar, btnCancelar2;
 	private JLabel lblParada1, lblParada2, lblHora, lblColectivos, errorHora, errorNumeroLineas;
 	private JComboBox<Object> cbxParada1, cbxParada2;
 	private JTextField jtfHora, jtfLimiteColectivos;
+	private JProgressBar progressBar;
 
 	public ConsultaForm() {
 		setBounds(100, 100, 530, 270);
@@ -46,13 +48,13 @@ public class ConsultaForm extends JDialog {
 		getContentPane().add(errorNumeroLineas);
 
 		btnCalcular = new JButton("Calcular");
-		btnCalcular.setBounds(65, 185, 156, 32);
+		btnCalcular.setBounds(50, 185, 104, 32);
 		btnCalcular.setFocusable(false);
 		contentPane.add(btnCalcular);
 		btnCalcular.addActionListener(handler);
 
 		btnCancelar = new JButton("Cancelar");
-		btnCancelar.setBounds(288, 185, 156, 32);
+		btnCancelar.setBounds(358, 185, 104, 32);
 		btnCancelar.setFocusable(false);
 		contentPane.add(btnCancelar);
 
@@ -115,12 +117,22 @@ public class ConsultaForm extends JDialog {
 		jtfHora = new JTextField();
 		jtfHora.setBounds(130, 109, 86, 20);
 		contentPane.add(jtfHora);
-		jtfHora.setColumns(10);
 
 		jtfLimiteColectivos = new JTextField();
 		jtfLimiteColectivos.setBounds(213, 144, 86, 20);
 		contentPane.add(jtfLimiteColectivos);
-		jtfLimiteColectivos.setColumns(10);
+
+		progressBar = new JProgressBar();
+		progressBar.setBounds(164, 185, 184, 32);
+		progressBar.setVisible(false);
+		contentPane.add(progressBar);
+
+		btnCancelar2 = new JButton("Cancelar");
+		btnCancelar2.setBounds(50, 185, 104, 32);
+		btnCancelar2.setFocusable(false);
+		btnCancelar2.setVisible(false);
+		contentPane.add(btnCancelar2);
+		btnCancelar2.addActionListener(handler);
 
 		btnCancelar.addActionListener(handler);
 		setModal(true);
@@ -139,26 +151,40 @@ public class ConsultaForm extends JDialog {
 
 	private class Handler implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
+
 			if (event.getSource() == btnCancelar) {
 				coordinador.cancelarConsulta();
 				logger.info("Cancelar consultaForm");
 				return;
 			}
+
+			if (event.getSource() == btnCancelar2) {
+				coordinador.cancelarHilo();
+				progressBar.setVisible(false);
+				progressBar.setValue(0);
+				terminar();
+				logger.info("Cancelar calculo");
+				return;
+			}
+
 			if (!registroValido())
 				return;
 
-			coordinador.setHoraLlegada(jtfHora.getText());
-			coordinador.setNumeroLimiteColectivos(Integer.parseInt(jtfLimiteColectivos.getText()));
-
 			if (event.getSource() == btnCalcular) {
+				/*
+				coordinador.ejecutarHilo(new MasRapidoHilo((Estacion) cbxEstacion1.getSelectedItem(),
+						(Estacion) cbxEstacion2.getSelectedItem(), coordinador));
+				*/
+
 				Parada parada1 = new Parada(Integer.parseInt(((String) cbxParada1.getSelectedItem()).split(" - ")[0]),
 						null);
 				Parada parada2 = new Parada(Integer.parseInt(((String) cbxParada2.getSelectedItem()).split(" - ")[0]),
 						null);
-				coordinador.calculo(coordinador.buscarParada(parada1),
-						coordinador.buscarParada(parada2), Time.toMins(coordinador.horaLlegadaParada()),
-						coordinador.getNumeroLimiteColectivos());
-				logger.info("Consulta masRapido");
+
+				coordinador.ejecutarHilo(new CalcularHilo(parada1, parada2, Time.toMins(jtfHora.getText()), Integer.parseInt(jtfLimiteColectivos.getText()), coordinador, Integer.parseInt(jtfLimiteColectivos.getText())));
+				calculando();
+
+				logger.info("Consulta calcula");
 			}
 		}
 	}
@@ -217,7 +243,38 @@ public class ConsultaForm extends JDialog {
 			errorNumeroLineas.setText("¡Solo numeros positivos!");
 			return false;
 		}
-		coordinador.setNumeroLimiteColectivos(Integer.parseInt(limiteColectivos));
 		return true;
 	}
+
+	public void actualizarBarra(int i) {
+		progressBar.setValue(i);
+		progressBar.repaint();
+	}
+
+	public void calculando() {
+		progressBar.setValue(0);
+		btnCancelar.setEnabled(false);
+		btnCalcular.setEnabled(false);
+		btnCalcular.setVisible(false);
+		progressBar.setVisible(true);
+		btnCancelar2.setVisible(true);
+		cbxParada1.setEnabled(false);
+		cbxParada2.setEnabled(false);
+		jtfHora.setEnabled(false);
+		jtfLimiteColectivos.setEnabled(false);
+	}
+
+	public void terminar() {
+		progressBar.setValue(0);
+		cbxParada1.setEnabled(true);
+		cbxParada2.setEnabled(true);
+		jtfHora.setEnabled(true);
+		jtfLimiteColectivos.setEnabled(true);
+		btnCalcular.setEnabled(true);
+		btnCalcular.setVisible(true);
+		btnCancelar.setEnabled(true);
+		btnCancelar2.setVisible(false);
+		progressBar.setVisible(false);
+	}
+
 }

@@ -70,6 +70,19 @@ public class DesktopFrame extends JFrame {
         menuBar.add(consultas);
         consultas.add(consulta);
 
+        JMenu ayuda = new JMenu("Ayuda");
+        setJMenuBar(menuBar);
+
+        JMenuItem idioma = new JMenuItem("Idioma");
+        consulta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //coordinador.mostrarConsulta();
+            }
+        });
+
+        menuBar.add(ayuda);
+        ayuda.add(idioma);
+
         aplicacion = new JPanel();
         aplicacion.setBorder(new EmptyBorder(5, 5, 5, 5));
         aplicacion.setLayout(new BorderLayout(0, 0));
