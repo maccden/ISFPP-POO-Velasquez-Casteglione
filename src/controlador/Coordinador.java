@@ -8,7 +8,6 @@ import negocio.*;
 import gui.consulta.ConsultaForm;
 import gui.consulta.ResultadoForm;
 import modelo.*;
-import util.Time;
 
 public class Coordinador {
     private Empresa empresa;
@@ -23,6 +22,8 @@ public class Coordinador {
     private TramoForm tramoForm;
     private ConsultaForm consultaForm;
     private ResultadoForm resultadoForm;
+    private String[] horaLlegada;
+    private int limiteColectivos;
 
     // <o> Getters y Setters de Empresa, Calculo e Interfaz <o>
 
@@ -42,8 +43,8 @@ public class Coordinador {
         this.calculo = calculo;
     }
 
-    public void masRapido(Parada parada1, Parada parada2, String horario, int nrolineas) {
-        List<List<Tramo>> resultado = calculo.recorridos(parada1, parada2, Time.toMins(horario), nrolineas);
+    public void masRapido(Parada parada1, Parada parada2, int horario, int nrolineas) {
+        List<List<Tramo>> resultado = calculo.recorridos(parada1, parada2, horario, nrolineas);
         resultadoForm.accion(resultadoForm.verDatos(resultado));
         resultadoForm.setVisible(true);
     }
@@ -92,12 +93,20 @@ public class Coordinador {
     // queda por ver donde obtener el numero de lineas y la hora de llagada a la
     // parada
 
-    public int numeroLineas() {
-        return 2;
+    public void setNumeroLimiteColectivos(int limite) {
+        this.limiteColectivos = limite;
+    }
+
+    public int getNumeroLimiteColectivos() {
+        return limiteColectivos;
+    }
+
+    public void setHoraLlegada(String[] horaLlegada) {
+        this.horaLlegada = horaLlegada;
     }
 
     public String horaLlegadaParada() {
-        return "10:25";
+        return horaLlegada[0] + ":" + horaLlegada[1];
     }
 
     // por ahora los valores son hardcodeados

@@ -17,7 +17,8 @@ import java.util.regex.PatternSyntaxException;
 
 public class LineaForm extends JDialog {
     private Coordinador coordinador;
-    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza, errorFrecuencia;
+    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza,
+            errorFrecuencia;
     private JTextField jtfCodigo, jtfComienzo, jtfFinaliza, jtfFrecuencia;
     private JButton btnInsertar, btnModificar, btnCancelar, btnEliminar, btnAgregar, btnQuitar;
     private JComboBox<Object> comboBoxParadas, comboBoxParadasN;
@@ -209,7 +210,7 @@ public class LineaForm extends JDialog {
             tituloInsertar.setVisible(true);
             comboBoxParadas.removeAllItems();
             comboBoxParadas.addItem("Seleccionar...");
-            for (Parada parada: coordinador.listarParadas().values())
+            for (Parada parada : coordinador.listarParadas().values())
                 comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
             btnAgregar.setVisible(true);
             btnQuitar.setVisible(true);
@@ -250,12 +251,12 @@ public class LineaForm extends JDialog {
         jtfFrecuencia.setText(String.valueOf(linea.getFrecuencia()));
         comboBoxParadas.removeAllItems();
         comboBoxParadas.addItem("Seleccionar...");
-        for (Parada parada: coordinador.listarParadas().values()) {
+        for (Parada parada : coordinador.listarParadas().values()) {
             if (!linea.contains(parada))
                 comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
         }
         comboBoxParadasN.removeAllItems();
-        for (Parada parada: linea.getParadas())
+        for (Parada parada : linea.getParadas())
             comboBoxParadasN.addItem(parada.getCodigo() + " - " + parada.getDireccion());
     }
 
@@ -266,7 +267,7 @@ public class LineaForm extends JDialog {
         jtfFrecuencia.setText(String.valueOf(linea.getFrecuencia()));
         comboBoxParadas.removeAllItems();
         comboBoxParadas.setEditable(false);
-        for (Parada parada: linea.getParadas())
+        for (Parada parada : linea.getParadas())
             comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
         comboBoxParadas.setEditable(false);
     }
@@ -309,7 +310,8 @@ public class LineaForm extends JDialog {
 
             if (event.getSource() == btnInsertar) {
                 for (int i = 0; i < comboBoxParadasN.getItemCount(); i++) {
-                    Parada parada = new Parada(Integer.parseInt(((String) comboBoxParadasN.getItemAt(i)).split(" - ")[0]), null);
+                    Parada parada = new Parada(
+                            Integer.parseInt(((String) comboBoxParadasN.getItemAt(i)).split(" - ")[0]), null);
                     linea.agregarParada(coordinador.buscarParada(parada));
                 }
                 try {
@@ -323,11 +325,12 @@ public class LineaForm extends JDialog {
             if (event.getSource() == btnModificar) {
                 List<Parada> paradas = new ArrayList<>();
                 for (int i = 0; i < comboBoxParadasN.getItemCount(); i++) {
-                    Parada parada = new Parada(Integer.parseInt(((String) comboBoxParadasN.getItemAt(i)).split(" - ")[0]), null);
+                    Parada parada = new Parada(
+                            Integer.parseInt(((String) comboBoxParadasN.getItemAt(i)).split(" - ")[0]), null);
                     paradas.add(coordinador.buscarParada(parada));
                     parada.setLinea(linea);
                 }
-                for (Parada parada: linea.getParadas()) {
+                for (Parada parada : linea.getParadas()) {
                     if (!paradas.contains(parada))
                         parada.removeLinea(linea);
                 }
@@ -351,7 +354,8 @@ public class LineaForm extends JDialog {
             return false;
         }
         if (codigo.matches("[A-Z][1-9][IR]") != true) {
-            errorCodigo.setText("Codigo invalido: Primera letra mayuscula, segundo caracter numerico, y tercer letra I o R.");
+            errorCodigo.setText(
+                    "Codigo invalido: Primera letra mayuscula, segundo caracter numerico, y tercer letra I o R.");
             return false;
         }
 
@@ -368,7 +372,8 @@ public class LineaForm extends JDialog {
             }
             Integer.parseInt(comienzo[0]);
             Integer.parseInt(comienzo[1]);
-            if (Integer.parseInt(comienzo[0]) > 24 || Integer.parseInt(comienzo[1]) > 60 || Integer.parseInt(comienzo[0]) < 0 || Integer.parseInt(comienzo[0]) < 0) {
+            if (Integer.parseInt(comienzo[0]) > 24 || Integer.parseInt(comienzo[1]) > 60
+                    || Integer.parseInt(comienzo[0]) < 0 || Integer.parseInt(comienzo[1]) < 0) {
                 errorComienzo.setText("¡Ingrese una hora valida!");
                 return false;
             }
@@ -397,7 +402,8 @@ public class LineaForm extends JDialog {
             }
             Integer.parseInt(finaliza[0]);
             Integer.parseInt(finaliza[1]);
-            if (Integer.parseInt(finaliza[0]) > 24 || Integer.parseInt(finaliza[1]) > 60 || Integer.parseInt(finaliza[0]) < 0 || Integer.parseInt(finaliza[0]) < 0) {
+            if (Integer.parseInt(finaliza[0]) > 24 || Integer.parseInt(finaliza[1]) > 60
+                    || Integer.parseInt(finaliza[0]) < 0 || Integer.parseInt(finaliza[0]) < 0) {
                 errorFinaliza.setText("¡Ingrese una hora valida!");
                 return false;
             }
