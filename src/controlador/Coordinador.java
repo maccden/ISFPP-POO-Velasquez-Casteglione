@@ -1,8 +1,11 @@
 package controlador;
 
 import java.util.List;
+import java.util.ResourceBundle;
+
 import datastructures.TreeMap;
 import gui.*;
+import gui.config.ConfigForm;
 import gui.consulta.ConsultaForm;
 import gui.consulta.ResultadoForm;
 import gui.consulta.SubResultadoForm;
@@ -27,6 +30,8 @@ public class Coordinador {
     private ConsultaForm consultaForm;
     private ResultadoForm resultadoForm;
     private SubResultadoForm subResultadoForm;
+    private ConfigForm configForm;
+    private Configuracion configuracion;
     private DesktopFrame desktopFrame;
     private SwingWorker<Void, Void> hilo;
 
@@ -48,6 +53,12 @@ public class Coordinador {
         this.calculo = calculo;
     }
 
+    public Configuracion getConfiguracion() { return configuracion; }
+
+    public void setConfiguracion(Configuracion configuracion) { this.configuracion = configuracion; }
+
+    // <o> Calculo <o>
+
     public void calculo (Parada parada1, Parada parada2, int horario, int nrolineas) {
         List<List<Tramo>> resultado = calculo.recorridos(buscarParada(parada1), buscarParada(parada2), horario, nrolineas);
         consultaForm.terminar();
@@ -66,6 +77,10 @@ public class Coordinador {
         subResultadoForm.accion(subResultadoForm.verDatos(Constantes.MENOS_COSTOSO, trayecto, horaLlegada, listarLineas()));
         subResultadoForm.setVisible(true);
     }
+
+    // <o> Configuracion <o>
+
+    public ResourceBundle getResourceBundle() { return configuracion.getResourceBundle(); }
 
     // <o> Listar Modelos <o>
 
@@ -197,16 +212,6 @@ public class Coordinador {
          consultaForm.setVisible(true);
      }
 
-    // <o> SubConsulta <o> //
-
-    public void mostrarMasRapido(String resultado) {
-        subResultadoForm.accion(resultado);
-    }
-
-    public void mostrarMenosCostoso(String resultado) {
-        subResultadoForm.accion(resultado);
-    }
-
     // <o> DesktopFrame Datos <o>
 
     public void mostrarLineaList() {
@@ -223,6 +228,22 @@ public class Coordinador {
         tramoList.loadTable();
         tramoList.setVisible(true);
     }
+
+    // <o> Configuracion <o>
+
+    public ConfigForm getConfigForm() {
+        return configForm;
+    }
+
+    public void setConfigForm(ConfigForm configForm) {
+        this.configForm = configForm;
+    }
+
+    public void mostrarIdioma() {
+        configForm.setVisible(true);
+    }
+
+    public void salirConfiguracion() { configForm.setVisible(false); }
 
     // <o> LineaList <o>
 

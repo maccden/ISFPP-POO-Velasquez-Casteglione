@@ -12,23 +12,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 public class ParadaForm extends JDialog {
     final static Logger logger = Logger.getLogger(ParadaForm.class);
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JTextField jtfCodigo;
     private JTextField jtfDireccion;
     private JButton btnCancelar, btnInsertar, btnModificar, btnEliminar;
     private JLabel errorCodigo, errorDireccion, tituloModificar, tituloInsertar, tituloEliminar;
 
     public ParadaForm() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 550, 190);
 
         getContentPane().setLayout(null);
 
         Handler handler = new Handler();
 
-        JLabel textoCodigo = new JLabel("Codigo:");
+        JLabel textoCodigo = new JLabel(resourceBundle.getString("ParadaForm_code"));
         textoCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoCodigo.setBounds(10, 50, 46, 14);
         getContentPane().add(textoCodigo);
@@ -38,7 +45,7 @@ public class ParadaForm extends JDialog {
         getContentPane().add(jtfCodigo);
         jtfCodigo.setColumns(10);
 
-        JLabel textoDireccion = new JLabel("Direccion:");
+        JLabel textoDireccion = new JLabel(resourceBundle.getString("ParadaForm_address"));
         textoDireccion.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoDireccion.setBounds(10, 80, 53, 14);
         getContentPane().add(textoDireccion);
@@ -48,47 +55,47 @@ public class ParadaForm extends JDialog {
         getContentPane().add(jtfDireccion);
         jtfDireccion.setColumns(10);
 
-        btnCancelar = new JButton("Cancelar");
+        btnCancelar = new JButton(resourceBundle.getString("ParadaForm_cancel"));
         btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnCancelar.setBounds(106, 120, 86, 23);
         btnCancelar.setFocusable(false);
         getContentPane().add(btnCancelar);
         btnCancelar.addActionListener(handler);
 
-        btnModificar = new JButton("Modificar");
+        btnModificar = new JButton(resourceBundle.getString("ParadaForm_update"));
         btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnModificar.setBounds(10, 120, 86, 23);
         btnModificar.setFocusable(false);
         getContentPane().add(btnModificar);
         btnModificar.addActionListener(handler);
 
-        tituloModificar = new JLabel("Seleccione y modifique los datos de la parada.");
+        tituloModificar = new JLabel(resourceBundle.getString("ParadaForm_title_modify"));
         tituloModificar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloModificar.setBounds(141, 15, 251, 14);
         getContentPane().add(tituloModificar);
 
-        btnEliminar = new JButton("Eliminar");
+        btnEliminar = new JButton(resourceBundle.getString("ParadaForm_delete"));
         btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnEliminar.setBounds(10, 121, 86, 23);
         btnEliminar.setFocusable(false);
         getContentPane().add(btnEliminar);
         btnEliminar.addActionListener(handler);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("ParadaForm_insert"));
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 121, 86, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
         btnInsertar.addActionListener(handler);
 
-        tituloInsertar = new JLabel("Ingrese los datos para la nueva parada.");
+        tituloInsertar = new JLabel(resourceBundle.getString("ParadaForm_title_insert"));
         tituloInsertar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloInsertar.setBounds(141, 16, 251, 14);
         getContentPane().add(tituloInsertar);
 
-        tituloEliminar = new JLabel("Datos de la parada.");
+        tituloEliminar = new JLabel(resourceBundle.getString("ParadaForm_title_remove"));
         tituloEliminar.setHorizontalAlignment(SwingConstants.CENTER);
         tituloEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloEliminar.setBounds(141, 16, 251, 14);
@@ -122,21 +129,21 @@ public class ParadaForm extends JDialog {
         errorDireccion.setText("");
 
         if (accion == Constantes.INSERTAR) {
-            setTitle("Insertar parada");
+            setTitle(resourceBundle.getString("ParadaForm_title_window_insert"));
             tituloInsertar.setVisible(true);
             btnInsertar.setVisible(true);
             limpiar();
         }
 
         if (accion == Constantes.MODIFICAR) {
-            setTitle("Modificar parada");
+            setTitle(resourceBundle.getString("ParadaForm_title_window_modify"));
             tituloModificar.setVisible(true);
             btnModificar.setVisible(true);
             mostrar(parada);
         }
 
         if (accion == Constantes.BORRAR) {
-            setTitle("Borrar parada");
+            setTitle(resourceBundle.getString("ParadaForm_title_window_remove"));
             tituloEliminar.setVisible(true);
             btnEliminar.setVisible(true);
             jtfCodigo.setEditable(false);
@@ -160,7 +167,7 @@ public class ParadaForm extends JDialog {
 
             if (event.getSource() == btnCancelar) {
                 coordinador.cancelarParada();
-                logger.info("cancelar paradaForm");
+                logger.info("Cancelar paradaForm");
                 return;
             }
 
@@ -168,7 +175,7 @@ public class ParadaForm extends JDialog {
             String direccion = jtfDireccion.getText().trim();
 
             if (!registroValido()) {
-                logger.error("registro no valido parada form");
+                logger.error("Registro no valido parada form");
                 return;
             }
 
@@ -177,35 +184,35 @@ public class ParadaForm extends JDialog {
             if (event.getSource() == btnInsertar) {
                 try {
                     coordinador.insertarParada(parada);
-                    logger.info("insertar paradaForm");
+                    logger.info("Insertar paradaForm");
 
                 } catch (ParadaExistenteException e) {
-                    JOptionPane.showMessageDialog(null, "¡Esta parada ya existe!");
-                    logger.error("error insertar paradaForm");
+                    JOptionPane.showMessageDialog(null, resourceBundle.getString("ParadaForm_error_1"));
+                    logger.error("Error insertar paradaForm");
                     return;
                 }
             }
 
             if (event.getSource() == btnModificar) {
                 coordinador.modificarParada(parada);
-                logger.info("modificar paradaForm");
+                logger.info("Modificar paradaForm");
             }
 
             if (event.getSource() == btnEliminar) {
-                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que borra este registro?", "Confirmar",
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("ParadaForm_confirm_1"), resourceBundle.getString("ParadaForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     try {
                         coordinador.borrarParada(parada);
-                        logger.info("borrar paradaForm");
+                        logger.info("Borrar paradaForm");
 
                     } catch (LineaReferenciaException e) {
-                        JOptionPane.showMessageDialog(null, "¡Hay lineas que hacen referencia a esta parada!");
+                        JOptionPane.showMessageDialog(null, resourceBundle.getString("ParadaForm_error_2"));
                         logger.error("error lineaReferencia paradaForm");
 
                         return;
                     } catch (TramoReferenciaException e) {
-                        JOptionPane.showMessageDialog(null, "¡Hay tramo que hacen referencia a esta parada!");
+                        JOptionPane.showMessageDialog(null, resourceBundle.getString("ParadaForm_error_3"));
                         logger.error("error tramoReferencia paradaForm");
                         return;
                     }
@@ -221,17 +228,17 @@ public class ParadaForm extends JDialog {
         // validar codigo
         String codigo = jtfCodigo.getText().trim();
         if (codigo.isEmpty()) {
-            errorCodigo.setText("Campo obligatorio");
+            errorCodigo.setText(resourceBundle.getString("ParadaForm_valid"));
             return false;
         }
         try {
             Integer.parseInt(jtfCodigo.getText().trim());
         } catch (NumberFormatException e) {
-            errorCodigo.setText("¡Solo numeros!");
+            errorCodigo.setText(resourceBundle.getString("ParadaForm_error_4"));
             return false;
         }
         if (Integer.parseInt(jtfCodigo.getText().trim()) <= 0) {
-            errorCodigo.setText("¡Solo numeros positivos!");
+            errorCodigo.setText(resourceBundle.getString("ParadaForm_error_5"));
             return false;
         }
 
@@ -239,7 +246,7 @@ public class ParadaForm extends JDialog {
         // validar direccion
         String direccion = jtfDireccion.getText().trim();
         if (direccion.isEmpty()) {
-            errorDireccion.setText("Campo obligatorio");
+            errorDireccion.setText(resourceBundle.getString("ParadaForm_valid"));
             return false;
         }
 

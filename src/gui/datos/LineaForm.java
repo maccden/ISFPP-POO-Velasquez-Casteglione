@@ -13,39 +13,45 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.regex.PatternSyntaxException;
 
 public class LineaForm extends JDialog {
     private Coordinador coordinador;
-    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza,
-            errorFrecuencia;
+    private ResourceBundle resourceBundle;
+    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza, errorFrecuencia;
     private JTextField jtfCodigo, jtfComienzo, jtfFinaliza, jtfFrecuencia;
     private JButton btnInsertar, btnModificar, btnCancelar, btnEliminar, btnAgregar, btnQuitar;
     private JComboBox<Object> comboBoxParadas, comboBoxParadasN;
 
     public LineaForm() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 750, 375);
 
         getContentPane().setLayout(null);
 
         Handler handler = new Handler();
 
-        tituloModificar = new JLabel("Seleccione y modifique los datos de la linea.");
+        tituloModificar = new JLabel(resourceBundle.getString("LineaForm_title_modify"));
         tituloModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloModificar.setBounds(245, 11, 239, 14);
         getContentPane().add(tituloModificar);
 
-        tituloInsertar = new JLabel("Ingrese los nuevos datos de la nueva linea.");
+        tituloInsertar = new JLabel(resourceBundle.getString("LineaForm_title_insert"));
         tituloInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloInsertar.setBounds(245, 12, 239, 14);
         getContentPane().add(tituloInsertar);
 
-        tituloEliminar = new JLabel("Datos del linea");
+        tituloEliminar = new JLabel(resourceBundle.getString("LineaForm_title_remove"));
         tituloEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloEliminar.setBounds(120, 12, 239, 14);
         getContentPane().add(tituloEliminar);
 
-        JLabel textoCodigo = new JLabel("Codigo:");
+        JLabel textoCodigo = new JLabel(resourceBundle.getString("LineaForm_code"));
         textoCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoCodigo.setBounds(10, 40, 46, 14);
         getContentPane().add(textoCodigo);
@@ -54,14 +60,14 @@ public class LineaForm extends JDialog {
         jtfCodigo.setBounds(57, 37, 86, 20);
         getContentPane().add(jtfCodigo);
 
-        JLabel textoHoraInicio = new JLabel("Comienzo de la linea:");
+        JLabel textoHoraInicio = new JLabel(resourceBundle.getString("LineaForm_start_time"));
         textoHoraInicio.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoHoraInicio.setBounds(10, 65, 126, 14);
         getContentPane().add(textoHoraInicio);
 
-        JLabel textoHoraFinal = new JLabel("Finalizacion de la linea:");
+        JLabel textoHoraFinal = new JLabel(resourceBundle.getString("LineaForm_end_time"));
         textoHoraFinal.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        textoHoraFinal.setBounds(10, 90, 120, 14);
+        textoHoraFinal.setBounds(10, 90, 130, 14);
         getContentPane().add(textoHoraFinal);
 
         jtfComienzo = new JTextField();
@@ -72,39 +78,39 @@ public class LineaForm extends JDialog {
         jtfFinaliza.setBounds(135, 88, 86, 20);
         getContentPane().add(jtfFinaliza);
 
-        JLabel textoFrecuencia = new JLabel("Frecuencia de la linea:");
+        JLabel textoFrecuencia = new JLabel(resourceBundle.getString("LineaForm_frecuency"));
         textoFrecuencia.setFont(new Font("Tahoma", Font.PLAIN, 12));
-        textoFrecuencia.setBounds(10, 115, 120, 14);
+        textoFrecuencia.setBounds(10, 115, 130, 14);
         getContentPane().add(textoFrecuencia);
 
         jtfFrecuencia = new JTextField();
         jtfFrecuencia.setBounds(135, 113, 86, 20);
         getContentPane().add(jtfFrecuencia);
 
-        JLabel textoParadas = new JLabel("Paradas:");
+        JLabel textoParadas = new JLabel(resourceBundle.getString("LineaForm_stops"));
         textoParadas.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoParadas.setBounds(10, 140, 46, 14);
         getContentPane().add(textoParadas);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("LineaForm_insert"));
         btnInsertar.setBounds(10, 302, 89, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
         btnInsertar.addActionListener(handler);
 
-        btnCancelar = new JButton("Cancelar");
+        btnCancelar = new JButton(resourceBundle.getString("LineaForm_cancel"));
         btnCancelar.setBounds(105, 302, 89, 23);
         btnCancelar.setFocusable(false);
         getContentPane().add(btnCancelar);
         btnCancelar.addActionListener(handler);
 
-        btnModificar = new JButton("Modificar");
+        btnModificar = new JButton(resourceBundle.getString("LineaForm_update"));
         btnModificar.setBounds(10, 302, 89, 23);
         btnModificar.setFocusable(false);
         getContentPane().add(btnModificar);
         btnModificar.addActionListener(handler);
 
-        btnEliminar = new JButton("Eliminar");
+        btnEliminar = new JButton(resourceBundle.getString("LineaForm_delete"));
         btnEliminar.setBounds(10, 302, 89, 23);
         btnEliminar.setFocusable(false);
         getContentPane().add(btnEliminar);
@@ -115,7 +121,7 @@ public class LineaForm extends JDialog {
         comboBoxParadas.setBounds(10, 161, 300, 20);
         getContentPane().add(comboBoxParadas);
 
-        btnAgregar = new JButton("Agregar");
+        btnAgregar = new JButton(resourceBundle.getString("LineaForm_add"));
         btnAgregar.setBounds(320, 198, 89, 23);
         btnAgregar.setFocusable(false);
         getContentPane().add(btnAgregar);
@@ -134,7 +140,7 @@ public class LineaForm extends JDialog {
             }
         });
 
-        btnQuitar = new JButton("Quitar");
+        btnQuitar = new JButton(resourceBundle.getString("LineaForm_remove"));
         btnQuitar.setBounds(320, 232, 89, 23);
         btnQuitar.setFocusable(false);
         getContentPane().add(btnQuitar);
@@ -206,10 +212,10 @@ public class LineaForm extends JDialog {
         errorFrecuencia.setText("");
 
         if (accion == Constantes.INSERTAR) {
-            setTitle("Insertar linea");
+            setTitle(resourceBundle.getString("LineaForm_title_window_insert"));
             tituloInsertar.setVisible(true);
             comboBoxParadas.removeAllItems();
-            comboBoxParadas.addItem("Seleccionar...");
+            comboBoxParadas.addItem(resourceBundle.getString("LineaForm_select"));
             for (Parada parada : coordinador.listarParadas().values())
                 comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
             btnAgregar.setVisible(true);
@@ -222,7 +228,7 @@ public class LineaForm extends JDialog {
         }
 
         if (accion == Constantes.MODIFICAR) {
-            setTitle("Modificar linea");
+            setTitle(resourceBundle.getString("LineaForm_title_window_modify"));
             tituloModificar.setVisible(true);
             comboBoxParadasN.setVisible(true);
             btnAgregar.setVisible(true);
@@ -233,7 +239,7 @@ public class LineaForm extends JDialog {
 
         if (accion == Constantes.BORRAR) {
             setBounds(100, 100, 335, 375);
-            setTitle("Borrar linea");
+            setTitle(resourceBundle.getString("LineaForm_title_window_remove"));
             tituloEliminar.setVisible(true);
             btnEliminar.setVisible(true);
             jtfCodigo.setEditable(false);
@@ -250,7 +256,7 @@ public class LineaForm extends JDialog {
         jtfFinaliza.setText(Time.toTime(linea.getFinaliza()));
         jtfFrecuencia.setText(String.valueOf(linea.getFrecuencia()));
         comboBoxParadas.removeAllItems();
-        comboBoxParadas.addItem("Seleccionar...");
+        comboBoxParadas.addItem(resourceBundle.getString("LineaForm_select"));
         for (Parada parada : coordinador.listarParadas().values()) {
             if (!linea.contains(parada))
                 comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
@@ -291,7 +297,7 @@ public class LineaForm extends JDialog {
                 String codigo = jtfCodigo.getText().trim();
                 Linea linea = new Linea(codigo, 0, 0, 0);
 
-                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que borra este registro?", "Confirmar",
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("LineaForm_confirm_1"), resourceBundle.getString("LineaForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     coordinador.borrarLinea(linea);
@@ -317,7 +323,7 @@ public class LineaForm extends JDialog {
                 try {
                     coordinador.insertarLinea(linea);
                 } catch (LineaExistenteException e) {
-                    JOptionPane.showMessageDialog(null, "¡Esta linea ya existe!");
+                    JOptionPane.showMessageDialog(null, resourceBundle.getString("LineaForm_error_1"));
                     return;
                 }
             }
@@ -350,72 +356,72 @@ public class LineaForm extends JDialog {
         // validar codigo
         String codigo = jtfCodigo.getText().trim();
         if (codigo.isEmpty()) {
-            errorCodigo.setText("Campo obligatorio");
+            errorCodigo.setText(resourceBundle.getString("LineaForm_valid_1"));
             return false;
         }
         if (codigo.matches("[A-Z][1-9][IR]") != true) {
             errorCodigo.setText(
-                    "Codigo invalido: Primera letra mayuscula, segundo caracter numerico, y tercer letra I o R.");
+                    resourceBundle.getString("LineaForm_valid_2"));
             return false;
         }
 
         // validar hora que comienza
         if (jtfComienzo.getText().isEmpty()) {
-            errorComienzo.setText("Campo obligatorio");
+            errorComienzo.setText(resourceBundle.getString("LineaForm_valid_1"));
             return false;
         }
         try {
             String[] comienzo = jtfComienzo.getText().trim().split(":");
             if (comienzo.length < 2) {
-                errorComienzo.setText("¡Escriba bien la hora! (XX:XX)");
+                errorComienzo.setText(resourceBundle.getString("LineaForm_error_2"));
                 return false;
             }
             Integer.parseInt(comienzo[0]);
             Integer.parseInt(comienzo[1]);
             if (Integer.parseInt(comienzo[0]) > 24 || Integer.parseInt(comienzo[1]) > 60
                     || Integer.parseInt(comienzo[0]) < 0 || Integer.parseInt(comienzo[1]) < 0) {
-                errorComienzo.setText("¡Ingrese una hora valida!");
+                errorComienzo.setText(resourceBundle.getString("LineaForm_error_3"));
                 return false;
             }
             if (Integer.parseInt(comienzo[0]) == 24 && Integer.parseInt(comienzo[1]) > 0) {
-                errorComienzo.setText("¡Ingrese una hora valida!");
+                errorComienzo.setText(resourceBundle.getString("LineaForm_error_3"));
                 return false;
             }
         } catch (PatternSyntaxException e) {
-            errorComienzo.setText("¡Escriba bien la hora! (XX:XX)");
+            errorComienzo.setText(resourceBundle.getString("LineaForm_error_2"));
             return false;
         } catch (NumberFormatException e) {
-            errorComienzo.setText("¡Ingrese una hora valida!");
+            errorComienzo.setText(resourceBundle.getString("LineaForm_error_3"));
             return false;
         }
 
         // validar hora que finaliza
         if (jtfFinaliza.getText().isEmpty()) {
-            errorFinaliza.setText("Campo obligatorio");
+            errorFinaliza.setText(resourceBundle.getString("LineaForm_valid_1"));
             return false;
         }
         try {
             String[] finaliza = jtfFinaliza.getText().trim().split(":");
             if (finaliza.length < 2) {
-                errorFinaliza.setText("¡Escriba bien la hora! (XX:XX)");
+                errorFinaliza.setText(resourceBundle.getString("LineaForm_error_2"));
                 return false;
             }
             Integer.parseInt(finaliza[0]);
             Integer.parseInt(finaliza[1]);
             if (Integer.parseInt(finaliza[0]) > 24 || Integer.parseInt(finaliza[1]) > 60
                     || Integer.parseInt(finaliza[0]) < 0 || Integer.parseInt(finaliza[0]) < 0) {
-                errorFinaliza.setText("¡Ingrese una hora valida!");
+                errorFinaliza.setText(resourceBundle.getString("LineaForm_error_3"));
                 return false;
             }
             if (Integer.parseInt(finaliza[0]) == 24 && Integer.parseInt(finaliza[1]) > 0) {
-                errorFinaliza.setText("¡Ingrese una hora valida!");
+                errorFinaliza.setText(resourceBundle.getString("LineaForm_error_3"));
                 return false;
             }
         } catch (PatternSyntaxException e) {
-            errorFinaliza.setText("¡Escriba bien la hora! (XX:XX)");
+            errorFinaliza.setText(resourceBundle.getString("LineaForm_error_2"));
             return false;
         } catch (NumberFormatException e) {
-            errorFinaliza.setText("¡Ingrese una hora valida!");
+            errorFinaliza.setText(resourceBundle.getString("LineaForm_error_3"));
             return false;
         }
 
@@ -425,24 +431,24 @@ public class LineaForm extends JDialog {
         int finaliza = Time.toMins(jtfFinaliza.getText().trim());
 
         if (comienzo >= finaliza) {
-            errorFinaliza.setText("¡No ingrese la hora de comienzo mayor a la de la finalizacion!");
+            errorFinaliza.setText(resourceBundle.getString("LineaForm_error_4"));
             return false;
         }
 
         // validar la frecuencia
         String frecuencia = jtfFrecuencia.getText().trim();
         if (frecuencia.isEmpty()) {
-            errorFrecuencia.setText("Campo obligatorio");
+            errorFrecuencia.setText(resourceBundle.getString("LineaForm_valid_1"));
             return false;
         }
         try {
             Integer.parseInt(jtfFrecuencia.getText().trim());
         } catch (NumberFormatException e) {
-            errorFrecuencia.setText("¡Solo numeros!");
+            errorFrecuencia.setText(resourceBundle.getString("LineaForm_error_5"));
             return false;
         }
         if (Integer.parseInt(jtfFrecuencia.getText().trim()) <= 0) {
-            errorFrecuencia.setText("¡Solo numeros positivos!");
+            errorFrecuencia.setText(resourceBundle.getString("LineaForm_error_6"));
             return false;
         }
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ResourceBundle;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ import org.apache.log4j.Logger;
 public class ConsultaForm extends JDialog {
 	final static Logger logger = Logger.getLogger(ConsultaForm.class);
 	private Coordinador coordinador;
+	private ResourceBundle resourceBundle;
 	private JPanel contentPane;
 	private JButton btnCalcular, btnCancelar, btnCancelar2;
 	private JLabel lblParada1, lblParada2, lblHora, lblColectivos, errorHora, errorNumeroLineas;
@@ -27,8 +29,13 @@ public class ConsultaForm extends JDialog {
 	private JProgressBar progressBar;
 
 	public ConsultaForm() {
+
+	}
+
+	public void init() {
+		resourceBundle = coordinador.getResourceBundle();
 		setBounds(100, 100, 530, 270);
-		setTitle("Consulta");
+		setTitle(resourceBundle.getString("ConsultaForm_title_window"));
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -47,22 +54,22 @@ public class ConsultaForm extends JDialog {
 		errorNumeroLineas.setBounds(310, 146, 200, 14);
 		getContentPane().add(errorNumeroLineas);
 
-		btnCalcular = new JButton("Calcular");
+		btnCalcular = new JButton(resourceBundle.getString("ConsultaForm_calculate"));
 		btnCalcular.setBounds(50, 185, 104, 32);
 		btnCalcular.setFocusable(false);
 		contentPane.add(btnCalcular);
 		btnCalcular.addActionListener(handler);
 
-		btnCancelar = new JButton("Cancelar");
+		btnCancelar = new JButton(resourceBundle.getString("ConsultaForm_cancel"));
 		btnCancelar.setBounds(358, 185, 104, 32);
 		btnCancelar.setFocusable(false);
 		contentPane.add(btnCancelar);
 
-		lblParada1 = new JLabel("Parada Origen:");
+		lblParada1 = new JLabel(resourceBundle.getString("ConsultaForm_origin_station"));
 		lblParada1.setBounds(20, 41, 118, 14);
 		contentPane.add(lblParada1);
 
-		lblParada2 = new JLabel("Parada Destino:");
+		lblParada2 = new JLabel(resourceBundle.getString("ConsultaForm_destination_station"));
 		lblParada2.setBounds(20, 77, 118, 14);
 		contentPane.add(lblParada2);
 
@@ -79,7 +86,7 @@ public class ConsultaForm extends JDialog {
 				} else {
 					cbxParada2.setEnabled(true);
 					cbxParada2.removeAllItems();
-					cbxParada2.addItem("Selecionar...");
+					cbxParada2.addItem(resourceBundle.getString("ConsultaForm_select"));
 					for (Parada parada : coordinador.listarParadas().values()) {
 						if (!parada.equals(coordinador.listarParadas().get(cbxParada1.getSelectedIndex())))
 							cbxParada2.addItem(parada.getCodigo() + " - " + parada.getDireccion());
@@ -101,16 +108,16 @@ public class ConsultaForm extends JDialog {
 			}
 		});
 
-		JLabel titulo = new JLabel("Ingrese los datos para calcular el trayecto mas corto:");
+		JLabel titulo = new JLabel(resourceBundle.getString("ConsultaForm_title"));
 		titulo.setFont(new Font("Tahoma", Font.BOLD, 12));
 		titulo.setBounds(94, 11, 325, 14);
 		contentPane.add(titulo);
 
-		lblHora = new JLabel("Hora de la llegada:");
+		lblHora = new JLabel(resourceBundle.getString("ConsultaForm_hour"));
 		lblHora.setBounds(20, 112, 150, 14);
 		contentPane.add(lblHora);
 
-		lblColectivos = new JLabel("Limite de numeros de colectivos:");
+		lblColectivos = new JLabel(resourceBundle.getString("ConsultaForm_bus"));
 		lblColectivos.setBounds(20, 147, 200, 14);
 		contentPane.add(lblColectivos);
 
@@ -127,7 +134,7 @@ public class ConsultaForm extends JDialog {
 		progressBar.setVisible(false);
 		contentPane.add(progressBar);
 
-		btnCancelar2 = new JButton("Cancelar");
+		btnCancelar2 = new JButton(resourceBundle.getString("ConsultaForm_cancel"));
 		btnCancelar2.setBounds(50, 185, 104, 32);
 		btnCancelar2.setFocusable(false);
 		btnCancelar2.setVisible(false);
@@ -140,7 +147,7 @@ public class ConsultaForm extends JDialog {
 
 	public void accion() {
 		cbxParada1.removeAllItems();
-		cbxParada1.addItem("Seleccionar...");
+		cbxParada1.addItem(resourceBundle.getString("ConsultaForm_select"));
 		for (Parada parada : coordinador.listarParadas().values())
 			cbxParada1.addItem(parada.getCodigo() + " - " + parada.getDireccion());
 		cbxParada2.setEnabled(false);
@@ -171,10 +178,6 @@ public class ConsultaForm extends JDialog {
 				return;
 
 			if (event.getSource() == btnCalcular) {
-				/*
-				coordinador.ejecutarHilo(new MasRapidoHilo((Estacion) cbxEstacion1.getSelectedItem(),
-						(Estacion) cbxEstacion2.getSelectedItem(), coordinador));
-				*/
 
 				Parada parada1 = new Parada(Integer.parseInt(((String) cbxParada1.getSelectedItem()).split(" - ")[0]),
 						null);
@@ -199,48 +202,48 @@ public class ConsultaForm extends JDialog {
 
 		// validar la hora
 		if (jtfHora.getText().isEmpty()) {
-			errorHora.setText("Campo obligatorio");
+			errorHora.setText(resourceBundle.getString("ConsultaForm_error_emptyspace"));
 			return false;
 		}
 		try {
 			String[] horario = jtfHora.getText().trim().split(":");
 			if (horario.length < 2) {
-				errorHora.setText("¡Escriba bien la hora! (XX:XX)");
+				errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour1"));
 				return false;
 			}
 			Integer.parseInt(horario[0]);
 			Integer.parseInt(horario[1]);
 			if (Integer.parseInt(horario[0]) > 24 || Integer.parseInt(horario[1]) > 60
 			|| Integer.parseInt(horario[0]) < 0 || Integer.parseInt(horario[1]) < 0) {
-				errorHora.setText("¡Ingrese una hora valida!");
+				errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour2"));
 				return false;
 			}
 			if (Integer.parseInt(horario[0]) == 24 && Integer.parseInt(horario[1]) > 0) {
-				errorHora.setText("¡Ingrese una hora valida!");
+				errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour2"));
 				return false;
 			}
 		} catch (PatternSyntaxException e) {
-			errorHora.setText("¡Escriba bien la hora! (XX:XX)");
+			errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour1"));
 			return false;
 		} catch (NumberFormatException e) {
-			errorHora.setText("¡Ingrese una hora valida!");
+			errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour2"));
 			return false;
 		}
 		
 		// validar limite colectivos
 		String limiteColectivos = jtfLimiteColectivos.getText().trim();
 		if (limiteColectivos.isEmpty()) {
-			errorNumeroLineas.setText("Campo obligatorio");
+			errorNumeroLineas.setText(resourceBundle.getString("ConsultaForm_error_emptyspace"));
 			return false;
 		}
 		try {
 			Integer.parseInt(jtfLimiteColectivos.getText().trim());
 		} catch (NumberFormatException e) {
-			errorNumeroLineas.setText("¡Solo numeros!");
+			errorNumeroLineas.setText(resourceBundle.getString("ConsultaForm_error_number1"));
 			return false;
 		}
 		if (Integer.parseInt(jtfLimiteColectivos.getText().trim()) <= 0) {
-			errorNumeroLineas.setText("¡Solo numeros positivos!");
+			errorNumeroLineas.setText(resourceBundle.getString("ConsultaForm_error_number2"));
 			return false;
 		}
 		return true;

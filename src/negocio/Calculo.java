@@ -28,6 +28,7 @@ public class Calculo implements Observer {
     private boolean actualizar;
 
     public Calculo() {
+
     }
 
     public void init(Subject subject) {

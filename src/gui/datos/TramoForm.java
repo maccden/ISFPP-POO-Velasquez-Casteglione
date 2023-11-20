@@ -12,20 +12,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ResourceBundle;
 
 public class TramoForm extends JDialog {
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JTextField jtfParadaInicio, jtfParadaFinal, jtfTiempo, jtfTipo;
     private JLabel tituloInsertar, tituloEliminar, tituloModificar, errorTiempo, errorTipo;
     private JButton btnInsertar, btnModificar, btnEliminar, btnCancelar;
     private JComboBox<Object> comboBoxInicio, comboBoxFinal;
     public TramoForm() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         getContentPane().setLayout(null);
-        //setBounds(100, 100, 470, 250);
 
         Handler handler = new Handler();
 
-        JLabel textoParadaI = new JLabel("Parada inicio:");
+        JLabel textoParadaI = new JLabel(resourceBundle.getString("TramoForm_stop_start"));
         textoParadaI.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoParadaI.setBounds(10, 39, 70, 14);
         getContentPane().add(textoParadaI);
@@ -35,7 +41,7 @@ public class TramoForm extends JDialog {
         getContentPane().add(jtfParadaInicio);
         jtfParadaInicio.setColumns(10);
 
-        JLabel textoParadaF = new JLabel("Parada final:");
+        JLabel textoParadaF = new JLabel(resourceBundle.getString("TramoForm_stop_end"));
         textoParadaF.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoParadaF.setBounds(10, 69, 65, 14);
         getContentPane().add(textoParadaF);
@@ -45,21 +51,21 @@ public class TramoForm extends JDialog {
         getContentPane().add(jtfParadaFinal);
         jtfParadaFinal.setColumns(10);
 
-        JLabel textoTiempo = new JLabel("Tiempo entre paradas:");
+        JLabel textoTiempo = new JLabel(resourceBundle.getString("TramoForm_time"));
         textoTiempo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoTiempo.setBounds(10, 99, 124, 14);
         getContentPane().add(textoTiempo);
 
-        JLabel textoTipo = new JLabel("Tipo*:");
+        JLabel textoTipo = new JLabel(resourceBundle.getString("TramoForm_type"));
         textoTipo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         textoTipo.setBounds(10, 129, 46, 14);
         getContentPane().add(textoTipo);
 
-        JLabel textoAyuda = new JLabel("*1 = colectivo. 2 = caminando.");
+        JLabel textoAyuda = new JLabel(resourceBundle.getString("TramoForm_help"));
         textoAyuda.setBounds(10, 188, 200, 14);
         getContentPane().add(textoAyuda);
 
-        btnEliminar = new JButton("Eliminar");
+        btnEliminar = new JButton(resourceBundle.getString("TramoForm_delete"));
         btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnEliminar.setBounds(10, 159, 89, 23);
         btnEliminar.setFocusable(false);
@@ -76,13 +82,13 @@ public class TramoForm extends JDialog {
         getContentPane().add(jtfTipo);
         jtfTipo.setColumns(10);
 
-        btnCancelar = new JButton("Cancelar");
+        btnCancelar = new JButton(resourceBundle.getString("TramoForm_cancel"));
         btnCancelar.setBounds(106, 159, 89, 23);
         btnCancelar.setFocusable(false);
         getContentPane().add(btnCancelar);
         btnCancelar.addActionListener(handler);
 
-        tituloModificar = new JLabel("Seleccione y modifique los datos del tramo.");
+        tituloModificar = new JLabel(resourceBundle.getString("TramoForm_title_modify"));
         tituloModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloModificar.setBounds(107, 11, 239, 14);
         getContentPane().add(tituloModificar);
@@ -101,7 +107,7 @@ public class TramoForm extends JDialog {
                 } else {
                     comboBoxFinal.setEnabled(true);
                     comboBoxFinal.removeAllItems();
-                    comboBoxFinal.addItem("Selecionar...");
+                    comboBoxFinal.addItem(resourceBundle.getString("TramoForm_select"));
                     for (Parada parada: coordinador.listarParadas().values()) {
                         if (!parada.equals(coordinador.listarParadas().get(comboBoxInicio.getSelectedIndex())))
                             comboBoxFinal.addItem(parada.getCodigo() + " - " + parada.getDireccion());
@@ -126,24 +132,24 @@ public class TramoForm extends JDialog {
             }
         });
 
-        tituloInsertar = new JLabel("Ingrese los nuevos datos del nuevo tramo.");
+        tituloInsertar = new JLabel(resourceBundle.getString("TramoForm_title_insert"));
         tituloInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloInsertar.setBounds(107, 12, 239, 14);
         getContentPane().add(tituloInsertar);
 
-        tituloEliminar = new JLabel("Datos del tramo");
+        tituloEliminar = new JLabel(resourceBundle.getString("TramoForm_title_remove"));
         tituloEliminar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         tituloEliminar.setBounds(107, 12, 239, 14);
         getContentPane().add(tituloEliminar);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("TramoForm_insert"));
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 160, 89, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
         btnInsertar.addActionListener(handler);
 
-        btnModificar = new JButton("Modificar");
+        btnModificar = new JButton(resourceBundle.getString("TramoForm_update"));
         btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnModificar.setBounds(10, 160, 89, 23);
         btnModificar.setFocusable(false);
@@ -183,10 +189,10 @@ public class TramoForm extends JDialog {
         errorTipo.setText("");
 
         if (accion == Constantes.INSERTAR) {
-            setTitle("Insertar tramo");
+            setTitle(resourceBundle.getString("TramoForm_title_window_insert"));
             tituloInsertar.setVisible(true);
             comboBoxInicio.setVisible(true);
-            comboBoxInicio.addItem("Seleccionar...");
+            comboBoxInicio.addItem(resourceBundle.getString("TramoForm_select"));
             for (Parada parada: coordinador.listarParadas().values()) {
                 comboBoxInicio.addItem(parada.getCodigo() + " - " + parada.getDireccion());
             }
@@ -202,7 +208,7 @@ public class TramoForm extends JDialog {
         }
 
         if (accion == Constantes.MODIFICAR) {
-            setTitle("Modificar tramo");
+            setTitle(resourceBundle.getString("TramoForm_title_window_modify"));
             tituloModificar.setVisible(true);
             comboBoxInicio.setVisible(true);
             jtfParadaInicio.setVisible(false);
@@ -216,7 +222,7 @@ public class TramoForm extends JDialog {
 
         if (accion == Constantes.BORRAR) {
             setBounds(100, 100, 320, 250);
-            setTitle("Borrar tramo");
+            setTitle(resourceBundle.getString("TramoForm_title_window_remove"));
             jtfParadaInicio.setVisible(true);
             jtfParadaFinal.setVisible(true);
             tituloEliminar.setVisible(true);
@@ -230,13 +236,13 @@ public class TramoForm extends JDialog {
     }
 
     private void mostrarModificar(Tramo tramo) {
-        comboBoxInicio.addItem("Selecionar...");
+        comboBoxInicio.addItem(resourceBundle.getString("TramoForm_select"));
         for (Parada parada: coordinador.listarParadas().values()) {
             comboBoxInicio.addItem(parada.getCodigo() + " - " + parada.getDireccion());
         }
         comboBoxInicio.setSelectedItem(tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion());
 
-        comboBoxFinal.addItem("Selecionar...");
+        comboBoxFinal.addItem(resourceBundle.getString("TramoForm_select"));
         for (Parada parada: coordinador.listarParadas().values()) {
             if (!parada.equals(coordinador.listarParadas().get(comboBoxInicio.getSelectedIndex())))
                 comboBoxFinal.addItem(parada.getCodigo() + " - " + parada.getDireccion());
@@ -276,7 +282,7 @@ public class TramoForm extends JDialog {
 
                 Tramo tramo = new Tramo(coordinador.listarParadas().get(codigoI), coordinador.listarParadas().get(codigoF), tiempo, tipo);
 
-                int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que borra este registro?", "Confirmar",
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("TramoForm_confirm_1"), resourceBundle.getString("TramoForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     coordinador.borrarTramo(tramo);
@@ -297,7 +303,7 @@ public class TramoForm extends JDialog {
                 try {
                     coordinador.insertarTramo(tramo);
                 } catch (TramoExistenteException e) {
-                    JOptionPane.showMessageDialog(null, "¡Este tramo ya existe!");
+                    JOptionPane.showMessageDialog(null, resourceBundle.getString("TramoForm_error_1"));
                     return;
                 }
             }
@@ -316,34 +322,34 @@ public class TramoForm extends JDialog {
         // validar tiempo
         String tiempo = jtfTiempo.getText().trim();
         if (tiempo.isEmpty()) {
-            errorTiempo.setText("Campo obligatorio");
+            errorTiempo.setText(resourceBundle.getString("TramoForm_valid_1"));
             return false;
         }
         try {
             Integer.parseInt(jtfTiempo.getText().trim());
         } catch (NumberFormatException e) {
-            errorTiempo.setText("¡Solo numeros!");
+            errorTiempo.setText(resourceBundle.getString("TramoForm_error_2"));
             return false;
         }
         if (Integer.parseInt(jtfTiempo.getText().trim()) <= 0) {
-            errorTiempo.setText("¡Solo numeros positivos!");
+            errorTiempo.setText(resourceBundle.getString("TramoForm_error_3"));
             return false;
         }
 
         // validar tipo
         String tipo = jtfTipo.getText().trim();
         if (tipo.isEmpty()) {
-            errorTipo.setText("Campo obligatorio");
+            errorTipo.setText(resourceBundle.getString("TramoForm_valid_1"));
             return false;
         }
         try {
             Integer.parseInt(jtfTipo.getText().trim());
         } catch (NumberFormatException e) {
-            errorTipo.setText("¡Solo numeros!");
+            errorTipo.setText(resourceBundle.getString("TramoForm_error_2"));
             return false;
         }
         if (Integer.parseInt(jtfTipo.getText().trim()) != 1 && Integer.parseInt(jtfTipo.getText().trim()) != 2) {
-            errorTipo.setText("¡Ingrese numeros solo validos!");
+            errorTipo.setText(resourceBundle.getString("TramoForm_error_4"));
             return false;
         }
 

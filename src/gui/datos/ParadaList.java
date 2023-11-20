@@ -11,21 +11,28 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 public class ParadaList extends JDialog {
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JButton btnInsertar, btnSalir;
     private JTable table;
     private Parada parada;
     private JScrollPane scrollPane;
     private int accion;
     public ParadaList() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 500, 360);
 
-        setTitle("Lista de paradas");
+        setTitle(resourceBundle.getString("ParadaList_title_window"));
         getContentPane().setLayout(null);
 
-        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en las paradas cargadas:");
+        JLabel titulo = new JLabel(resourceBundle.getString("ParadaList_title"));
         titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         titulo.setBounds(31, 11, 421, 14);
         getContentPane().add(titulo);
@@ -40,7 +47,10 @@ public class ParadaList extends JDialog {
                 new Object[][] {
                 },
                 new String[] {
-                        "Codigo", "Direccion", "Modificar", "Eliminar"
+                        resourceBundle.getString("ParadaList_code"),
+                        resourceBundle.getString("ParadaList_address"),
+                        resourceBundle.getString("ParadaList_update"),
+                        resourceBundle.getString("ParadaList_delete")
                 }
         ));
         table.getColumnModel().getColumn(1).setPreferredWidth(250);
@@ -48,13 +58,13 @@ public class ParadaList extends JDialog {
         table.setBounds(10, 30, 464, 250);
         getContentPane().add(table);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("ParadaList_insert"));
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 291, 89, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
 
-        btnSalir = new JButton("Salir");
+        btnSalir = new JButton(resourceBundle.getString("ParadaList_exit"));
         btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSalir.setBounds(109, 291, 89, 23);
         btnSalir.setFocusable(false);
@@ -66,10 +76,10 @@ public class ParadaList extends JDialog {
             }
         });
 
-        table.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox()));
-        table.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("ParadaList_update")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("ParadaList_update")).setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("ParadaList_delete")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("ParadaList_delete")).setCellEditor(new ButtonEditor(new JCheckBox()));
         scrollPane.setViewportView(table);
 
         Handler handler = new Handler();

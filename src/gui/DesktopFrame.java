@@ -7,22 +7,29 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 public class DesktopFrame extends JFrame {
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JPanel aplicacion;
 
     public DesktopFrame() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 650, 600);
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
 
-        JMenu menu1 = new JMenu("Aplicacion");
+        JMenu menu1 = new JMenu(resourceBundle.getString("DesktopFrame_application"));
         menuBar.add(menu1);
 
-        JMenuItem salir = new JMenuItem("Salir");
+        JMenuItem salir = new JMenuItem(resourceBundle.getString("DesktopFrame_application_exit"));
         salir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(NORMAL);
@@ -30,10 +37,10 @@ public class DesktopFrame extends JFrame {
         });
         menu1.add(salir);
 
-        JMenu datos = new JMenu("Datos");
+        JMenu datos = new JMenu(resourceBundle.getString("DesktopFrame_application_data"));
         menuBar.add(datos);
 
-        JMenuItem lineas = new JMenuItem("Lineas");
+        JMenuItem lineas = new JMenuItem(resourceBundle.getString("DesktopFrame_application_lines"));
         lineas.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 coordinador.mostrarLineaList();
@@ -41,7 +48,7 @@ public class DesktopFrame extends JFrame {
         });
         datos.add(lineas);
 
-        JMenuItem paradas = new JMenuItem("Paradas");
+        JMenuItem paradas = new JMenuItem(resourceBundle.getString("DesktopFrame_application_stops"));
         paradas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,17 +57,17 @@ public class DesktopFrame extends JFrame {
         });
         datos.add(paradas);
 
-        JMenuItem tramos = new JMenuItem("Tramos");
+        JMenuItem tramos = new JMenuItem(resourceBundle.getString("DesktopFrame_application_sections"));
         tramos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { coordinador.mostrarTramoList(); }
         });
         datos.add(tramos);
 
-        JMenu consultas = new JMenu("Consultas");
+        JMenu consultas = new JMenu(resourceBundle.getString("DesktopFrame_application_queries"));
         setJMenuBar(menuBar);
 
-        JMenuItem consulta = new JMenuItem("Consultas");
+        JMenuItem consulta = new JMenuItem(resourceBundle.getString("DesktopFrame_application_querie"));
         consulta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 coordinador.mostrarConsulta();
@@ -70,13 +77,13 @@ public class DesktopFrame extends JFrame {
         menuBar.add(consultas);
         consultas.add(consulta);
 
-        JMenu ayuda = new JMenu("Ayuda");
+        JMenu ayuda = new JMenu(resourceBundle.getString("DesktopFrame_application_help"));
         setJMenuBar(menuBar);
 
-        JMenuItem idioma = new JMenuItem("Idioma");
-        consulta.addActionListener(new ActionListener() {
+        JMenuItem idioma = new JMenuItem(resourceBundle.getString("DesktopFrame_application_language"));
+        idioma.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //coordinador.mostrarConsulta();
+                coordinador.mostrarIdioma();
             }
         });
 
@@ -89,7 +96,7 @@ public class DesktopFrame extends JFrame {
         setContentPane(aplicacion);
 
         setSize(600, 480);
-        setTitle("Empresa: MVC");
+        setTitle(resourceBundle.getString("DesktopFrame_company"));
         setLocationRelativeTo(null);
         setResizable(false);
         getContentPane().setLayout(null);

@@ -11,21 +11,28 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 public class TramoList extends JDialog{
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JButton btnInsertar, btnSalir;
     private JTable table;
     private Tramo tramo;
     private JScrollPane scrollPane;
     private int accion;
     public TramoList() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 635, 360);
 
-        setTitle("Lista de tramos");
+        setTitle(resourceBundle.getString("TramoList_title_window"));
         getContentPane().setLayout(null);
 
-        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en los tramos cargados:");
+        JLabel titulo = new JLabel(resourceBundle.getString("TramoList_title"));
         titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         titulo.setBounds(90, 11, 421, 14);
         getContentPane().add(titulo);
@@ -40,7 +47,12 @@ public class TramoList extends JDialog{
                 new Object[][] {
                 },
                 new String[] {
-                        "Parada Inicio", "Parada Final", "Tiempo" , "Tipo", "Modificar", "Eliminar"
+                        resourceBundle.getString("TramoList_stop_start"),
+                        resourceBundle.getString("TramoList_stop_end"),
+                        resourceBundle.getString("TramoList_time"),
+                        resourceBundle.getString("TramoList_type"),
+                        resourceBundle.getString("TramoList_update"),
+                        resourceBundle.getString("TramoList_delete")
                 }
         ));
         table.getColumnModel().getColumn(0).setPreferredWidth(250);
@@ -49,13 +61,13 @@ public class TramoList extends JDialog{
         table.setBounds(10, 30, 464, 250);
         getContentPane().add(table);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("TramoList_insert"));
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 291, 89, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
 
-        btnSalir = new JButton("Salir");
+        btnSalir = new JButton(resourceBundle.getString("TramoList_exit"));
         btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSalir.setBounds(109, 291, 89, 23);
         btnSalir.setFocusable(false);
@@ -67,10 +79,10 @@ public class TramoList extends JDialog{
             }
         });
 
-        table.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox()));
-        table.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("TramoList_update")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("TramoList_update")).setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("TramoList_delete")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("TramoList_delete")).setCellEditor(new ButtonEditor(new JCheckBox()));
         scrollPane.setViewportView(table);
 
         Handler handler = new Handler();

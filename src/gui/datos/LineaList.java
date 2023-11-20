@@ -13,21 +13,28 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 public class LineaList extends JDialog {
     private Coordinador coordinador;
+    private ResourceBundle resourceBundle;
     private JButton btnInsertar, btnSalir;
     private JTable table;
     private Linea linea;
     private JScrollPane scrollPane;
     private int accion;
     public LineaList() {
+
+    }
+
+    public void init() {
+        resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 825, 360);
 
-        setTitle("Lista de tramos");
+        setTitle(resourceBundle.getString("LineaList_title_window"));
         getContentPane().setLayout(null);
 
-        JLabel titulo = new JLabel("Seleccione una de las opciones para realizar acciones en las lineas cargadas:");
+        JLabel titulo = new JLabel(resourceBundle.getString("LineaList_title"));
         titulo.setFont(new Font("Tahoma", Font.PLAIN, 12));
         titulo.setBounds(180, 11, 421, 14);
         getContentPane().add(titulo);
@@ -42,7 +49,13 @@ public class LineaList extends JDialog {
                 new Object[][] {
                 },
                 new String[] {
-                        "Codigo", "Hora inicio", "Hora finaliza" , "Frecuencia", "Paradas", "Modificar", "Eliminar"
+                        resourceBundle.getString("LineaList_code"),
+                        resourceBundle.getString("LineaList_start_time"),
+                        resourceBundle.getString("LineaList_end_time"),
+                        resourceBundle.getString("LineaList_frecuency"),
+                        resourceBundle.getString("LineaList_stops"),
+                        resourceBundle.getString("LineaList_update"),
+                        resourceBundle.getString("LineaList_delete")
                 }
         ));
         table.getColumnModel().getColumn(4).setPreferredWidth(390);
@@ -50,13 +63,13 @@ public class LineaList extends JDialog {
         table.setBounds(10, 30, 464, 250);
         getContentPane().add(table);
 
-        btnInsertar = new JButton("Insertar");
+        btnInsertar = new JButton(resourceBundle.getString("LineaList_insert"));
         btnInsertar.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnInsertar.setBounds(10, 291, 89, 23);
         btnInsertar.setFocusable(false);
         getContentPane().add(btnInsertar);
 
-        btnSalir = new JButton("Salir");
+        btnSalir = new JButton(resourceBundle.getString("LineaList_exit"));
         btnSalir.setFont(new Font("Tahoma", Font.PLAIN, 12));
         btnSalir.setBounds(109, 291, 89, 23);
         btnSalir.setFocusable(false);
@@ -68,10 +81,10 @@ public class LineaList extends JDialog {
             }
         });
 
-        table.getColumn("Modificar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Modificar").setCellEditor(new ButtonEditor(new JCheckBox()));
-        table.getColumn("Eliminar").setCellRenderer(new ButtonRenderer());
-        table.getColumn("Eliminar").setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("LineaList_update")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("LineaList_update")).setCellEditor(new ButtonEditor(new JCheckBox()));
+        table.getColumn(resourceBundle.getString("LineaList_delete")).setCellRenderer(new ButtonRenderer());
+        table.getColumn(resourceBundle.getString("LineaList_delete")).setCellEditor(new ButtonEditor(new JCheckBox()));
         scrollPane.setViewportView(table);
 
         Handler handler = new Handler();
