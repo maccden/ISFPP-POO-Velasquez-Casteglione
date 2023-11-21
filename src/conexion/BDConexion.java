@@ -4,14 +4,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ResourceBundle;
 
+/**
+ * Esta clase proporciona una conexión a la base de datos utilizando los datos
+ * de conexión del archivo jdbc.properties.
+ */
 public class BDConexion {
-	private static Connection con = null;
 	
-	// Nos conectamos a la base de datos (con los datos de conexión del archivo jdbc.properties)
+	private static Connection con = null;
+
+	/**
+	 * Obtiene una conexión a la base de datos.
+	 *
+	 * @return La conexión a la base de datos.
+	 * @throws RuntimeException Si ocurre un error al crear la conexión.
+	 */
 	public static Connection getConnection() {
 		try {
 			if (con == null) {
-				// con esto determinamos cuando finalize el programa
+				// Agregamos un hook para cerrar la conexión al finalizar el programa
 				Runtime.getRuntime().addShutdownHook(new MiShDwnHook());
 				ResourceBundle rb = ResourceBundle.getBundle("jdbc");
 				String driver = rb.getString("driver");
@@ -24,13 +34,15 @@ public class BDConexion {
 			return con;
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new RuntimeException("Error al crear la conexion", ex);
+			throw new RuntimeException("Error al crear la conexión", ex);
 		}
 	}
 
+	/**
+	 * Este hook se ejecuta justo antes de que finalice el programa para cerrar la
+	 * conexión.
+	 */
 	public static class MiShDwnHook extends Thread {
-		// justo antes de finalizar el programa la JVM invocara
-		// a este metodo donde podemos cerrar la conexion
 		public void run() {
 			try {
 				Connection con = BDConexion.getConnection();

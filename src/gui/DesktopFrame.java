@@ -9,15 +9,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+/**
+ * DesktopFrame es la ventana principal de la aplicación que proporciona un menú
+ * para acceder a diferentes funcionalidades.
+ */
 public class DesktopFrame extends JFrame {
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JPanel aplicacion;
 
+    /**
+     * Constructor por defecto para DesktopFrame.
+     */
     public DesktopFrame() {
-
     }
 
+    /**
+     * Inicializa DesktopFrame, configurando la interfaz gráfica y agregando
+     * elementos de menú con sus respectivos manejadores de eventos.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +71,9 @@ public class DesktopFrame extends JFrame {
         JMenuItem tramos = new JMenuItem(resourceBundle.getString("DesktopFrame_application_sections"));
         tramos.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { coordinador.mostrarTramoList(); }
+            public void actionPerformed(ActionEvent e) {
+                coordinador.mostrarTramoList();
+            }
         });
         datos.add(tramos);
 
@@ -102,6 +115,11 @@ public class DesktopFrame extends JFrame {
         getContentPane().setLayout(null);
     }
 
+    /**
+     * Establece la instancia de Coordinador para DesktopFrame.
+     *
+     * @param coordinador La instancia de Coordinador que se establecerá.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }

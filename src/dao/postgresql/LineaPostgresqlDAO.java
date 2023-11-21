@@ -9,8 +9,14 @@ import dao.LineaDAO;
 import datastructures.TreeMap;
 import modelo.Linea;
 
+/**
+ * Implementación de la interfaz LineaDAO para PostgreSQL.
+ */
 public class LineaPostgresqlDAO implements LineaDAO {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void insertar(Linea linea) {
 		Connection con = null;
@@ -18,9 +24,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "";
-			sql += "INSERT INTO public.lineas (codigo, comienza, finaliza, frecuencia) ";
-			sql += "VALUES(?,?,?,?) ";
+			String sql = "INSERT INTO public.lineas (codigo, comienza, finaliza, frecuencia) VALUES(?,?,?,?)";
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, linea.getCodigo());
 			pstm.setInt(2, linea.getComienza());
@@ -43,6 +47,9 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void actualizar(Linea linea) {
 		Connection con = null;
@@ -50,9 +57,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "UPDATE public.lineas ";
-			sql += "SET comienza = ?, finaliza = ?, frecuencia = ? ";
-			sql += "WHERE codigo = ? ";
+			String sql = "UPDATE public.lineas SET comienza = ?, finaliza = ?, frecuencia = ? WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, linea.getComienza());
 			pstm.setInt(2, linea.getFinaliza());
@@ -75,6 +80,9 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void borrar(Linea linea) {
 		Connection con = null;
@@ -82,8 +90,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "";
-			sql += "DELETE FROM public.lineas WHERE codigo = ? ";
+			String sql = "DELETE FROM public.lineas WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, linea.getCodigo());
 			pstm.executeUpdate();
@@ -101,9 +108,11 @@ public class LineaPostgresqlDAO implements LineaDAO {
 				throw new RuntimeException(ex);
 			}
 		}
-
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public TreeMap<String, Linea> buscarTodos() {
 		Connection con = null;
@@ -111,13 +120,13 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "SELECT codigo, comienza, finaliza, frecuencia FROM public.lineas ";
+			String sql = "SELECT codigo, comienza, finaliza, frecuencia FROM public.lineas";
 			pstm = con.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			TreeMap<String, Linea> ret = new TreeMap<>();
 			while (rs.next()) {
-				ret.put(rs.getString("codigo"), new Linea(rs.getString("codigo"), 
-				rs.getInt("comienza"), rs.getInt("finaliza"),rs.getInt("frecuencia")));		
+				ret.put(rs.getString("codigo"), new Linea(rs.getString("codigo"),
+						rs.getInt("comienza"), rs.getInt("finaliza"), rs.getInt("frecuencia")));
 			}
 			return ret;
 		} catch (Exception ex) {

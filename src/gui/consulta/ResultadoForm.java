@@ -18,8 +18,20 @@ import negocio.hilos.MenosCostosoHilo;
 import org.apache.log4j.Logger;
 import util.Time;
 
+/**
+ * ResultadoForm es una ventana de diálogo que muestra los resultados de una
+ * consulta de transporte, incluyendo las rutas sugeridas
+ * e información de viaje. Los usuarios pueden elegir ver la ruta más rápida o
+ * menos costosa, y el cálculo se realiza en segundo
+ * plano mediante hilos.
+ */
 public class ResultadoForm extends JDialog {
+
+	/**
+	 * Registro para registrar mensajes y eventos en ResultadoForm.
+	 */
 	final static Logger logger = Logger.getLogger(ResultadoForm.class);
+
 	private ResourceBundle resourceBundle;
 	private Coordinador coordinador;
 	private JPanel contentPane;
@@ -29,10 +41,16 @@ public class ResultadoForm extends JDialog {
 	private int horario;
 	private List<List<Tramo>> trayecto;
 
+	/**
+	 * Constructor por defecto para ResultadoForm.
+	 */
 	public ResultadoForm() {
-
 	}
 
+	/**
+	 * Inicializa ResultadoForm, configurando los componentes de la interfaz gráfica
+	 * y agregando escuchadores de eventos.
+	 */
 	public void init() {
 		resourceBundle = coordinador.getResourceBundle();
 		setBounds(100, 100, 662, 300);
@@ -78,6 +96,14 @@ public class ResultadoForm extends JDialog {
 		setModal(true);
 	}
 
+	/**
+	 * Muestra la información de viaje calculada en la ventana ResultadoForm.
+	 *
+	 * @param tramos  La lista de tramos que representa las rutas sugeridas.
+	 * @param horario El tiempo de viaje especificado.
+	 * @param lineas  El TreeMap de líneas para referencia.
+	 * @return Una cadena formateada que contiene la información de viaje.
+	 */
 	public String verDatos(List<List<Tramo>> tramos, int horario, TreeMap<String, Linea> lineas) {
 		StringBuilder resultado = new StringBuilder();
 		if (tramos.isEmpty()) {
@@ -93,18 +119,23 @@ public class ResultadoForm extends JDialog {
 		Tramo tramo;
 		String nombreLinea;
 		for (List<Tramo> t : tramos) {
-			resultado.append(Time.toTime(horario)).append(" - ").append(resourceBundle.getString("ResultadoForm_arrives")).append("\n");
+			resultado.append(Time.toTime(horario)).append(" - ")
+					.append(resourceBundle.getString("ResultadoForm_arrives")).append("\n");
 			for (int i = 0; i < t.size() - 1; i++) {
 				tramo = t.get(i);
 				linea = tramo.getInicio().getLineas().get(0);
 				nombreLinea = linea.getCodigo();
-				if (lineas.get(linea.getCodigo())==null)
+				if (lineas.get(linea.getCodigo()) == null)
 					nombreLinea = resourceBundle.getString("ResultadoForm_walking");
-				resultado.append(Time.toTime(tramo.getTiempo())).append(" - ").append(nombreLinea).append(" (").append(tramo.getInicio().getDireccion()).append(" ").append(" > ").append(tramo.getFin().getDireccion()).append(") \n");
+				resultado.append(Time.toTime(tramo.getTiempo())).append(" - ").append(nombreLinea).append(" (")
+						.append(tramo.getInicio().getDireccion()).append(" ").append(" > ")
+						.append(tramo.getFin().getDireccion()).append(") \n");
 			}
 			tramo = t.get(t.size() - 1);
-			resultado.append(Time.toTime(tramo.getTiempo())).append(" - ").append(resourceBundle.getString("ResultadoForm_end")).append("\n");
-			resultado.append(resourceBundle.getString("ResultadoForm_total_time")).append(Time.toTime(tramo.getTiempo() - horario)).append("\n");
+			resultado.append(Time.toTime(tramo.getTiempo())).append(" - ")
+					.append(resourceBundle.getString("ResultadoForm_end")).append("\n");
+			resultado.append(resourceBundle.getString("ResultadoForm_total_time"))
+					.append(Time.toTime(tramo.getTiempo() - horario)).append("\n");
 			resultado.append("=======================================================================\n");
 		}
 		btnMasRapido.setEnabled(true);
@@ -112,11 +143,27 @@ public class ResultadoForm extends JDialog {
 		return resultado.toString();
 	}
 
+	/**
+	 * Actualiza el contenido del JTextArea con la cadena de resultado
+	 * proporcionada.
+	 *
+	 * @param resultado La cadena de resultado que se mostrará.
+	 */
 	public void accion(String resultado) {
 		txtResultado.setText(resultado);
 	}
 
+	/**
+	 * Clase de escuchador de acciones para manejar clics de botones e interacciones
+	 * del usuario.
+	 */
 	private class Handler implements ActionListener {
+
+		/**
+		 * Maneja eventos de acción desencadenados por botones en ResultadoForm.
+		 *
+		 * @param event El evento de acción.
+		 */
 		public void actionPerformed(ActionEvent event) {
 			if (event.getSource() == btnCancelar) {
 				coordinador.cancelarResultado();
@@ -134,7 +181,7 @@ public class ResultadoForm extends JDialog {
 			}
 
 			if (event.getSource() == btnMasRapido) {
-				//coordinador.masRapido(trayecto, horario);
+				// coordinador.masRapido(trayecto, horario);
 				btnCancelarSub.setBounds(84, 205, 155, 32);
 				coordinador.ejecutarHilo(new MasRapidoHilo(trayecto, horario, coordinador, trayecto.size()));
 				calculando(Constantes.MAS_RAPIDO);
@@ -150,15 +197,31 @@ public class ResultadoForm extends JDialog {
 		}
 	}
 
+	/**
+	 * Establece la instancia de Coordinador para ResultadoForm.
+	 *
+	 * @param coordinador La instancia de Coordinador que se establecerá.
+	 */
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
 	}
 
+	/**
+	 * Actualiza la barra de progreso con el valor proporcionado.
+	 *
+	 * @param i El valor para establecer en la barra de progreso.
+	 */
 	public void actualizarBarra(int i) {
 		progressBar.setValue(i);
 		progressBar.repaint();
 	}
 
+	/**
+	 * Inicia la indicación visual de cálculos en curso mostrando la barra de
+	 * progreso y ajustando la visibilidad de los botones.
+	 *
+	 * @param consulta El tipo de consulta que se está realizando.
+	 */
 	public void calculando(int consulta) {
 		progressBar.setValue(0);
 		progressBar.setVisible(true);
@@ -179,6 +242,10 @@ public class ResultadoForm extends JDialog {
 		btnCancelarSub.setVisible(true);
 	}
 
+	/**
+	 * Completa el proceso de cálculo restableciendo la barra de progreso y
+	 * volviendo a habilitar las interacciones del usuario.
+	 */
 	public void terminar() {
 		progressBar.setValue(0);
 		progressBar.setVisible(false);

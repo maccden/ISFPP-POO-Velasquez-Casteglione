@@ -9,8 +9,18 @@ import modelo.Tramo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.FormatterClosedException;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 
+/**
+ * Implementación de la interfaz TramoDAO para el acceso secuencial a datos.
+ */
 public class TramoSecuencialDAO implements TramoDAO {
 
     private List<Tramo> list;
@@ -18,6 +28,9 @@ public class TramoSecuencialDAO implements TramoDAO {
     private Hashtable<Integer, Parada> paradas;
     private boolean actualizar;
 
+    /**
+     * Constructor que inicializa el DAO.
+     */
     public TramoSecuencialDAO() {
         paradas = cargarParadas();
         ResourceBundle rb = ResourceBundle.getBundle("secuencial");
@@ -25,6 +38,12 @@ public class TramoSecuencialDAO implements TramoDAO {
         actualizar = true;
     }
 
+    /**
+     * Lee los tramos desde un archivo y los retorna en una lista.
+     *
+     * @param file El nombre del archivo.
+     * @return Una lista de tramos.
+     */
     private List<Tramo> readFromFile(String file) {
         List<Tramo> list = new ArrayList<>();
         Scanner inFile = null;
@@ -55,6 +74,12 @@ public class TramoSecuencialDAO implements TramoDAO {
         return list;
     }
 
+    /**
+     * Escribe los tramos en un archivo.
+     *
+     * @param list La lista de tramos.
+     * @param file El nombre del archivo.
+     */
     private void writeToFile(List<Tramo> list, String file) {
         Formatter outFile = null;
         try {
@@ -73,6 +98,9 @@ public class TramoSecuencialDAO implements TramoDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Tramo> buscarTodos() {
         if (actualizar) {
@@ -82,6 +110,9 @@ public class TramoSecuencialDAO implements TramoDAO {
         return list;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insertar(Tramo tramo) {
         list.add(tramo);
@@ -89,6 +120,9 @@ public class TramoSecuencialDAO implements TramoDAO {
         actualizar = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void actualizar(Tramo tramo) {
         int pos = list.indexOf(tramo);
@@ -97,6 +131,9 @@ public class TramoSecuencialDAO implements TramoDAO {
         actualizar = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void borrar(Tramo tramo) {
         list.remove(tramo);
@@ -104,8 +141,14 @@ public class TramoSecuencialDAO implements TramoDAO {
         actualizar = true;
     }
 
+    /**
+     * Carga las paradas desde el archivo.
+     *
+     * @return Un Hashtable con las paradas, donde la clave es el código de la
+     *         parada y el valor es la parada.
+     */
     private Hashtable<Integer, Parada> cargarParadas() {
-        Hashtable<Integer, Parada> paradas = new Hashtable<Integer, Parada>();
+        Hashtable<Integer, Parada> paradas = new Hashtable<>();
         ParadaDAO paradaDAO = (ParadaDAO) Factory.getInstancia("PARADA");
         TreeMap<Integer, Parada> ds = paradaDAO.buscarTodos();
         for (Parada d : ds.values())

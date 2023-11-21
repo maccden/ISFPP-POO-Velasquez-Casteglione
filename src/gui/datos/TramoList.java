@@ -13,7 +13,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
-public class TramoList extends JDialog{
+/**
+ * Clase TramoList que representa la interfaz gráfica para la lista de tramos.
+ */
+public class TramoList extends JDialog {
+    
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JButton btnInsertar, btnSalir;
@@ -21,10 +25,16 @@ public class TramoList extends JDialog{
     private Tramo tramo;
     private JScrollPane scrollPane;
     private int accion;
-    public TramoList() {
 
+    /**
+     * Constructor de la clase TramoList.
+     */
+    public TramoList() {
     }
 
+    /**
+     * Inicializa la interfaz gráfica y configura los componentes necesarios.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 635, 360);
@@ -53,8 +63,7 @@ public class TramoList extends JDialog{
                         resourceBundle.getString("TramoList_type"),
                         resourceBundle.getString("TramoList_update"),
                         resourceBundle.getString("TramoList_delete")
-                }
-        ));
+                }));
         table.getColumnModel().getColumn(0).setPreferredWidth(250);
         table.getColumnModel().getColumn(1).setPreferredWidth(250);
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -91,14 +100,26 @@ public class TramoList extends JDialog{
         setModal(true);
     }
 
+    /**
+     * Clase interna Handler que implementa ActionListener para manejar eventos de
+     * los botones.
+     */
     private class Handler implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
 
+        /**
+         * Maneja los eventos de los botones.
+         *
+         * @param event Evento de acción.
+         */
+        public void actionPerformed(ActionEvent event) {
             if (event.getSource() == btnInsertar)
                 coordinador.insertarTramoForm();
         }
     }
 
+    /**
+     * Carga los datos en la tabla.
+     */
     public void loadTable() {
         // Eliminar todas las filas
         ((DefaultTableModel) table.getModel()).setRowCount(0);
@@ -107,6 +128,11 @@ public class TramoList extends JDialog{
                 addRow((Tramo) tramo);
     }
 
+    /**
+     * Agrega una fila a la tabla con los datos del tramo.
+     *
+     * @param tramo Tramo a agregar.
+     */
     public void addRow(Tramo tramo) {
         Object[] row = new Object[table.getModel().getColumnCount()];
         row[0] = tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion();
@@ -118,6 +144,11 @@ public class TramoList extends JDialog{
         ((DefaultTableModel) table.getModel()).addRow(row);
     }
 
+    /**
+     * Actualiza una fila en la tabla con los datos del tramo.
+     *
+     * @param row Índice de la fila a actualizar.
+     */
     private void updateRow(int row) {
         table.setValueAt(tramo.getInicio(), row, 0);
         table.setValueAt(tramo.getFin(), row, 1);
@@ -125,14 +156,35 @@ public class TramoList extends JDialog{
         table.setValueAt(tramo.getTipo(), row, 3);
     }
 
+    /**
+     * Clase interna ButtonRenderer que implementa TableCellRenderer para renderizar
+     * botones en las celdas de la tabla.
+     */
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
+        /**
+         * Constructor de la clase ButtonRenderer.
+         * Configura el renderizador de celdas para mostrar botones en una tabla.
+         */
         public ButtonRenderer() {
             setOpaque(true);
         }
 
+        /**
+         * Obtiene el componente de renderizado de celdas para mostrar el botón en la
+         * tabla.
+         *
+         * @param table      Tabla a la que pertenece el renderizador.
+         * @param value      Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param hasFocus   Indica si la celda tiene el foco.
+         * @param row        Índice de la fila de la celda.
+         * @param column     Índice de la columna de la celda.
+         * @return Componente de renderizado de celdas.
+         */
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
@@ -151,6 +203,10 @@ public class TramoList extends JDialog{
         }
     }
 
+    /**
+     * Clase interna ButtonEditor que extiende DefaultCellEditor para manejar la
+     * edición de botones en las celdas de la tabla.
+     */
     class ButtonEditor extends DefaultCellEditor {
 
         protected JButton button;
@@ -160,6 +216,11 @@ public class TramoList extends JDialog{
         private boolean isDeleteRow = false;
         private boolean isUpdateRow = false;
 
+        /**
+         * Constructor de la clase ButtonEditor.
+         *
+         * @param checkBox Componente de casilla de verificación asociado al editor.
+         */
         public ButtonEditor(JCheckBox checkBox) {
             super(checkBox);
             button = new JButton();
@@ -172,8 +233,19 @@ public class TramoList extends JDialog{
             });
         }
 
+        /**
+         * Obtiene el componente de editor de celdas para mostrar el botón en la tabla.
+         *
+         * @param table      Tabla a la que pertenece el editor.
+         * @param value      Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param row        Índice de la fila de la celda.
+         * @param column     Índice de la columna de la celda.
+         * @return Componente de editor de celdas.
+         */
         @Override
-        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+                int column) {
 
             if (isSelected) {
                 button.setForeground(table.getSelectionForeground());
@@ -198,13 +270,19 @@ public class TramoList extends JDialog{
             return button;
         }
 
+        /**
+         * Obtiene el valor de la celda después de que se ha producido la edición.
+         *
+         * @return Valor de la celda después de la edición.
+         */
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
                 int pI = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 0).toString().split(" - ")[0]);
                 int pF = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 1).toString().split(" - ")[0]);
                 int tipo = Integer.parseInt(table.getValueAt(table.getSelectedRow(), 3).toString());
-                Tramo t = (Tramo) coordinador.buscarTramo(new Tramo(coordinador.listarParadas().get(pI), coordinador.listarParadas().get(pF),0, tipo));
+                Tramo t = (Tramo) coordinador.buscarTramo(
+                        new Tramo(coordinador.listarParadas().get(pI), coordinador.listarParadas().get(pF), 0, tipo));
                 if (label.equals("edit"))
                     coordinador.modificarTramoForm(t);
                 else
@@ -218,34 +296,54 @@ public class TramoList extends JDialog{
             return new String(label);
         }
 
+        /**
+         * Detiene la edición de la celda y maneja eventos cuando se detiene la edición.
+         *
+         * @return true si se detiene la edición, false en caso contrario.
+         */
         @Override
         public boolean stopCellEditing() {
             isPushed = false;
             return super.stopCellEditing();
         }
 
+        /**
+         * Maneja eventos cuando se detiene la edición y actualiza la tabla según sea
+         * necesario.
+         */
         protected void fireEditingStopped() {
             super.fireEditingStopped();
-
             DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
             if (isDeleteRow)
                 tableModel.removeRow(table.getSelectedRow());
-
-            if (isUpdateRow) {
+            if (isUpdateRow)
                 updateRow(table.getSelectedRow());
-            }
-
         }
     }
 
+    /**
+     * Establece el coordinador para la clase TramoList.
+     *
+     * @param coordinador Coordinador a establecer.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
 
+    /**
+     * Establece la acción para la clase TramoList.
+     *
+     * @param accion Acción a establecer.
+     */
     public void setAccion(int accion) {
         this.accion = accion;
     }
 
+    /**
+     * Establece el tramo para la clase TramoList.
+     *
+     * @param tramo Tramo a establecer.
+     */
     public void setTramo(Tramo tramo) {
         this.tramo = tramo;
     }

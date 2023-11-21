@@ -14,17 +14,28 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ResourceBundle;
 
+/**
+ * Clase TramoForm que representa la interfaz gráfica para el formulario de
+ * tramos.
+ */
 public class TramoForm extends JDialog {
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JTextField jtfParadaInicio, jtfParadaFinal, jtfTiempo, jtfTipo;
     private JLabel tituloInsertar, tituloEliminar, tituloModificar, errorTiempo, errorTipo;
     private JButton btnInsertar, btnModificar, btnEliminar, btnCancelar;
     private JComboBox<Object> comboBoxInicio, comboBoxFinal;
-    public TramoForm() {
 
+    /**
+     * Constructor de la clase TramoForm.
+     */
+    public TramoForm() {
     }
 
+    /**
+     * Inicializa la interfaz gráfica y configura los componentes necesarios.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         getContentPane().setLayout(null);
@@ -108,10 +119,9 @@ public class TramoForm extends JDialog {
                     comboBoxFinal.setEnabled(true);
                     comboBoxFinal.removeAllItems();
                     comboBoxFinal.addItem(resourceBundle.getString("TramoForm_select"));
-                    for (Parada parada: coordinador.listarParadas().values()) {
+                    for (Parada parada : coordinador.listarParadas().values())
                         if (!parada.equals(coordinador.listarParadas().get(comboBoxInicio.getSelectedIndex())))
                             comboBoxFinal.addItem(parada.getCodigo() + " - " + parada.getDireccion());
-                    }
                 }
             }
         });
@@ -171,6 +181,13 @@ public class TramoForm extends JDialog {
         setModal(true);
     }
 
+    /**
+     * Configura la acción y muestra el formulario según la acción especificada.
+     *
+     * @param accion Acción a realizar (Constantes.INSERTAR, Constantes.MODIFICAR,
+     *               Constantes.BORRAR).
+     * @param tramo  Tramo asociado a la acción.
+     */
     public void accion(int accion, Tramo tramo) {
         setBounds(100, 100, 470, 250);
         tituloEliminar.setVisible(false);
@@ -193,9 +210,8 @@ public class TramoForm extends JDialog {
             tituloInsertar.setVisible(true);
             comboBoxInicio.setVisible(true);
             comboBoxInicio.addItem(resourceBundle.getString("TramoForm_select"));
-            for (Parada parada: coordinador.listarParadas().values()) {
+            for (Parada parada : coordinador.listarParadas().values())
                 comboBoxInicio.addItem(parada.getCodigo() + " - " + parada.getDireccion());
-            }
             jtfParadaInicio.setVisible(false);
             comboBoxFinal.setVisible(true);
             comboBoxFinal.setEnabled(false);
@@ -235,23 +251,31 @@ public class TramoForm extends JDialog {
         }
     }
 
+    /**
+     * Muestra los detalles del tramo en el formulario de modificación.
+     *
+     * @param tramo Tramo cuyos detalles se mostrarán.
+     */
     private void mostrarModificar(Tramo tramo) {
         comboBoxInicio.addItem(resourceBundle.getString("TramoForm_select"));
-        for (Parada parada: coordinador.listarParadas().values()) {
+        for (Parada parada : coordinador.listarParadas().values())
             comboBoxInicio.addItem(parada.getCodigo() + " - " + parada.getDireccion());
-        }
         comboBoxInicio.setSelectedItem(tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion());
 
         comboBoxFinal.addItem(resourceBundle.getString("TramoForm_select"));
-        for (Parada parada: coordinador.listarParadas().values()) {
+        for (Parada parada : coordinador.listarParadas().values())
             if (!parada.equals(coordinador.listarParadas().get(comboBoxInicio.getSelectedIndex())))
                 comboBoxFinal.addItem(parada.getCodigo() + " - " + parada.getDireccion());
-        }
         comboBoxFinal.setSelectedItem(tramo.getFin().getCodigo() + " - " + tramo.getFin().getDireccion());
         jtfTiempo.setText(String.valueOf(tramo.getTiempo()));
         jtfTipo.setText(String.valueOf(tramo.getTipo()));
     }
 
+    /**
+     * Muestra los detalles del tramo en el formulario de eliminación.
+     *
+     * @param tramo Tramo cuyos detalles se mostrarán.
+     */
     private void mostrarEliminar(Tramo tramo) {
         jtfParadaInicio.setText(tramo.getInicio().getCodigo() + " - " + tramo.getInicio().getDireccion());
         jtfParadaFinal.setText(tramo.getFin().getCodigo() + " - " + tramo.getFin().getDireccion());
@@ -259,6 +283,9 @@ public class TramoForm extends JDialog {
         jtfTipo.setText(String.valueOf(tramo.getTipo()));
     }
 
+    /**
+     * Limpia los campos de texto del formulario.
+     */
     private void limpiar() {
         jtfParadaInicio.setText("");
         jtfParadaFinal.setText("");
@@ -266,7 +293,17 @@ public class TramoForm extends JDialog {
         jtfTipo.setText("");
     }
 
+    /**
+     * Clase interna Handler que implementa ActionListener para manejar eventos de
+     * los botones.
+     */
     private class Handler implements ActionListener {
+
+        /**
+         * Maneja los eventos de los botones.
+         *
+         * @param event Evento de acción.
+         */
         public void actionPerformed(ActionEvent event) {
 
             if (event.getSource() == btnCancelar) {
@@ -280,9 +317,11 @@ public class TramoForm extends JDialog {
                 int tiempo = Integer.parseInt(jtfTiempo.getText().trim());
                 int tipo = Integer.parseInt(jtfTipo.getText().trim());
 
-                Tramo tramo = new Tramo(coordinador.listarParadas().get(codigoI), coordinador.listarParadas().get(codigoF), tiempo, tipo);
+                Tramo tramo = new Tramo(coordinador.listarParadas().get(codigoI),
+                        coordinador.listarParadas().get(codigoF), tiempo, tipo);
 
-                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("TramoForm_confirm_1"), resourceBundle.getString("TramoForm_confirm_2"),
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("TramoForm_confirm_1"),
+                        resourceBundle.getString("TramoForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     coordinador.borrarTramo(tramo);
@@ -297,24 +336,27 @@ public class TramoForm extends JDialog {
             int tiempo = Integer.parseInt(jtfTiempo.getText().trim());
             int tipo = Integer.parseInt(jtfTipo.getText().trim());
 
-            Tramo tramo = new Tramo(coordinador.listarParadas().get(codigoI), coordinador.listarParadas().get(codigoF), tiempo, tipo);
+            Tramo tramo = new Tramo(coordinador.listarParadas().get(codigoI), coordinador.listarParadas().get(codigoF),
+                    tiempo, tipo);
 
-            if (event.getSource() == btnInsertar) {
+            if (event.getSource() == btnInsertar)
                 try {
                     coordinador.insertarTramo(tramo);
                 } catch (TramoExistenteException e) {
                     JOptionPane.showMessageDialog(null, resourceBundle.getString("TramoForm_error_1"));
                     return;
                 }
-            }
 
-            if (event.getSource() == btnModificar) {
+            if (event.getSource() == btnModificar)
                 coordinador.modificarTramo(tramo);
-            }
-
         }
     }
 
+    /**
+     * Verifica si el registro en el formulario es válido.
+     *
+     * @return `true` si el registro es válido, `false` en caso contrario.
+     */
     public boolean registroValido() {
         errorTiempo.setText("");
         errorTipo.setText("");
@@ -352,10 +394,14 @@ public class TramoForm extends JDialog {
             errorTipo.setText(resourceBundle.getString("TramoForm_error_4"));
             return false;
         }
-
         return true;
     }
 
+    /**
+     * Establece el coordinador para la clase TramoForm.
+     *
+     * @param coordinador Coordinador a establecer.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }

@@ -14,8 +14,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+/**
+ * Clase ParadaForm que representa la interfaz gráfica para la gestión de
+ * paradas.
+ */
 public class ParadaForm extends JDialog {
+
+    /**
+     * Registro para registrar mensajes y eventos en ParadaForm.
+     */
     final static Logger logger = Logger.getLogger(ParadaForm.class);
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JTextField jtfCodigo;
@@ -23,10 +32,15 @@ public class ParadaForm extends JDialog {
     private JButton btnCancelar, btnInsertar, btnModificar, btnEliminar;
     private JLabel errorCodigo, errorDireccion, tituloModificar, tituloInsertar, tituloEliminar;
 
+    /**
+     * Constructor de la clase ParadaForm.
+     */
     public ParadaForm() {
-
     }
 
+    /**
+     * Inicializa la interfaz gráfica y configura los componentes necesarios.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 550, 190);
@@ -116,6 +130,14 @@ public class ParadaForm extends JDialog {
         setModal(true);
     }
 
+    /**
+     * Configura la interfaz gráfica y los componentes según la acción y la parada
+     * proporcionada.
+     *
+     * @param accion Tipo de acción a realizar (Constantes.INSERTAR,
+     *               Constantes.MODIFICAR, Constantes.BORRAR).
+     * @param parada Parada sobre la cual se realizará la acción.
+     */
     public void accion(int accion, Parada parada) {
         tituloEliminar.setVisible(false);
         tituloModificar.setVisible(false);
@@ -152,17 +174,35 @@ public class ParadaForm extends JDialog {
         }
     }
 
+    /**
+     * Muestra los datos de la parada en los campos correspondientes.
+     *
+     * @param parada Parada a mostrar.
+     */
     private void mostrar(Parada parada) {
         jtfCodigo.setText(String.valueOf(parada.getCodigo()));
         jtfDireccion.setText(parada.getDireccion());
     }
 
+    /**
+     * Limpia los campos de la interfaz gráfica.
+     */
     private void limpiar() {
         jtfCodigo.setText("");
         jtfDireccion.setText("");
     }
 
+    /**
+     * Clase interna Handler que implementa ActionListener para manejar eventos de
+     * los botones.
+     */
     private class Handler implements ActionListener {
+
+        /**
+         * Maneja los eventos de los botones.
+         *
+         * @param event Evento de acción.
+         */
         public void actionPerformed(ActionEvent event) {
 
             if (event.getSource() == btnCancelar) {
@@ -199,7 +239,8 @@ public class ParadaForm extends JDialog {
             }
 
             if (event.getSource() == btnEliminar) {
-                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("ParadaForm_confirm_1"), resourceBundle.getString("ParadaForm_confirm_2"),
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("ParadaForm_confirm_1"),
+                        resourceBundle.getString("ParadaForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     try {
@@ -221,6 +262,11 @@ public class ParadaForm extends JDialog {
         }
     }
 
+    /**
+     * Verifica la validez de los datos ingresados en la interfaz gráfica.
+     *
+     * @return `true` si los datos son válidos, `false` en caso contrario.
+     */
     public boolean registroValido() {
         errorCodigo.setText("");
         errorDireccion.setText("");
@@ -242,7 +288,6 @@ public class ParadaForm extends JDialog {
             return false;
         }
 
-
         // validar direccion
         String direccion = jtfDireccion.getText().trim();
         if (direccion.isEmpty()) {
@@ -253,6 +298,11 @@ public class ParadaForm extends JDialog {
         return true;
     }
 
+    /**
+     * Establece el coordinador para la clase ParadaForm.
+     *
+     * @param coordinador Coordinador a establecer.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }

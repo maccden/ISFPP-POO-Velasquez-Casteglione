@@ -4,20 +4,31 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Hashtable;
+
 import conexion.BDConexion;
 import dao.ParadaDAO;
-import datastructures.TreeMap;
 import dao.LineaDAO;
+import datastructures.TreeMap;
 import modelo.Parada;
 import modelo.Linea;
 
+/**
+ * Implementación de la interfaz ParadaDAO para PostgreSQL.
+ */
 public class ParadaPostgresqlDAO implements ParadaDAO {
+	
 	private Hashtable<String, Linea> lineas;
 
+	/**
+	 * Constructor que carga las líneas al crear una instancia del DAO.
+	 */
 	public ParadaPostgresqlDAO() {
 		lineas = cargarLineas();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void insertar(Parada parada) {
 		Connection con = null;
@@ -25,9 +36,7 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "";
-			sql += "INSERT INTO public.paradas (codigo, direccion, codigo_linea) ";
-			sql += "VALUES(?,?,?) ";
+			String sql = "INSERT INTO public.paradas (codigo, direccion, codigo_linea) VALUES(?,?,?)";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, parada.getCodigo());
 			pstm.setString(2, parada.getDireccion());
@@ -50,6 +59,9 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void actualizar(Parada parada) {
 		Connection con = null;
@@ -57,9 +69,7 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "UPDATE public.paradas ";
-			sql += "SET direccion = ?, codigo_linea = ? ";
-			sql += "WHERE codigo = ? ";
+			String sql = "UPDATE public.paradas SET direccion = ?, codigo_linea = ? WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, parada.getDireccion());
 			for (Linea linea : parada.getLineas())
@@ -82,6 +92,9 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void borrar(Parada parada) {
 		Connection con = null;
@@ -89,8 +102,7 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "";
-			sql += "DELETE FROM public.paradas WHERE codigo = ? ";
+			String sql = "DELETE FROM public.paradas WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, parada.getCodigo());
 			pstm.executeUpdate();
@@ -110,6 +122,9 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public TreeMap<Integer, Parada> buscarTodos() {
 		Connection con = null;
@@ -117,7 +132,7 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "SELECT codigo, nombre, codigo_linea FROM public.paradas ";
+			String sql = "SELECT codigo, nombre, codigo_linea FROM public.paradas";
 			pstm = con.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			TreeMap<Integer, Parada> ret = new TreeMap<>();
@@ -141,8 +156,14 @@ public class ParadaPostgresqlDAO implements ParadaDAO {
 		}
 	}
 
+	/**
+	 * Carga las líneas desde la base de datos y las devuelve en un Hashtable.
+	 * 
+	 * @return Un Hashtable con las líneas donde la clave es el código de la línea y
+	 *         el valor es la línea.
+	 */
 	private Hashtable<String, Linea> cargarLineas() {
-		Hashtable<String, Linea> lineas = new Hashtable<String, Linea>();
+		Hashtable<String, Linea> lineas = new Hashtable<>();
 		LineaDAO lineaDAO = new LineaPostgresqlDAO();
 		TreeMap<String, Linea> ds = lineaDAO.buscarTodos();
 		ds.entrySet().forEach(entry -> {

@@ -8,17 +8,31 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * Implementación de la interfaz ParadaDAO para el acceso secuencial a datos.
+ */
 public class ParadaSecuencialDAO implements ParadaDAO {
+    
     private TreeMap<Integer, Parada> list;
     private String name;
     private boolean actualizar;
 
+    /**
+     * Constructor que inicializa el DAO.
+     */
     public ParadaSecuencialDAO() {
         ResourceBundle rb = ResourceBundle.getBundle("secuencial");
         name = rb.getString("parada");
         actualizar = true;
     }
 
+    /**
+     * Lee las paradas desde un archivo y las retorna en un TreeMap.
+     *
+     * @param file El nombre del archivo.
+     * @return Un TreeMap con las paradas, donde la clave es el código de la parada
+     *         y el valor es la parada.
+     */
     private TreeMap<Integer, Parada> readFromFile(String file) {
         TreeMap<Integer, Parada> list = new TreeMap<>();
         Scanner inFile = null;
@@ -47,6 +61,12 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         return list;
     }
 
+    /**
+     * Escribe las paradas en un archivo.
+     *
+     * @param list El TreeMap con las paradas.
+     * @param file El nombre del archivo.
+     */
     private void writeToFile(TreeMap<Integer, Parada> list, String file) {
         Formatter outFile = null;
         try {
@@ -64,6 +84,9 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TreeMap<Integer, Parada> buscarTodos() {
         if (actualizar) {
@@ -73,6 +96,9 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         return list;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void insertar(Parada parada) {
         list.put(parada.getCodigo(), parada);
@@ -80,6 +106,9 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         actualizar = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void actualizar(Parada parada) {
         list.put(parada.getCodigo(), parada);
@@ -87,6 +116,9 @@ public class ParadaSecuencialDAO implements ParadaDAO {
         actualizar = true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void borrar(Parada parada) {
         list.remove(parada.getCodigo());

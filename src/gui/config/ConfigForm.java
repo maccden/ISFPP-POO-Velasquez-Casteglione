@@ -8,24 +8,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * La clase ConfigForm representa una ventana de configuración en la interfaz
+ * gráfica de usuario.
+ * Permite al usuario seleccionar el idioma de la aplicación.
+ */
 public class ConfigForm extends JDialog {
+    
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
-    private JComboBox comboBox;
+    private JComboBox<Object> comboBox;
     private JButton btnConfirmar, btnSalir;
-    public ConfigForm() {
 
+    /**
+     * Constructor de la clase ConfigForm.
+     */
+    public ConfigForm() {
     }
 
+    /**
+     * Inicializa la interfaz gráfica de usuario y configura los componentes.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 250, 225);
-        setTitle("Configuracion");
+        setTitle("Configuración");
         getContentPane().setLayout(null);
 
         JLabel titulo = new JLabel(resourceBundle.getString("ConfigForm_title"));
@@ -33,7 +43,7 @@ public class ConfigForm extends JDialog {
         titulo.setBounds(10, 11, 207, 14);
         getContentPane().add(titulo);
 
-        comboBox = new JComboBox();
+        comboBox = new JComboBox<>();
         comboBox.addItem(resourceBundle.getString("ConfigForm_select"));
         comboBox.addItem(resourceBundle.getString("ConfigForm_ES"));
         comboBox.addItem(resourceBundle.getString("ConfigForm_US"));
@@ -58,10 +68,10 @@ public class ConfigForm extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_ES"))) {
-
+                    // Realizar acciones para el idioma español
                 }
                 if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_US"))) {
-
+                    // Realizar acciones para el idioma inglés
                 }
             }
         });
@@ -81,5 +91,13 @@ public class ConfigForm extends JDialog {
         setModal(true);
     }
 
-    public void setCoordinador(Coordinador coordinador) { this.coordinador = coordinador; }
+    /**
+     * Establece el coordinador para la ventana de configuración.
+     *
+     * @param coordinador El coordinador que gestionará las acciones de
+     *                    configuración.
+     */
+    public void setCoordinador(Coordinador coordinador) {
+        this.coordinador = coordinador;
+    }
 }

@@ -17,8 +17,19 @@ import util.Time;
 
 import org.apache.log4j.Logger;
 
+/**
+ * La clase ConsultaForm representa una ventana de consulta en la interfaz
+ * gráfica de usuario.
+ * Permite al usuario realizar consultas de colectivos entre dos paradas en un
+ * determinado horario.
+ */
 public class ConsultaForm extends JDialog {
+
+	/**
+	 * Registro para registrar mensajes y eventos en ConsultaForm.
+	 */
 	final static Logger logger = Logger.getLogger(ConsultaForm.class);
+
 	private Coordinador coordinador;
 	private ResourceBundle resourceBundle;
 	private JPanel contentPane;
@@ -28,10 +39,15 @@ public class ConsultaForm extends JDialog {
 	private JTextField jtfHora, jtfLimiteColectivos;
 	private JProgressBar progressBar;
 
+	/**
+	 * Constructor de la clase ConsultaForm.
+	 */
 	public ConsultaForm() {
-
 	}
 
+	/**
+	 * Inicializa la interfaz gráfica de usuario y configura los componentes.
+	 */
 	public void init() {
 		resourceBundle = coordinador.getResourceBundle();
 		setBounds(100, 100, 530, 270);
@@ -145,6 +161,9 @@ public class ConsultaForm extends JDialog {
 		setModal(true);
 	}
 
+	/**
+	 * Acción que se ejecuta al abrir la ventana de consulta.
+	 */
 	public void accion() {
 		cbxParada1.removeAllItems();
 		cbxParada1.addItem(resourceBundle.getString("ConsultaForm_select"));
@@ -156,7 +175,15 @@ public class ConsultaForm extends JDialog {
 		jtfLimiteColectivos.setText("");
 	}
 
+	/**
+	 * Clase interna para gestionar eventos de acción.
+	 */
 	private class Handler implements ActionListener {
+		/**
+		 * Método que se ejecuta al realizar una acción.
+		 *
+		 * @param event El evento de acción.
+		 */
 		public void actionPerformed(ActionEvent event) {
 
 			if (event.getSource() == btnCancelar) {
@@ -184,7 +211,9 @@ public class ConsultaForm extends JDialog {
 				Parada parada2 = new Parada(Integer.parseInt(((String) cbxParada2.getSelectedItem()).split(" - ")[0]),
 						null);
 
-				coordinador.ejecutarHilo(new CalcularHilo(parada1, parada2, Time.toMins(jtfHora.getText()), Integer.parseInt(jtfLimiteColectivos.getText()), coordinador, Integer.parseInt(jtfLimiteColectivos.getText())));
+				coordinador.ejecutarHilo(new CalcularHilo(parada1, parada2, Time.toMins(jtfHora.getText()),
+						Integer.parseInt(jtfLimiteColectivos.getText()), coordinador,
+						Integer.parseInt(jtfLimiteColectivos.getText())));
 				calculando();
 
 				logger.info("Consulta calcula");
@@ -192,10 +221,20 @@ public class ConsultaForm extends JDialog {
 		}
 	}
 
+	/**
+	 * Establece el coordinador para la ventana de consulta.
+	 *
+	 * @param coordinador El coordinador que gestionará las acciones de consulta.
+	 */
 	public void setCoordinador(Coordinador coordinador) {
 		this.coordinador = coordinador;
 	}
 
+	/**
+	 * Verifica si los datos ingresados en la ventana son válidos.
+	 *
+	 * @return true si los datos son válidos, false de lo contrario.
+	 */
 	public boolean registroValido() {
 		errorHora.setText("");
 		errorNumeroLineas.setText("");
@@ -214,7 +253,7 @@ public class ConsultaForm extends JDialog {
 			Integer.parseInt(horario[0]);
 			Integer.parseInt(horario[1]);
 			if (Integer.parseInt(horario[0]) > 24 || Integer.parseInt(horario[1]) > 60
-			|| Integer.parseInt(horario[0]) < 0 || Integer.parseInt(horario[1]) < 0) {
+					|| Integer.parseInt(horario[0]) < 0 || Integer.parseInt(horario[1]) < 0) {
 				errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour2"));
 				return false;
 			}
@@ -229,7 +268,7 @@ public class ConsultaForm extends JDialog {
 			errorHora.setText(resourceBundle.getString("ConsultaForm_error_hour2"));
 			return false;
 		}
-		
+
 		// validar limite colectivos
 		String limiteColectivos = jtfLimiteColectivos.getText().trim();
 		if (limiteColectivos.isEmpty()) {
@@ -249,11 +288,19 @@ public class ConsultaForm extends JDialog {
 		return true;
 	}
 
+	/**
+	 * Actualiza el valor de la barra de progreso.
+	 *
+	 * @param i El nuevo valor de la barra de progreso.
+	 */
 	public void actualizarBarra(int i) {
 		progressBar.setValue(i);
 		progressBar.repaint();
 	}
 
+	/**
+	 * Configura la interfaz para indicar que se está realizando un cálculo.
+	 */
 	public void calculando() {
 		progressBar.setValue(0);
 		btnCancelar.setEnabled(false);
@@ -267,6 +314,9 @@ public class ConsultaForm extends JDialog {
 		jtfLimiteColectivos.setEnabled(false);
 	}
 
+	/**
+	 * Configura la interfaz para indicar que el cálculo ha terminado.
+	 */
 	public void terminar() {
 		progressBar.setValue(0);
 		cbxParada1.setEnabled(true);
@@ -279,5 +329,4 @@ public class ConsultaForm extends JDialog {
 		btnCancelar2.setVisible(false);
 		progressBar.setVisible(false);
 	}
-
 }

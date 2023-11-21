@@ -13,7 +13,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
+/**
+ * Clase ParadaList que representa la interfaz gráfica para la lista de paradas.
+ */
 public class ParadaList extends JDialog {
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JButton btnInsertar, btnSalir;
@@ -21,10 +25,16 @@ public class ParadaList extends JDialog {
     private Parada parada;
     private JScrollPane scrollPane;
     private int accion;
-    public ParadaList() {
 
+    /**
+     * Constructor de la clase ParadaList.
+     */
+    public ParadaList() {
     }
 
+    /**
+     * Inicializa la interfaz gráfica y configura los componentes necesarios.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 500, 360);
@@ -51,8 +61,7 @@ public class ParadaList extends JDialog {
                         resourceBundle.getString("ParadaList_address"),
                         resourceBundle.getString("ParadaList_update"),
                         resourceBundle.getString("ParadaList_delete")
-                }
-        ));
+                }));
         table.getColumnModel().getColumn(1).setPreferredWidth(250);
         table.setBorder(new LineBorder(new Color(0, 0, 0)));
         table.setBounds(10, 30, 464, 250);
@@ -88,14 +97,26 @@ public class ParadaList extends JDialog {
         setModal(true);
     }
 
+    /**
+     * Clase interna Handler que implementa ActionListener para manejar eventos de
+     * los botones.
+     */
     private class Handler implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
 
+        /**
+         * Maneja los eventos de los botones.
+         *
+         * @param event Evento de acción.
+         */
+        public void actionPerformed(ActionEvent event) {
             if (event.getSource() == btnInsertar)
                 coordinador.insertarParadaForm();
         }
     }
 
+    /**
+     * Carga los datos de las paradas en la tabla.
+     */
     public void loadTable() {
         // Eliminar todas las filas
         ((DefaultTableModel) table.getModel()).setRowCount(0);
@@ -104,6 +125,11 @@ public class ParadaList extends JDialog {
                 addRow((Parada) parada);
     }
 
+    /**
+     * Agrega una fila a la tabla con los datos de la parada.
+     *
+     * @param parada Parada a agregar a la tabla.
+     */
     public void addRow(Parada parada) {
         Object[] row = new Object[table.getModel().getColumnCount()];
         row[0] = parada.getCodigo();
@@ -113,19 +139,44 @@ public class ParadaList extends JDialog {
         ((DefaultTableModel) table.getModel()).addRow(row);
     }
 
+    /**
+     * Actualiza una fila en la tabla con los datos de la parada.
+     *
+     * @param row Índice de la fila a actualizar.
+     */
     private void updateRow(int row) {
         table.setValueAt(parada.getCodigo(), row, 0);
         table.setValueAt(parada.getDireccion(), row, 1);
     }
 
+    /**
+     * Clase interna ButtonRenderer que extiende JButton e implementa
+     * TableCellRenderer.
+     * Se utiliza para personalizar la apariencia de los botones en la tabla.
+     */
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
+        /**
+         * Constructor de ButtonRenderer.
+         */
         public ButtonRenderer() {
             setOpaque(true);
         }
 
+        /**
+         * Configura la apariencia del botón en la celda de la tabla.
+         *
+         * @param table      Tabla a la que pertenece la celda.
+         * @param value      Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param hasFocus   Indica si la celda tiene el foco.
+         * @param row        Índice de la fila de la celda.
+         * @param column     Índice de la columna de la celda.
+         * @return Componente de la celda configurado con la apariencia deseada.
+         */
         @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 setBackground(table.getSelectionBackground());
@@ -144,6 +195,10 @@ public class ParadaList extends JDialog {
         }
     }
 
+    /**
+     * Clase interna ButtonEditor que extiende DefaultCellEditor.
+     * Se utiliza para manejar la edición de celdas con botones en la tabla.
+     */
     class ButtonEditor extends DefaultCellEditor {
 
         protected JButton button;
@@ -153,6 +208,11 @@ public class ParadaList extends JDialog {
         private boolean isDeleteRow = false;
         private boolean isUpdateRow = false;
 
+        /**
+         * Constructor de ButtonEditor.
+         *
+         * @param checkBox Casilla de verificación asociada al editor.
+         */
         public ButtonEditor(JCheckBox checkBox) {
             super(checkBox);
             button = new JButton();
@@ -165,9 +225,19 @@ public class ParadaList extends JDialog {
             });
         }
 
+        /**
+         * Configura el componente editor de la celda.
+         *
+         * @param table      Tabla a la que pertenece la celda.
+         * @param value      Valor de la celda.
+         * @param isSelected Indica si la celda está seleccionada.
+         * @param row        Índice de la fila de la celda.
+         * @param column     Índice de la columna de la celda.
+         * @return Componente editor configurado.
+         */
         @Override
         public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-                                                     int column) {
+                int column) {
 
             if (isSelected) {
                 button.setForeground(table.getSelectionForeground());
@@ -192,6 +262,11 @@ public class ParadaList extends JDialog {
             return button;
         }
 
+        /**
+         * Obtiene el valor de la celda editora.
+         *
+         * @return Valor de la celda editora.
+         */
         @Override
         public Object getCellEditorValue() {
             if (isPushed) {
@@ -210,34 +285,53 @@ public class ParadaList extends JDialog {
             return new String(label);
         }
 
+        /**
+         * Detiene la edición de la celda.
+         *
+         * @return `true` si la edición debe detenerse, `false` en caso contrario.
+         */
         @Override
         public boolean stopCellEditing() {
             isPushed = false;
             return super.stopCellEditing();
         }
 
+        /**
+         * Dispara el evento de edición detenida.
+         */
         protected void fireEditingStopped() {
             super.fireEditingStopped();
-
             DefaultTableModel tableModel = (DefaultTableModel) table.getModel();
             if (isDeleteRow)
                 tableModel.removeRow(table.getSelectedRow());
-
-            if (isUpdateRow) {
+            if (isUpdateRow)
                 updateRow(table.getSelectedRow());
-            }
-
         }
     }
 
+    /**
+     * Establece el coordinador para la clase ParadaList.
+     *
+     * @param coordinador Coordinador a establecer.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }
 
+    /**
+     * Establece la acción para la clase ParadaList.
+     *
+     * @param accion Acción a establecer.
+     */
     public void setAccion(int accion) {
         this.accion = accion;
     }
 
+    /**
+     * Establece la parada para la clase ParadaList.
+     *
+     * @param parada Parada a establecer.
+     */
     public void setParada(Parada parada) {
         this.parada = parada;
     }

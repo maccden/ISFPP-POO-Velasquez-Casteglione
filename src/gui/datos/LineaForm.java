@@ -16,18 +16,30 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.PatternSyntaxException;
 
+/**
+ * LineaForm es una ventana de diálogo que permite al usuario realizar
+ * operaciones relacionadas con las líneas del sistema.
+ */
 public class LineaForm extends JDialog {
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
-    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza, errorFrecuencia;
+    private JLabel tituloModificar, tituloInsertar, tituloEliminar, errorCodigo, errorComienzo, errorFinaliza,
+            errorFrecuencia;
     private JTextField jtfCodigo, jtfComienzo, jtfFinaliza, jtfFrecuencia;
     private JButton btnInsertar, btnModificar, btnCancelar, btnEliminar, btnAgregar, btnQuitar;
     private JComboBox<Object> comboBoxParadas, comboBoxParadasN;
 
+    /**
+     * Constructor por defecto para LineaForm.
+     */
     public LineaForm() {
-
     }
 
+    /**
+     * Inicializa LineaForm, configurando la interfaz gráfica y agregando elementos
+     * con sus respectivos manejadores de eventos.
+     */
     public void init() {
         resourceBundle = coordinador.getResourceBundle();
         setBounds(100, 100, 750, 375);
@@ -191,6 +203,14 @@ public class LineaForm extends JDialog {
         setModal(true);
     }
 
+    /**
+     * Realiza acciones específicas según la acción proporcionada y muestra la
+     * ventana LineaForm con los datos apropiados.
+     * 
+     * @param accion La acción a realizar (Constantes.INSERTAR, Constantes.MODIFICAR
+     *               o Constantes.BORRAR).
+     * @param linea  La línea sobre la cual se realizará la acción.
+     */
     public void accion(int accion, Linea linea) {
         setBounds(100, 100, 750, 375);
         tituloEliminar.setVisible(false);
@@ -250,6 +270,11 @@ public class LineaForm extends JDialog {
         }
     }
 
+    /**
+     * Muestra los datos de la línea en la ventana para realizar modificaciones.
+     * 
+     * @param linea La línea cuyos datos se mostrarán para la modificación.
+     */
     private void mostrarModificar(Linea linea) {
         jtfCodigo.setText(linea.getCodigo());
         jtfComienzo.setText(Time.toTime(linea.getComienza()));
@@ -257,15 +282,19 @@ public class LineaForm extends JDialog {
         jtfFrecuencia.setText(String.valueOf(linea.getFrecuencia()));
         comboBoxParadas.removeAllItems();
         comboBoxParadas.addItem(resourceBundle.getString("LineaForm_select"));
-        for (Parada parada : coordinador.listarParadas().values()) {
+        for (Parada parada : coordinador.listarParadas().values())
             if (!linea.contains(parada))
                 comboBoxParadas.addItem(parada.getCodigo() + " - " + parada.getDireccion());
-        }
         comboBoxParadasN.removeAllItems();
         for (Parada parada : linea.getParadas())
             comboBoxParadasN.addItem(parada.getCodigo() + " - " + parada.getDireccion());
     }
 
+    /**
+     * Muestra los datos de la línea en la ventana para realizar la eliminación.
+     * 
+     * @param linea La línea cuyos datos se mostrarán para la eliminación.
+     */
     private void mostrarEliminar(Linea linea) {
         jtfCodigo.setText(linea.getCodigo());
         jtfComienzo.setText(Time.toTime(linea.getComienza()));
@@ -278,6 +307,9 @@ public class LineaForm extends JDialog {
         comboBoxParadas.setEditable(false);
     }
 
+    /**
+     * Limpia los campos de entrada en la ventana.
+     */
     private void limpiar() {
         jtfCodigo.setText("");
         jtfComienzo.setText("");
@@ -285,7 +317,16 @@ public class LineaForm extends JDialog {
         jtfFrecuencia.setText("");
     }
 
+    /**
+     * Manejador de eventos para los botones y acciones en la ventana.
+     */
     private class Handler implements ActionListener {
+
+        /**
+         * Maneja eventos de acción desencadenados por botones en LineaForm.
+         *
+         * @param event El evento de acción.
+         */
         public void actionPerformed(ActionEvent event) {
 
             if (event.getSource() == btnCancelar) {
@@ -297,7 +338,8 @@ public class LineaForm extends JDialog {
                 String codigo = jtfCodigo.getText().trim();
                 Linea linea = new Linea(codigo, 0, 0, 0);
 
-                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("LineaForm_confirm_1"), resourceBundle.getString("LineaForm_confirm_2"),
+                int resp = JOptionPane.showConfirmDialog(null, resourceBundle.getString("LineaForm_confirm_1"),
+                        resourceBundle.getString("LineaForm_confirm_2"),
                         JOptionPane.YES_NO_OPTION);
                 if (JOptionPane.OK_OPTION == resp)
                     coordinador.borrarLinea(linea);
@@ -336,17 +378,21 @@ public class LineaForm extends JDialog {
                     paradas.add(coordinador.buscarParada(parada));
                     parada.setLinea(linea);
                 }
-                for (Parada parada : linea.getParadas()) {
+                for (Parada parada : linea.getParadas())
                     if (!paradas.contains(parada))
                         parada.removeLinea(linea);
-                }
                 linea.setParadas(paradas);
                 coordinador.modificarLinea(linea);
             }
-
         }
     }
 
+    /**
+     * Verifica si el registro ingresado es válido y muestra mensajes de error si es
+     * necesario.
+     * 
+     * @return true si el registro es válido, false de lo contrario.
+     */
     public boolean registroValido() {
         errorCodigo.setText("");
         errorComienzo.setText("");
@@ -426,7 +472,6 @@ public class LineaForm extends JDialog {
         }
 
         // validar entre 2 horas
-
         int comienzo = Time.toMins(jtfComienzo.getText().trim());
         int finaliza = Time.toMins(jtfFinaliza.getText().trim());
 
@@ -455,6 +500,11 @@ public class LineaForm extends JDialog {
         return true;
     }
 
+    /**
+     * Establece la instancia de Coordinador para LineaForm.
+     * 
+     * @param coordinador La instancia de Coordinador que se establecerá.
+     */
     public void setCoordinador(Coordinador coordinador) {
         this.coordinador = coordinador;
     }

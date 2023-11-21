@@ -10,6 +10,10 @@ import negocio.Calculo;
 import negocio.Empresa;
 import negocio.Subject;
 
+/**
+ * Clase principal que inicia la aplicación y configura los componentes
+ * necesarios.
+ */
 public class Aplicacion {
 
     private Empresa empresa;
@@ -28,11 +32,20 @@ public class Aplicacion {
     private Calculo calculo;
     private Subject subject;
     private Coordinador coordinador;
+
+    /**
+     * Método principal que crea una instancia de la aplicación y la inicia.
+     *
+     * @param args Argumentos de línea de comandos (no se utilizan).
+     */
     public static void main(String[] args) {
         Aplicacion miAplicacion = new Aplicacion();
         miAplicacion.iniciar();
     }
 
+    /**
+     * Inicia la aplicación configurando y vinculando los componentes necesarios.
+     */
     private void iniciar() {
         empresa = Empresa.getEmpresa();
         subject = new Subject();
@@ -51,6 +64,26 @@ public class Aplicacion {
         configuracion = Configuracion.getConfiguracion();
         configForm = new ConfigForm();
 
+        // Configuración de la interacción entre los componentes
+        configurarInteraccionComponentes();
+
+        // Configuración del coordinador
+        configurarCoordinador();
+
+        // Inicialización de los componentes
+        inicializarComponentes();
+
+        // Carga de datos iniciales
+        cargarDatosIniciales();
+
+        // Hacer visible el frame principal
+        desktopFrame.setVisible(true);
+    }
+
+    /**
+     * Configura la interacción entre los diferentes componentes de la aplicación.
+     */
+    private void configurarInteraccionComponentes() {
         desktopFrame.setCoordinador(coordinador);
         lineaList.setCoordinador(coordinador);
         lineaForm.setCoordinador(coordinador);
@@ -64,7 +97,12 @@ public class Aplicacion {
         calculo.setCoordinador(coordinador);
         configuracion.setCoordinador(coordinador);
         configForm.setCoordinador(coordinador);
+    }
 
+    /**
+     * Configura el coordinador con las instancias de los diferentes componentes.
+     */
+    private void configurarCoordinador() {
         coordinador.setEmpresa(empresa);
         coordinador.setLineaList(lineaList);
         coordinador.setLineaForm(lineaForm);
@@ -78,7 +116,12 @@ public class Aplicacion {
         coordinador.setCalculo(calculo);
         coordinador.setConfiguracion(configuracion);
         coordinador.setConfigForm(configForm);
+    }
 
+    /**
+     * Inicializa los componentes de la aplicación.
+     */
+    private void inicializarComponentes() {
         calculo.init(subject);
         empresa.init(subject);
         configForm.init();
@@ -92,8 +135,12 @@ public class Aplicacion {
         tramoForm.init();
         tramoList.init();
         desktopFrame.init();
+    }
 
+    /**
+     * Carga los datos iniciales necesarios para la aplicación.
+     */
+    private void cargarDatosIniciales() {
         calculo.cargarDatos(coordinador.listarParadas(), coordinador.listarLineas(), coordinador.listarTramos());
-        desktopFrame.setVisible(true);
     }
 }
