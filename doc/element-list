@@ -1,9 +1,16 @@
 conexion
 controlador
 dao
+dao.postgresql
+dao.secuencial
 factory
 gui
+gui.config
+gui.consulta
+gui.datos
 modelo
 negocio
+negocio.exceptions
+negocio.hilos
 servicio
 util

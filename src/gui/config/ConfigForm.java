@@ -73,9 +73,9 @@ public class ConfigForm extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_ES")))
-                    cambiarIdioma("es", "ES");
+                    cambiarIdioma("es", "es");
                 if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_US")))
-                    cambiarIdioma("en", "US");
+                    cambiarIdioma("en", "us");
             }
         });
 
@@ -106,9 +106,9 @@ public class ConfigForm extends JDialog {
             List<String> lines = Files.readAllLines(path);
             for (int i = 0; i < lines.size(); i++) {
                 if (lines.get(i).matches("\\s*language\\s*=\\s*(es|en)"))
-                    lines.set(i, "language = " + language);
+                    lines.set(i, "language = " + language.toLowerCase());
                 else if (lines.get(i).matches("\\s*country\\s*=\\s*(ES|US)"))
-                    lines.set(i, "country = " + country);
+                    lines.set(i, "country = " + country.toUpperCase());
             }
             Files.write(path, lines);
         } catch (IOException ex) {
