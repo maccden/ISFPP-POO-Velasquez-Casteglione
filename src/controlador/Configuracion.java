@@ -21,10 +21,7 @@ public class Configuracion {
      * @return Instancia única de la configuración.
      */
     public static Configuracion getConfiguracion() {
-        if (configuracion == null) {
-            configuracion = new Configuracion();
-        }
-        return configuracion;
+        return new Configuracion();
     }
 
     /**

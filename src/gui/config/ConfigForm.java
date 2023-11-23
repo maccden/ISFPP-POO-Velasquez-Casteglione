@@ -1,6 +1,7 @@
 package gui.config;
 
 import controlador.Coordinador;
+import java.util.List;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +9,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -17,7 +22,7 @@ import java.util.ResourceBundle;
  * Permite al usuario seleccionar el idioma de la aplicación.
  */
 public class ConfigForm extends JDialog {
-    
+
     private Coordinador coordinador;
     private ResourceBundle resourceBundle;
     private JComboBox<Object> comboBox;
@@ -67,12 +72,10 @@ public class ConfigForm extends JDialog {
         btnConfirmar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_ES"))) {
-                    // Realizar acciones para el idioma español
-                }
-                if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_US"))) {
-                    // Realizar acciones para el idioma inglés
-                }
+                if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_ES")))
+                    cambiarIdioma("es", "ES");
+                if (Objects.equals(comboBox.getSelectedItem(), resourceBundle.getString("ConfigForm_US")))
+                    cambiarIdioma("en", "US");
             }
         });
 
@@ -89,6 +92,29 @@ public class ConfigForm extends JDialog {
         });
 
         setModal(true);
+    }
+
+    /**
+     * Cambia la configuración de idioma y país en un archivo de propiedades.
+     *
+     * @param language Nuevo valor para la configuración de idioma.
+     * @param country  Nuevo valor para la configuración de país.
+     */
+    private void cambiarIdioma(String language, String country) {
+        try {
+            Path path = Paths.get("./config.properties");
+            List<String> lines = Files.readAllLines(path);
+            for (int i = 0; i < lines.size(); i++) {
+                if (lines.get(i).matches("\\s*language\\s*=\\s*(es|en)"))
+                    lines.set(i, "language = " + language);
+                else if (lines.get(i).matches("\\s*country\\s*=\\s*(ES|US)"))
+                    lines.set(i, "country = " + country);
+            }
+            Files.write(path, lines);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        coordinador.salirConfiguracion();
     }
 
     /**
