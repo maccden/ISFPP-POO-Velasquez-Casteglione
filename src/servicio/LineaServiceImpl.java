@@ -2,7 +2,7 @@ package servicio;
 
 import dao.LineaDAO;
 import datastructures.TreeMap;
-import conexion.Factory;
+import factory.Factory;
 import modelo.Linea;
 
 /**

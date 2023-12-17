@@ -38,7 +38,7 @@ public class TramoPostgresqlDAO implements TramoDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "INSERT INTO public.tramos (codigo_parada1, codigo_parada2, tiempo, tipo) VALUES(?,?,?,?)";
+			String sql = "INSERT INTO poo2023.tramos_juanmaty (codigo_parada1, codigo_parada2, tiempo, tipo) VALUES(?,?,?,?)";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, tramo.getInicio().getCodigo());
 			pstm.setInt(2, tramo.getFin().getCodigo());
@@ -71,7 +71,7 @@ public class TramoPostgresqlDAO implements TramoDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "UPDATE public.tramos SET tiempo = ?, tipo = ? WHERE codigo_parada1 = ? AND codigo_parada2 = ?";
+			String sql = "UPDATE poo2023.tramos_juanmaty SET tiempo = ?, tipo = ? WHERE codigo_parada1 = ? AND codigo_parada2 = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, tramo.getTiempo());
 			pstm.setInt(2, tramo.getTipo());
@@ -104,7 +104,7 @@ public class TramoPostgresqlDAO implements TramoDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "DELETE FROM public.tramos WHERE codigo_parada1 = ? AND codigo_parada2 = ?";
+			String sql = "DELETE FROM poo2023.tramos_juanmaty WHERE codigo_parada1 = ? AND codigo_parada2 = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, tramo.getInicio().getCodigo());
 			pstm.setInt(2, tramo.getFin().getCodigo());
@@ -135,7 +135,7 @@ public class TramoPostgresqlDAO implements TramoDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "SELECT codigo_parada1, codigo_parada2, tiempo, tipo FROM public.tramos";
+			String sql = "SELECT codigo_parada1, codigo_parada2, tiempo, tipo FROM poo2023.tramos_juanmaty";
 			pstm = con.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			List<Tramo> ret = new ArrayList<>();

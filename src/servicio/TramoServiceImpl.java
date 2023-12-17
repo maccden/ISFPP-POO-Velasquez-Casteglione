@@ -1,6 +1,6 @@
 package servicio;
 
-import conexion.Factory;
+import factory.Factory;
 import modelo.Tramo;
 import dao.TramoDAO;
 

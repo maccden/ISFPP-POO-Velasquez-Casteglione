@@ -24,7 +24,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "INSERT INTO public.lineas (codigo, comienza, finaliza, frecuencia) VALUES(?,?,?,?)";
+			String sql = "INSERT INTO poo2023.lineas_juanmaty (codigo, comienza, finaliza, frecuencia) VALUES(?,?,?,?)";
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, linea.getCodigo());
 			pstm.setInt(2, linea.getComienza());
@@ -57,7 +57,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "UPDATE public.lineas SET comienza = ?, finaliza = ?, frecuencia = ? WHERE codigo = ?";
+			String sql = "UPDATE poo2023.lineas_juanmaty SET comienza = ?, finaliza = ?, frecuencia = ? WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setInt(1, linea.getComienza());
 			pstm.setInt(2, linea.getFinaliza());
@@ -90,7 +90,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "DELETE FROM public.lineas WHERE codigo = ?";
+			String sql = "DELETE FROM poo2023.lineas_juanmaty WHERE codigo = ?";
 			pstm = con.prepareStatement(sql);
 			pstm.setString(1, linea.getCodigo());
 			pstm.executeUpdate();
@@ -120,7 +120,7 @@ public class LineaPostgresqlDAO implements LineaDAO {
 		ResultSet rs = null;
 		try {
 			con = BDConexion.getConnection();
-			String sql = "SELECT codigo, comienza, finaliza, frecuencia FROM public.lineas";
+			String sql = "SELECT codigo, comienza, finaliza, frecuencia FROM poo2023.lineas_juanmaty";
 			pstm = con.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			TreeMap<String, Linea> ret = new TreeMap<>();

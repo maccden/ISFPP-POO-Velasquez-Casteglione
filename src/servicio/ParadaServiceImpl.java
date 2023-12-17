@@ -2,7 +2,7 @@ package servicio;
 
 import dao.ParadaDAO;
 import datastructures.TreeMap;
-import conexion.Factory;
+import factory.Factory;
 import modelo.Parada;
 
 /**

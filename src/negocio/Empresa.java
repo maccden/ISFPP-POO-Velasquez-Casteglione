@@ -251,15 +251,6 @@ public class Empresa {
     }
 
     /**
-     * Establece el nombre de la empresa.
-     *
-     * @param nombre El nuevo nombre de la empresa.
-     */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    /**
      * Obtiene el mapa de líneas de la empresa.
      *
      * @return El mapa de líneas de la empresa.
