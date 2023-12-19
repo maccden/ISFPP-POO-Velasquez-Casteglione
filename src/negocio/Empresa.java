@@ -23,7 +23,7 @@ public class Empresa {
     private TreeMap<Integer, Parada> paradas;
     private ParadaService paradaService;
     private List<Tramo> tramos;
-    private Logger logger;
+    private Logger logger = Logger.getLogger(Empresa.class);
     private TramoService tramoService;
 
     /**

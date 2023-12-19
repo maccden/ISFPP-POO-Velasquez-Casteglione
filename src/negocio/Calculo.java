@@ -78,16 +78,14 @@ public class Calculo implements Observer {
 
             red = new DirectedMultigraph<>(null, null, false);
 
-            // Cargar paradas
-            for (Parada p : this.paradaMap.values())
-                red.addVertex(p);
-
             // Cargar tramos lineas
             Parada origen, destino;
             for (Linea l : lineaMap.values())
                 for (int i = 0; i < l.getParadas().size() - 1; i++) {
                     origen = l.getParadas().get(i);
+                    red.addVertex(origen);
                     destino = l.getParadas().get(i + 1);
+                    red.addVertex(destino);
                     red.addEdge(origen, destino, new ParadaLinea(origen, l));
                 }
 

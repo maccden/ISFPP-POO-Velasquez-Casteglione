@@ -77,10 +77,16 @@ public class LineaPostgresqlDAO implements LineaDAO {
 			pstm.setString(4, linea.getCodigo());
 			pstm.executeUpdate();
 			pstm.close();
-			sql = "UPDATE poo2023.lineas_paradas_juanmaty SET cod_paradas = ? WHERE cod_lineas = ?";
+			sql = "DELETE FROM poo2023.lineas_paradas_juanmaty WHERE cod_lineas = ?";
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, linea.getCodigo());
+			pstm.executeUpdate();
+			pstm.close();
+			sql = "INSERT INTO poo2023.lineas_paradas_juanmaty (cod_lineas, cod_paradas) VALUES(?,?)";
 			pstm = con.prepareStatement(sql);
 			for (Parada p : linea.getParadas()) {
-				pstm.setInt(1, p.getCodigo());
+				pstm.setString(1, linea.getCodigo());
+				pstm.setInt(2, p.getCodigo());
 				pstm.executeUpdate();
 			}
 		} catch (Exception ex) {
@@ -147,13 +153,12 @@ public class LineaPostgresqlDAO implements LineaDAO {
 			String sql = "SELECT codigo, comienza, finaliza, frecuencia FROM poo2023.lineas_juanmaty";
 			pstm = con.prepareStatement(sql);
 			rs = pstm.executeQuery();
-			TreeMap<String, Linea> ret = new TreeMap<String, Linea>();
+			TreeMap<String, Linea> ret = new TreeMap<>();
 			while (rs.next()) {
 				Linea nuevaLinea = new Linea(rs.getString("codigo"), rs.getInt("comienza"), rs.getInt("finaliza"),
 						rs.getInt("frecuencia"));
-				List<Parada> listaParadas = this.cargarParadas(nuevaLinea);
-				for (Parada parada : listaParadas)
-					nuevaLinea.agregarParada(parada);
+				for (Parada p : cargarParadas(nuevaLinea))
+					nuevaLinea.agregarParada(p);
 				ret.put(rs.getString("codigo"), nuevaLinea);
 			}
 			return ret;
