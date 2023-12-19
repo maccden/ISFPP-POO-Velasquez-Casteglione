@@ -11,13 +11,12 @@ public class Parada {
 
     private int codigo;
     private String direccion;
-    private List<Linea> lineas;
+    private List<Linea> lineas = new ArrayList<>();
 
     /**
-     * Constructor por defecto de la clase Parada. Inicializa la lista de líneas.
+     * Constructor por defecto de la clase Parada.
      */
     public Parada() {
-        lineas = new ArrayList<>();
     }
 
     /**
