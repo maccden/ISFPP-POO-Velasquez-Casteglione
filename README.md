@@ -17,14 +17,14 @@ Este proyecto es un sistema de colectivos urbanos desarrollado en Java. El siste
 - Java
 - Javax Swing (para la interfaz gráfica)
 - PostgreSQL JDBC (para la base de datos)
+- JGraphT
+- Log4J
 
 ## Requisitos Previos
 
 - JDK 11 o superior instalado
 - PostgeSQL Server instalado y configurado
 - IDE de Java (Eclipse, IntelliJ IDEA, NetBeans, etc.)
-- JGraphT
-- Log4J
 
 ## Instrucciones de Instalación y Ejecución
 
