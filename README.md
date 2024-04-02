@@ -15,14 +15,16 @@ Este proyecto es un sistema de colectivos urbanos desarrollado en Java. El siste
 ## Tecnologías Utilizadas
 
 - Java
-- JavaFX (para la interfaz gráfica)
-- MySQL (para la base de datos)
+- Javax Swing (para la interfaz gráfica)
+- PostgreSQL JDBC (para la base de datos)
 
 ## Requisitos Previos
 
 - JDK 11 o superior instalado
 - PostgeSQL Server instalado y configurado
 - IDE de Java (Eclipse, IntelliJ IDEA, NetBeans, etc.)
+- JGraphT
+- Log4J
 
 ## Instrucciones de Instalación y Ejecución
 
@@ -41,6 +43,6 @@ Si deseas contribuir al proyecto, puedes hacerlo enviando pull requests o report
 
 ## Licencia
 Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para obtener más detalles.
-* [Apache Log4J] (https://logging.apache.org/log4j/2.x/)
-* [JGraphT] (https://jgrapht.org/)
-* [PostgreSQL JDBC] (https://jdbc.postgresql.org/)
+* [Apache Log4J](https://logging.apache.org/log4j/2.x/)
+* [JGraphT](https://jgrapht.org/)
+* [PostgreSQL JDBC](https://jdbc.postgresql.org/)
